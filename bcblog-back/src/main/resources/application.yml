@@ -1,0 +1,26 @@
+spring:
+  profiles:
+    active: dev
+  jackson:
+    time-zone: GMT+8
+
+#  mail:
+#    host: smtp.163.com
+#    username: QingheLi_XDU@163.com
+#    password: SCPMNGZSOQKJBERP
+#    properties:
+#      from: QingheLi_XDU@163.com
+#  mail:
+#    host: smtp.qq.com
+#    port: 465
+#    username: 2980267045@qq.com
+#    password: xuhlxclddyeedhad
+#    properties:
+#      from: 2980267045@qq.com
+server:
+  port: 8080
+
+#mybatis:
+#  mapper-locations: classpath:com/bc208/blog/mapper/*.xml
+#  type-aliases-package: com.bc208.blog.mapper
+

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bc208.blog.repository.base.mapper.TeamTasksMapper">
+
+    <insert id="insertTeamTask" >
+        insert into team_todolist(task_content, task_type, task_createtime, task_finishtime) values(#{task_content},0,null,null);
+    </insert>
+
+    <update id="updateTeamTask">
+        update team_todolist set task_content=#{task_content} where task_id =  #{task_id};
+    </update>
+    <update id="changeStatus">
+        update team_todolist set task_type = case when task_type=1 then 0 when task_type =0 then 1 end where task_id = #{task_id}
+    </update>
+
+    <delete id="deleteTeamTask">
+        delete from team_todolist where task_id = #{task_id} and task_type =#{task_type};
+    </delete>
+
+
+    <select id="queryTeamTodoList" resultType="com.bc208.blog.pojo.TeamTask">
+        select * from team_todolist where task_type=#{task_type}
+    </select>
+
+    <select id="findById" resultType="com.bc208.blog.pojo.TeamTask">
+        select * from team_todolist where task_id=#{task_id}
+    </select>
+    <select id="queryFinishedList" resultType="com.bc208.blog.pojo.TeamTask">
+        select * from team_todolist where task_type = 1
+    </select>
+
+</mapper>

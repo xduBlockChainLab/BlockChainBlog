@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bc208.blog.repository.base.mapper.AdminMapper">
+
+    <insert id="registerAdmin" parameterType="com.bc208.blog.pojo.Admin" statementType="PREPARED" keyProperty="userId">
+        insert into admin(userName, userEmail, userPassword, userRole, enabled, accountNoExpired,
+                         credentialsNoExpired, accountNoLocked, userToken)
+        values (#{userName}, #{userEmail}, #{userPassword}, #{userRole}, #{enabled}, #{accountNoExpired},
+                #{credentialsNoExpired}, #{accountNoLocked}, #{userToken})
+    </insert>
+
+    <select id="findAdmin" resultType="com.bc208.blog.pojo.Admin">
+        select * from admin where username=#{email} and password=#{password}
+    </select>
+
+    <update id="judgeApplication" statementType="PREPARED">
+        update application set userComments=#{comments}, userScore=#{score} where userId=#{userId}
+    </update>
+    
+    <update id="upDateApplicationStatus" statementType="PREPARED">
+        update application set userJudged=1 where userId=#{userId}
+    </update>
+
+    <select id="getUserByPage" resultType="com.bc208.blog.pojo.User" statementType="PREPARED">
+        select * from user limit #{page},#{size}
+    </select>
+
+    <select id="getUserCount" resultType="java.lang.Long">
+        select count(1) from user
+    </select>
+    <select id="getAdminByEmail" resultType="com.bc208.blog.pojo.Admin">
+        select * from admin where userEmail=#{email}
+    </select>
+
+    <select id="queryAdminByEmail" resultType="com.bc208.blog.pojo.Admin">
+        select * from admin where userEmail=#{email}
+    </select>
+    <select id="checkUserEnabled" resultType="java.lang.Integer">
+        select enabled from admin where userEmail=#{email}
+    </select>
+
+    <update id="makeDefaultPassword">
+        update admin set userPassword=#{userPassword} where userEmail=#{userEmail}
+    </update>
+
+</mapper>

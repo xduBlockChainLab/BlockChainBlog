@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bc208.blog.repository.base.mapper.UsersMapper">
+
+    <select id="queryUserByEmail" resultType="com.bc208.blog.pojo.User">
+        select * from user where userEmail=#{userEmail}
+    </select>
+
+    <select id="selectIdByEmail" resultType="com.bc208.blog.pojo.User">
+        select userId from user where userEmail=#{userEmail}
+    </select>
+
+    <select id="queryUsers" resultType="com.bc208.blog.pojo.User">
+        select * from user
+    </select>
+    <select id="getByUserEmail" resultType="com.bc208.blog.pojo.User">
+        select * from user where userEmail=#{email}
+    </select>
+
+    <select id="getByUserName" resultType="com.bc208.blog.pojo.User">
+        select * from user where userName=#{userName}
+    </select>
+
+    <select id="checkUserEnabled" resultType="java.lang.Integer">
+        select enabled from user where userEmail=#{userEmail}
+    </select>
+
+    <insert id="registerUser" parameterType="com.bc208.blog.pojo.User" statementType="PREPARED" keyProperty="userId">
+        insert into user(userName, userEmail, userPassword, userRole, enabled, accountNoExpired,
+                         credentialsNoExpired, accountNoLocked, userToken)
+                values (#{userName}, #{userEmail}, #{userPassword}, #{userRole}, #{enabled}, #{accountNoExpired},
+                                 #{credentialsNoExpired}, #{accountNoLocked}, #{userToken})
+    </insert>
+
+    <update id="updateUser" parameterType="com.bc208.blog.pojo.User">
+        update user set userToken=concat(userEmail,'?id=',cast(userId AS char)) where userEmail=#{userEmail}
+    </update>
+
+    <insert id="userDemand" statementType="PREPARED">
+        insert into demand(userName, demandName, demandDescription, demandStatus) values (#{userName}, #{demandName}, #{demandDescription}, #{demandStatus})
+    </insert>
+
+    <update id="changeDemand" statementType="PREPARED">
+        update demand set demandStatus=#{demandStatus},demandDescription=#{demandDescription}  where demandName=#{demandName} and userName=#{userName}
+    </update>
+    <update id="makeDefaultPassword">
+        update user set userPassword=#{userPassword} where userEmail=#{userEmail}
+    </update>
+
+
+</mapper>

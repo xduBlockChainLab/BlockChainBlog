@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bc208.blog.repository.quartz.mapper.quartzMapper">
+
+    <update id="updateDescription">
+        update qrtz_job_details set DESCRIPTION=#{captcha} where JOB_CLASS_NAME=#{JOB_CLASS_NAME}
+    </update>
+    <select id="getDescription" resultType="java.lang.String">
+        select DESCRIPTION from qrtz_job_details where JOB_CLASS_NAME=#{JOB_CLASS_NAME}
+    </select>
+
+</mapper>
