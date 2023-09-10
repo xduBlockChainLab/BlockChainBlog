@@ -16,6 +16,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 public class BlogApplication {
 
     public static void main(String[] args) {
+        System.out.println("SpringBoot Application");
         SpringApplication.run(BlogApplication.class, args);
     }
 
