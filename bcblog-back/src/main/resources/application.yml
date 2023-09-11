@@ -24,3 +24,9 @@ server:
 #  mapper-locations: classpath:com/bc208/blog/mapper/*.xml
 #  type-aliases-package: com.bc208.blog.mapper
 
+mybatis:
+  #  mapper-locations: classpath:com/bc208/blog/mapper/*.xml
+  #  type-aliases-package: com.bc208.blog.repository.mapper
+  #  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

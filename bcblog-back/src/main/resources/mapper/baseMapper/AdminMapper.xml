@@ -28,6 +28,7 @@
     <select id="getUserCount" resultType="java.lang.Long">
         select count(1) from user
     </select>
+
     <select id="getAdminByEmail" resultType="com.bc208.blog.pojo.Admin">
         select * from admin where userEmail=#{email}
     </select>

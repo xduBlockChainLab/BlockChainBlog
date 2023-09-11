@@ -7,9 +7,9 @@ import com.bc208.blog.common.vo.MailVo;
 import com.bc208.blog.common.vo.PageVO;
 import com.bc208.blog.pojo.User;
 import com.bc208.blog.repository.base.mapper.ApplicationMapper;
-import com.bc208.blog.service.AdminService;
 import com.bc208.blog.service.MailService;
 import com.bc208.blog.service.QuartzService;
+import com.bc208.blog.service.impl.AdminServiceImpl;
 import com.bc208.blog.utils.ResultInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class AdminController {
 
     @Autowired
-    AdminService adminService;
+    AdminServiceImpl adminService;
 
     @Autowired
     QuartzService quartzService;
@@ -47,7 +47,7 @@ public class AdminController {
             try {
                 if (adminService.adminRegister(adminRegisterDto) == 1) {
                     log.info("Admin registration successful");
-                    return new ResultInfo().success(2005, "User registration success");
+                    return new ResultInfo().success(2005, "Admin registration success");
                 } else {
                     log.info("Admin registration failure");
                     return new ResultInfo().error(5005, "User registration fail");
@@ -65,7 +65,6 @@ public class AdminController {
     @ResponseBody
     public ResultInfo userLogin(@RequestBody LoginDto user) throws Exception {
         try {
-            log.info("Login successful");
             return new ResultInfo().success(2003, "Admin login success", adminService.adminLogin(user));
         } catch (Exception e) {
             e.printStackTrace();

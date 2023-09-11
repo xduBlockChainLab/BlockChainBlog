@@ -12,16 +12,16 @@
                     <router-link to="/" class="toIndex">BlackChain Studio 208</router-link>
                 </div>
                 <div style="float: left; margin-left: 10%" id="box">
-                    <router-link to="/applicationmanage">面试情况</router-link>    
+                    <router-link to="/applicationmanage">用户情况</router-link>    
                 </div>
                 <div style="float: left; margin-left: 10%" id="box">
-                    <router-link to="/membermanage">成员管理</router-link>
+                    <router-link to="/membermanage">1</router-link>
                 </div>
                 <div style="float: left; margin-left: 10%" id="box">
-                    <router-link to="/upcomemanage">近期安排</router-link>
+                    <router-link to="/upcomemanage">2</router-link>
                 </div>
                 <div style="float: left; margin-left: 10%" id="box">
-                    <router-link to="/webmanage">网站情况</router-link>
+                    <router-link to="/webmanage">3</router-link>
                 </div>
                 <div style="float: right; padding-right: 50px; padding-top: 20px;">
                     <el-dropdown>

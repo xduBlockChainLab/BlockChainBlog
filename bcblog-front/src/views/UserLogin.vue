@@ -37,7 +37,11 @@
 import { reactive, ref } from 'vue'
 import { FormInstance, FormRules } from 'element-plus'
 import axios from 'axios';
+
 import useRouter from '../router/index'
+const router = useRouter
+
+import { ElMessage } from 'element-plus'
 
 interface RuleForm {
     email: string
@@ -68,9 +72,6 @@ const rules = reactive<FormRules<RuleForm>>({
     ],
 })
 
-import { ElMessage } from 'element-plus'
-const router = useRouter
-
 const successMessage = () => {
     ElMessage({
         message: '登录成功, 正在跳转.',
@@ -92,12 +93,14 @@ const Login = async (formEl: FormInstance | undefined) => {
     if (!formEl) return console.error("错误");
     await formEl.validate((valid, fields) => {
         if (valid) {
-            axios.post('http://localhost:8080/bc208/login', {
+            axios.post('bc208/login', {
                 "email": ruleForm.email,
                 "password": ruleForm.password
             })
                 .then(function (response) {
-                    if (response.data.code == 2003) {
+                    if (response.data.code == 2003 && response.data.result.token != null) {
+                        localStorage.setItem('token', response.data.result.token),
+                        localStorage.setItem('role', "user"),
                         successMessage()
                     } else {
                         falseMessage()
@@ -120,7 +123,7 @@ const Register = () => {
     })
     setTimeout(()=>{
         router.push('/register');
-    },2000)
+    },1000)
 }
 
 const Admin = () => {
@@ -130,7 +133,7 @@ const Admin = () => {
     })
     setTimeout(()=>{
         router.push('/adminlogin');
-    },2000)
+    },1000)
 }
 
 

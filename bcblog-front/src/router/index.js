@@ -6,6 +6,7 @@ const routes = [
         name: 'index',
         component: () => import("../views/Index.vue")
     },
+
     {
         path: '/application',
         name: 'application',
@@ -21,6 +22,17 @@ const routes = [
         name: 'register',
         component: () => import("../views/UserRegister.vue")
     },
+
+    {
+        path: '/userpage',
+        name: 'userpage',
+        component: () => import("../views/UserPage.vue"),
+        meta: {
+            needLogin: true,
+            roles: ["user"],
+        },
+    },
+
     {
         path: '/adminlogin',
         name: 'adminlogin',
@@ -36,6 +48,11 @@ const routes = [
         name: 'adminpage',
         component: () => import("../views/AdminPage.vue"),
         redirect: "/applicationmanage",
+        meta: {
+            needLogin: true,
+            roles: ["admin"],
+        },
+
         children: [
             {
                 path: '/applicationmanage',
@@ -61,16 +78,42 @@ const routes = [
                 name: 'webmanage',
                 component: () => import("../views/WebManage.vue")
             },
-        ]
+        ],
     },
-
-
 ]
 
 const router = createRouter({ //设置为history模式
     history: createWebHistory(),
     routes: routes
 })
+
+router.beforeEach(async (to, from, next) => {
+    // 如果需要登录
+    if (to.meta.needLogin) {
+      // 获取token
+        const token = localStorage.getItem("token");
+        // alert(token)
+      // 如果有token 则直接放行
+        if (token) {
+            // 获取用户信息，从store里面获取
+            let role = localStorage.getItem("role");
+            // alert(role)
+            if(to.meta.roles && to.meta.roles.includes(role)){
+                next();
+            }else{
+                alert("warning");
+                next("/login");
+            }
+        } else {
+        // 否则去登录页
+        alert("warning");
+        next("/login");
+        }
+    } else {
+        // 不需要登录则直接放行
+        next();
+    }
+});
 
 export default router;
 

@@ -78,15 +78,18 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
         return adminMapper.registerAdmin(admin);
     }
 
+
     @Override
+    @Transactional
     public HashMap<String, String> adminLogin(LoginDto loginDto) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
         // 使用authenticationManager调用loadUserByUsername
+
         Authentication authentication = authenticationManager.authenticate(authToken);
         if(authentication == null) {
             throw new RuntimeException("Login false");
         }
-
+        log.info("admin login successful");
         SecurityAdmin securityAdmin = (SecurityAdmin) authentication.getPrincipal();
         Integer adminId = securityAdmin.getAdmin().getUserId();
         String usrName = securityAdmin.getUsername();
@@ -173,6 +176,5 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
             return false;
         }
     }
-
 
 }

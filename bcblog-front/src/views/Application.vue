@@ -55,6 +55,11 @@ import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import axios from 'axios';
 
+import useRouter from '../router/index'
+const router = useRouter
+
+import { ElMessage } from 'element-plus'
+
 interface RuleForm {
     name: string
     grade: string
@@ -118,15 +123,31 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     if(!formEl) return console.error("错误");
     await formEl.validate((valid, fields) => {
         if (valid) {
-            const response = axios.post('http://localhost:8080/application/submit', {
+            axios.post('application/submit', {
                 "userName": ruleForm.name,
                 "userGrade": ruleForm.grade,
                 "userEmail": ruleForm.email,
                 "userQq": ruleForm.qq,
                 "userInterest": ruleForm.type,
                 "userDescription": ruleForm.desc
+            })
+                .then(function (response) {
+                    if (response.data.code == 2001) {
+                        console.log(response.data.msg)
+                        ElMessage({
+                            message: '申请提交成功, 正在跳转到首页.',
+                            type: 'success',
+                        })
+                        setTimeout(()=>{
+                            router.push('/');
+                        },1000)
+                    } else {
+                        formEl.resetFields()
+                    }
                 })
-            console.log(response.data.msg)
+                .catch(function (error) {
+                    console.log(error);
+                });
         } else {
         console.log('error submit!', fields)
         }

@@ -32,7 +32,8 @@ public class JwtUtil {
 
 
     public static String createJwt(String subject, Integer userid, String userRole){
-        JwtBuilder builder = getJwtBuilder(subject, getUUID(), userid, userRole);// 设置过期时间
+        JwtBuilder builder = getJwtBuilder(subject, getUUID(), userid, userRole);
+        // 设置过期时间
         return builder.compact();
     }
 

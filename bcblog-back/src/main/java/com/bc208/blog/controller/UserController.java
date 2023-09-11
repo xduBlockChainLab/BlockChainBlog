@@ -28,7 +28,6 @@ public class UserController {
     @ResponseBody
     public ResultInfo userLogin(@RequestBody LoginDto user) throws Exception {
         try{
-            log.info("Login successful");
             return new ResultInfo().success(2003, "User login success", usersServiceImpl.userLogin(user));
         }catch (Exception e){
             e.printStackTrace();

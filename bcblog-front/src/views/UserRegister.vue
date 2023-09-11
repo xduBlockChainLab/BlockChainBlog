@@ -80,7 +80,7 @@ const Register = async (formEl: FormInstance | undefined) => {
     if(!formEl) return console.error("错误");
     await formEl.validate((valid, fields) => {
         if (valid) {
-            axios.post('http://localhost:8080/bc208/register', {
+            axios.post('bc208/register', {
                 "username": ruleForm.name,
                     "email": ruleForm.email,
                     "password": ruleForm.password

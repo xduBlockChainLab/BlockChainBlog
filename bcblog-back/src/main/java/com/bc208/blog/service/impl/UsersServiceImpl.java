@@ -61,6 +61,7 @@ public class UsersServiceImpl implements UserService, UserDetailsService {
         if(authentication == null) {
             throw new RuntimeException("Login false");
         }
+        log.info("user login successful");
 
         SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
         Integer useId = securityUser.getUser().getUserId();
@@ -72,7 +73,7 @@ public class UsersServiceImpl implements UserService, UserDetailsService {
         for (GrantedAuthority auth : securityUser.getAuthorities()) {
             authList.add(auth.getAuthority());
         }
-        String jwt = JwtUtil.createJwt("user login", useId, role);
+        String jwt = JwtUtil.createJwt("User login", useId, role);
         //TODO: Token存入数据库, 考虑Redis和数据库的关系
 
         //存入Redis
@@ -129,8 +130,8 @@ public class UsersServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = usersMapper.getByUserEmail(username);
+    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+        User user = usersMapper.getByUserEmail(userEmail);
         if (user == null) {
             log.info("username not found");
             throw new UsernameNotFoundException("username not found");

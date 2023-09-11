@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     @Qualifier("UsersServiceImpl")
-    private UserDetailsService  usersService;
+    private UserDetailsService usersService;
 
     @Autowired
     @Qualifier("AdminServiceImpl")

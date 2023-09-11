@@ -38,7 +38,10 @@ import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import axios from 'axios';
+
 import useRouter from '../router/index'
+const router = useRouter
+
 
 interface RuleForm {
     email: string
@@ -86,19 +89,21 @@ const falseMessage = () => {
     })
 }
 
-const router = useRouter
+
 
 const Login = async (formEl: FormInstance | undefined) => {  
     if (!formEl) return console.error("错误");
     await formEl.validate((valid, fields) => {
         if (valid) {
-            axios.post('http://localhost:8080/admin/login', {
+            axios.post('admin/login', {
                 "email": ruleForm.email,
                 "password": ruleForm.password
             })
                 .then(function (response) {
-                    if (response.data.code == 2003) {
-                        console.log(response.data.result.token)
+                    if (response.data.code == 2003 && response.data.result.token != null) {
+                        // console.log(response.data.result.token)
+                        localStorage.setItem('token', response.data.result.token),
+                        localStorage.setItem('role', "admin"),
                         successMessage()
                     } else {
                         falseMessage()
