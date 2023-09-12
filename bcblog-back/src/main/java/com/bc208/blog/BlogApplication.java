@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @author QingheLi
@@ -13,6 +14,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 @ServletComponentScan
 //@MapperScan("com.bc208.blog.repository")
 //@ComponentScan(basePackages = {"com.bc208.blog.repository", "com.bc208.blog.controller", "com.bc208.blog.service"})
+@EnableScheduling
 public class BlogApplication {
 
     public static void main(String[] args) {

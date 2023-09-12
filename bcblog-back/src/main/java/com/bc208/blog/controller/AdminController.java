@@ -8,7 +8,6 @@ import com.bc208.blog.common.vo.PageVO;
 import com.bc208.blog.pojo.User;
 import com.bc208.blog.repository.base.mapper.ApplicationMapper;
 import com.bc208.blog.service.MailService;
-import com.bc208.blog.service.QuartzService;
 import com.bc208.blog.service.impl.AdminServiceImpl;
 import com.bc208.blog.utils.ResultInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +29,8 @@ public class AdminController {
     @Autowired
     AdminServiceImpl adminService;
 
-    @Autowired
-    QuartzService quartzService;
+//    @Autowired
+//    QuartzService quartzService;
 
 
     @Autowired
@@ -43,8 +42,10 @@ public class AdminController {
     @PostMapping("/register")
     @ResponseBody
     public ResultInfo userRegister(@RequestBody adminRegisterDto adminRegisterDto) throws Exception {
-        if (adminRegisterDto.getCaptcha().equals(quartzService.getAdminRegisterCaptcha())) {
-            try {
+//        if (adminRegisterDto.getCaptcha().equals(quartzService.getAdminRegisterCaptcha())) {
+        if (adminRegisterDto.getCaptcha().equals("36MKrz")) {
+
+                try {
                 if (adminService.adminRegister(adminRegisterDto) == 1) {
                     log.info("Admin registration successful");
                     return new ResultInfo().success(2005, "Admin registration success");

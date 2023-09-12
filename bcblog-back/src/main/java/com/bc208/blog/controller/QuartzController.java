@@ -102,7 +102,7 @@
 //        repository.updateState(quartzBean.getJobId(), 2);
 //        log.info("=========删除定时任务成功=========");
 //        return HttpStatus.OK;
-
+//
 //    }
 //
 //}

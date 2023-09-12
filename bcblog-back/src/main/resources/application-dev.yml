@@ -30,7 +30,7 @@ spring:
             class: org.quartz.impl.jdbcjobstore.JobStoreTX # JobStore 实现类
             driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
             tablePrefix: QRTZ_ # Quartz 表前缀
-            isClustered: true # 是集群模式
+            isClustered: false # 是集群模式
             clusterCheckinInterval: 1000
             useProperties: false
           # 线程池相关配置

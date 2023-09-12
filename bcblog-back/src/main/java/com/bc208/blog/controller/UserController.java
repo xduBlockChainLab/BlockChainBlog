@@ -5,7 +5,6 @@ import com.bc208.blog.common.dto.userRegisterDto;
 import com.bc208.blog.common.vo.MailVo;
 import com.bc208.blog.repository.quartz.mapper.TestMapper;
 import com.bc208.blog.service.MailService;
-import com.bc208.blog.service.QuartzService;
 import com.bc208.blog.service.impl.UsersServiceImpl;
 import com.bc208.blog.utils.ResultInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -92,8 +91,8 @@ public class UserController {
     @Autowired
     TestMapper testMapper;
 
-    @Autowired
-    QuartzService quartzService;
+//    @Autowired
+//    QuartzService quartzService;
 
 //    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/hello")

@@ -6,6 +6,8 @@ import com.bc208.blog.utils.AdminCaptchaJob;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -17,7 +19,7 @@ import java.util.Set;
  */
 @Service
 @Slf4j
-public class QuartzServiceImpl implements QuartzService {
+public class QuartzServiceImpl implements QuartzService, ApplicationRunner {
 
     private static final String ID = "Qinghe";
 
@@ -29,22 +31,32 @@ public class QuartzServiceImpl implements QuartzService {
      */
     @Override
     public void sendAdminRegisterCaptcha() throws SchedulerException {
-        JobDetail jobDetail = JobBuilder.newJob(AdminCaptchaJob.class)
-                .withIdentity(AdminCaptchaJob.class.getName())
-                .storeDurably()
-                .build();
-        CronScheduleBuilder scheduleBuilder =
+        try {
+            JobDetail jobDetail = JobBuilder.newJob(AdminCaptchaJob.class)
+                    .withIdentity(AdminCaptchaJob.class.getName())
+                    .storeDurably()
+                    .build();
+
+            CronScheduleBuilder scheduleBuilder =
                 CronScheduleBuilder.cronSchedule("0 40 14 10 * ?");
-        Trigger trigger = TriggerBuilder.newTrigger()
-                .forJob(jobDetail)
-                .withIdentity(ID + " 0Trigger")
-                .withSchedule(scheduleBuilder)
-                .startNow()
-                .build();
-        Set<Trigger> set = new HashSet<>();
-        set.add(trigger);
-        scheduler.scheduleJob(jobDetail, set, true);
-//        test
+//                    CronScheduleBuilder.cronSchedule("0/10 * * * * ? *");
+
+            Trigger trigger = TriggerBuilder.newTrigger()
+                    .forJob(jobDetail)
+                    .withIdentity(ID + " 1Trigger")
+                    .withSchedule(scheduleBuilder)
+                    .startNow()
+                    .build();
+
+            Set<Trigger> set = new HashSet<>();
+            set.add(trigger);
+
+            scheduler.scheduleJob(jobDetail, set, true);
+            scheduler.start();
+            log.warn("JobDetail test");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -54,5 +66,10 @@ public class QuartzServiceImpl implements QuartzService {
     @Override
     public String getAdminRegisterCaptcha(){
         return quartzMapper.getDescription(AdminCaptchaJob.class.getName());
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        sendAdminRegisterCaptcha();
     }
 }
