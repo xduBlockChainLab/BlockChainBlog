@@ -7,7 +7,7 @@
             color: #fefefe;
             text-shadow: 0 0 0.5em #00ffff, 0 0 0.2em #5c5c5c;
         " class="BCName">
-                <router-link to="/" class="toIndex">BlackChain Studio 208</router-link>
+                <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
             </div>
         </div>
         <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="150px" class="applicationForm" status-icon

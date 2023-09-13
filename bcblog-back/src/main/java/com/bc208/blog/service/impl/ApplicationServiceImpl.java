@@ -1,13 +1,16 @@
 package com.bc208.blog.service.impl;
 
 import com.bc208.blog.common.vo.PageVO;
-import com.bc208.blog.repository.base.mapper.ApplicationMapper;
+import com.bc208.blog.common.vo.applicationDetailVO;
+import com.bc208.blog.common.vo.applicationVO;
 import com.bc208.blog.pojo.Application;
+import com.bc208.blog.repository.base.mapper.ApplicationMapper;
 import com.bc208.blog.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,13 +37,21 @@ public class ApplicationServiceImpl implements ApplicationService {
         return pageVO;
     }
 
+
+
     @Override
     public String applicationEmail(int userId){
         return applicationMapper.getApplicationEmail(userId);
     }
 
     @Override
-    public Application applicationDetail(int userId) {
-        return applicationMapper.getApplicationDetail(userId);
+    public List<applicationVO> getNoInterview() {
+        return applicationMapper.getNoInterview();
+    }
+
+    @Override
+    public applicationDetailVO getApplicationDetail(String userName) {
+        System.out.println("test"+userName+"----------------");
+        return applicationMapper.getApplicationDetail(userName);
     }
 }

@@ -9,7 +9,7 @@
                         float: left;
                         padding-left: 10px;
                         " class="BCName">
-                    <router-link to="/" class="toIndex">BlackChain Studio 208</router-link>
+                    <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
                 </div>
                 <div style="float: left; margin-left: 10%" id="box">
                     <router-link to="/applicationmanage">面试情况</router-link>    

@@ -6,7 +6,7 @@
                 <div style="font-size: 60px;      
                 color: #fefefe;
                 text-shadow: 0 0 0.5em #00ffff, 0 0 0.2em #5c5c5c;
-                " class="BCName">BlackChain Studio 208</div>
+                " class="BCName">BlockChain Studio 208</div>
             </div>
         </div>
         <div style="transform: translateY(-40vh);" class="someButton">

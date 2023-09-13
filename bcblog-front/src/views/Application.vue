@@ -7,7 +7,7 @@
             color: #fefefe;
             text-shadow: 0 0 0.5em #00ffff, 0 0 0.2em #5c5c5c;
         " class="BCName">
-                <router-link to="/" class="toIndex">BlackChain Studio 208</router-link>
+                <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
             </div>
         </div>
         <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="150px" class="applicationForm" status-icon
@@ -59,6 +59,7 @@ import useRouter from '../router/index'
 const router = useRouter
 
 import { ElMessage } from 'element-plus'
+import { ca } from 'element-plus/es/locale';
 
 interface RuleForm {
     name: string
@@ -119,16 +120,32 @@ const rules = reactive<FormRules<RuleForm>>({
     ],
 })
 
+let userInterest : string
+
 const submitForm = async (formEl: FormInstance | undefined) => {  
     if(!formEl) return console.error("错误");
     await formEl.validate((valid, fields) => {
         if (valid) {
+            switch (ruleForm.type) {
+                case 1:
+                    userInterest = "FrontEnd"
+                    break;
+                case 2:
+                    userInterest = "BackEnd"
+                    break;
+                case 3:
+                    userInterest = "BlockChain"
+                    break;
+                case 4:
+                    userInterest = "Beauty/PPT"
+                    break;
+            }
             axios.post('application/submit', {
                 "userName": ruleForm.name,
                 "userGrade": ruleForm.grade,
                 "userEmail": ruleForm.email,
                 "userQq": ruleForm.qq,
-                "userInterest": ruleForm.type,
+                "userInterest": userInterest,
                 "userDescription": ruleForm.desc
             })
                 .then(function (response) {

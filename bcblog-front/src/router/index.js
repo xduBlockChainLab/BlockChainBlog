@@ -52,7 +52,6 @@ const routes = [
             needLogin: true,
             roles: ["admin"],
         },
-
         children: [
             {
                 path: '/applicationmanage',
@@ -78,7 +77,7 @@ const routes = [
                 name: 'webmanage',
                 component: () => import("../views/WebManage.vue")
             },
-        ],
+        ],        
     },
 ]
 
@@ -92,7 +91,7 @@ router.beforeEach(async (to, from, next) => {
     if (to.meta.needLogin) {
       // 获取token
         const token = localStorage.getItem("token");
-        #TODO: 这里的认证逻辑需要处理.
+        //TODO: 这里的认证逻辑需要处理.
         // alert(token)
       // 如果有token 则直接放行
         if (token) {

@@ -7,7 +7,7 @@
             color: #fefefe;
             text-shadow: 0 0 0.5em #00ffff, 0 0 0.2em #5c5c5c;
         " class="BCName" >
-                <router-link to="/" class="toIndex">BlackChain Studio 208</router-link>
+                <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
             </div>
         </div>
         <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="150px" class="applicationForm" status-icon
@@ -39,6 +39,7 @@ import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import axios from 'axios';
 import useRouter from '../router/index'
+const router = useRouter
 
 interface RuleForm {
     name: string
@@ -86,7 +87,7 @@ const rules = reactive<FormRules<RuleForm>>({
 })
 
 import { ElMessage } from 'element-plus'
-const router = useRouter
+
 
 const successMessage = () => {
     ElMessage({

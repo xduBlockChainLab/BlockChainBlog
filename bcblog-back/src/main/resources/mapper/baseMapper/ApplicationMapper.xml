@@ -19,8 +19,11 @@
         select userEmail from application where userId=#{userId}
     </select>
 
-    <select id="getApplicationDetail" resultType="com.bc208.blog.pojo.Application" statementType="PREPARED">
-        select * from application where userId = #{userId}
+    <select id="getApplicationDetail" resultType="com.bc208.blog.common.vo.applicationDetailVO" statementType="PREPARED">
+        select  * from application where userName = #{userName} order by userId desc limit 0,1
     </select>
-    
+    <select id="getNoInterview" resultType="com.bc208.blog.common.vo.applicationVO">
+        select userName, userGrade, userInterest from application where userJudged = 0
+    </select>
+
 </mapper>

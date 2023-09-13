@@ -1,5 +1,7 @@
 package com.bc208.blog.repository.base.mapper;
 
+import com.bc208.blog.common.vo.applicationDetailVO;
+import com.bc208.blog.common.vo.applicationVO;
 import com.bc208.blog.pojo.Application;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -42,9 +44,10 @@ public interface ApplicationMapper {
 
     /**
      * 通过userId获取对应的详细信息
-     * @param userId 用户Id
+     * @param userName 用户Id
      * @return 返回详细用户信息
      */
-    Application getApplicationDetail(int userId);
+    applicationDetailVO getApplicationDetail(String userName);
 
+    List<applicationVO> getNoInterview();
 }

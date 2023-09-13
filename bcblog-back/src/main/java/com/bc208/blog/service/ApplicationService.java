@@ -1,7 +1,11 @@
 package com.bc208.blog.service;
 
 import com.bc208.blog.common.vo.PageVO;
+import com.bc208.blog.common.vo.applicationDetailVO;
+import com.bc208.blog.common.vo.applicationVO;
 import com.bc208.blog.pojo.Application;
+
+import java.util.List;
 
 /**
  * @author QingheLi
@@ -30,10 +34,12 @@ public interface ApplicationService {
     String applicationEmail(int userId);
     //TODO: 不对劲, 我通过applicationDetail获取详细信息, 为什么还要单独获取邮箱, 多余了
 
+    List<applicationVO> getNoInterview();
+
     /**
      * 通过userId获取对应的详细信息
      * @param userId 用户Id
      * @return 返回详细用户信息
      */
-    Application applicationDetail(int userId);
+    applicationDetailVO getApplicationDetail(String userName);
 }
