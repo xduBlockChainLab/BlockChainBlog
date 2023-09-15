@@ -16,7 +16,7 @@
     </select>
 
     <select id="getApplicationEmail" resultType="String" statementType="PREPARED">
-        select userEmail from application where userId=#{userId}
+        select userEmail from application where userName=#{userName} order by userId desc limit 0,1
     </select>
 
     <select id="getApplicationDetail" resultType="com.bc208.blog.common.vo.applicationDetailVO" statementType="PREPARED">
@@ -24,6 +24,9 @@
     </select>
     <select id="getNoInterview" resultType="com.bc208.blog.common.vo.applicationVO">
         select userName, userGrade, userInterest from application where userJudged = 0
+    </select>
+    <select id="getInterviewed" resultType="com.bc208.blog.common.vo.applicationVO">
+        select userName, userGrade, userInterest from application where userJudged = 1
     </select>
 
 </mapper>

@@ -59,7 +59,6 @@ import useRouter from '../router/index'
 const router = useRouter
 
 import { ElMessage } from 'element-plus'
-import { ca } from 'element-plus/es/locale';
 
 interface RuleForm {
     name: string
@@ -70,7 +69,6 @@ interface RuleForm {
     desc: string
 }
 
-const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
     name: '',
@@ -249,4 +247,5 @@ const resetForm = (formEl: FormInstance | undefined) => {
     text-decoration: none;
     color: #00ffff;
 }
+
 </style>

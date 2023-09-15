@@ -37,7 +37,7 @@ public interface AdminMapper {
      * @param userId 招聘人名字
      * @return 返回更新条数
      */
-    int upDateApplicationStatus(int userId);
+    int upDateApplicationStatus(String userName);
 
     List<User> getUserByPage(int page, int size);
 

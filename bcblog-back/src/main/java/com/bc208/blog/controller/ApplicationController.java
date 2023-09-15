@@ -38,26 +38,26 @@ public class ApplicationController {
         }
     }
 
-//    @PostMapping("/applications")
-//    public ResultInfo applicationPages(@RequestBody PageVO<Application> pageVO){
-//        pageVO = applicationService.applicationByPage(pageVO);
-//        if(pageVO != null){
-//            log.info("获取面试人员信息成功.");
-//            return new ResultInfo().success(2002,"获取面试人员信息成功." ,pageVO);
-//        }else {
-//            log.warn("获取面试人员信息失败.");
-//            return new ResultInfo().error(5002, "Get applications fail");
-//        }
-//    }
-
     @GetMapping("/applications")
-    public ResultInfo applicationPages(){
+    public ResultInfo getApplications(){
         List<applicationVO> applications = applicationService.getNoInterview();
         if(applications != null){
-            log.info("获取面试人员信息成功.");
-            return new ResultInfo().success(2002,"获取面试人员信息成功." ,applications);
+            log.info("获取未面试人员信息成功.");
+            return new ResultInfo().success(2002,"获取未面试人员信息成功." ,applications);
         }else {
             log.warn("获取面试人员信息失败.");
+            return new ResultInfo().error(5002, "Get applications fail");
+        }
+    }
+
+    @GetMapping("/applicationsJudged")
+    public ResultInfo getApplicationsJudged(){
+        List<applicationVO> applications = applicationService.getInterviewed();
+        if(applications != null){
+            log.info("获取已面试人员信息成功.");
+            return new ResultInfo().success(2002,"获取已面试人员信息成功." ,applications);
+        }else {
+            log.warn("获取已面试人员信息失败.");
             return new ResultInfo().error(5002, "Get applications fail");
         }
     }

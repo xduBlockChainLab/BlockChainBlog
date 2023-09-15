@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class JudgeDto {
-    private int userId;
+    private String userName;
     private String comments;
     private int score;
 }

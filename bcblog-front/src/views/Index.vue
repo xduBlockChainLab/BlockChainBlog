@@ -20,9 +20,12 @@
                     border-radius: 30px;
                     font-size: large;
                     margin-right: 500px;
-                    " round @click="Application">加入我们吧</el-button>
+                    " round @click="Application">
+                    加入我们吧
+            </el-button>
             <el-dropdown >
-                <el-button type="primary" style="position: absolute;
+                <el-button type="primary" size="large"
+                    style="position: absolute;
                         background-color:#00ffff;
                         color:white;
                         width: 300px;
@@ -31,7 +34,7 @@
                         border-radius: 30px;
                         font-size: large;
                         margin-left: 500px;
-                        ">
+                    ">
                     探索新世界<el-icon></el-icon>
                 </el-button>
                 <template #dropdown>
@@ -81,7 +84,7 @@
     </div>
 </template>
 
-<script>
+<script se>
 export default {
     name: 'index',
     methods: {
@@ -98,14 +101,7 @@ export default {
 }
 </script>
 
-
 <style scoped>
-
-* {
-    padding: 0;
-    margin: 0;
-}
-
 .shell {
     height: 100vh;
     overflow-x: hidden;
@@ -182,4 +178,5 @@ export default {
     color: white;
     font-size: 30px;
 }
+
 </style>

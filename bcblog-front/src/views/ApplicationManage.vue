@@ -4,110 +4,99 @@
             <div style="font-size: smaller; height: 40px; line-height: 40px">
                 待面试人名单
             </div>
-            <el-table :data="noInterview" height="340" style="width: 100%">
-                <el-table-column prop="userName" label="名字" width="100"></el-table-column>
-                <el-table-column prop="userGrade" label="年级" width="100"></el-table-column>
-                <el-table-column prop="userInterest" label="方向" width="100"></el-table-column>
-                <el-table-column fixed="right" label="操作" width="100">
-                    <template #default="scope">
-                        <el-button link type="primary" size="small" @click="loadDetail(scope.row.userName)">评价</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
+            <div>
+                <el-table :data="noInterview" height="500px" style="width: 100%">
+                    <el-table-column prop="userName" label="名字"></el-table-column>
+                    <el-table-column prop="userGrade" label="年级"></el-table-column>
+                    <el-table-column prop="userInterest" label="方向"></el-table-column>
+                    <el-table-column fixed="right" label="操作">
+                        <template #default="scope">
+                            <el-button link type="primary" size="small"
+                                @click="loadDetail(scope.row.userName)">评价</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
         </div>
         <div style="height: 45%; margin-top: 0px">
-            <div style="font-size: smaller; height: 40px; line-height: 40px">
+            <div style="font-size: smaller; height: 42px; line-height: 40px">
                 已面试人名单
             </div>
-            <el-table :data="tableData" height="270" style="width: 100%">
-                <el-table-column prop="name" label="Name" width="100" />
-                <el-table-column prop="grade" label="grade" width="100" />
-                <el-table-column prop="type" label="type" width="100" />
-                <el-table-column fixed="right" label="Operations" width="120">
-                    <template #default>
-                        <el-button link type="primary" size="small" @click="handleClick">重新评价</el-button>
+            <div>
+                <el-table :data="Interviewed" height="410px" style="width: 100%">
+                    <el-table-column prop="userName" label="Name"/>
+                    <el-table-column prop="userGrade" label="grade"/>
+                    <el-table-column prop="userInterest" label="type"/>
+                    <el-table-column fixed="right" label="Operations">
+                    <template #default="scope">
+                        <el-button link type="primary" size="small" 
+                            @click="handleClick(scope.row.userName)">重新评价</el-button>
                     </template>
-                </el-table-column>
-            </el-table>
+                    </el-table-column>
+                </el-table>
+            </div>
         </div>
     </div>
     <div style="width: 60%; float: left; height: 100%" class="judge">
-        <div class="applicationDetail" style="display, width: 100%;">
-            <el-descriptions :data="applicationDetail" :props="DefaultProps" class="margin-top" title="面试人详情" :column="3"
-                border style="font-size: smaller; height: 40px; line-height: 40px">
-                <el-descriptions-item>
+        <div class="applicationDetail">
+            <el-descriptions :data="applicationDetail" :props="DefaultProps" title="面试人详情" :column="2" border
+                style="font-size: smaller; height: 0px; line-height: 40px; margin: 0;">
+                <el-descriptions-item width="100px">
                     <template #label>
                         <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <user />
-                            </el-icon>
-                            姓名
+                            名字
                         </div>
                     </template>
                     {{ applicationDetail.userName }}
                 </el-descriptions-item>
-                <el-descriptions-item>
+                <el-descriptions-item width="100px">
                     <template #label>
                         <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <iphone />
-                            </el-icon>
                             年级
                         </div>
                     </template>
                     {{ applicationDetail.userGrade }}
                 </el-descriptions-item>
-                <el-descriptions-item>
+                <el-descriptions-item width="100px">
                     <template #label>
                         <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <location />
-                            </el-icon>
                             邮箱
                         </div>
                     </template>
                     {{ applicationDetail.userEmail }}
                 </el-descriptions-item>
-                <el-descriptions-item>
+                <el-descriptions-item width="100px">
                     <template #label>
                         <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <tickets />
-                            </el-icon>
                             方向
                         </div>
                     </template>
                     {{ applicationDetail.userInterest }}
                 </el-descriptions-item>
-                <el-descriptions-item>
+                <el-descriptions-item width="100px">
                     <template #label>
                         <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <office-building />
-                            </el-icon>
                             简介
                         </div>
                     </template>
                     {{ applicationDetail.userDescription }}
+                    <!-- TODO:内容过长时, 蹦出来影响布局 -->
                 </el-descriptions-item>
             </el-descriptions>
         </div>
-        <div class="adminJudge" style="display, width: 100%; margin-top: 200px">
-            <el-form :model="form" label-width="120px">
-                <el-form-item label="面试评价">
-                    <el-input v-model="form.desc" type="textarea" />
+        <div class="adminJudge" style="display, width: 50%; padding-top: 550px">
+            <el-form :data="applicationDetail" label-width="120px">
+                <el-form-item label="面试评价" prop="evaluate" style="width: 90%;">
+                    <el-input v-model="judgeForm.evaluate" type="textarea" :autosize="{ minRows: 3, maxRows: 8 }" />
                 </el-form-item>
-                <el-form-item label="兴趣方向" prop="type">
-                <el-radio-group >
-                    <el-radio :label="1">前端开发</el-radio>
-                    <el-radio :label="2">后端开发</el-radio>
-                    <el-radio :label="3">区块链开发</el-radio>
-                    <el-radio :label="4">文案PPT设计</el-radio>
-                </el-radio-group>
-            </el-form-item>
+                <el-form-item label="面试结果" prop="type">
+                    <el-radio-group v-model="judgeForm.type">
+                        <el-radio :label="0">通过</el-radio>
+                        <el-radio :label="1">不通过</el-radio>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">Create</el-button>
-                    <el-button>Cancel</el-button>
+                    <el-button type="primary" @click="submitJudge(applicationDetail.userName, judgeForm)">提交</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -120,28 +109,6 @@ import axios from "axios";
 import { DefaultProps } from "element-plus";
 import { ref } from "vue";
 
-const currentPage4 = ref(4);
-const pageSize4 = ref(10);
-const small = ref(true);
-const background = ref(false);
-
-const form = ref({
-    name: '',
-    region: '',
-    date1: '',
-    date2: '',
-    delivery: false,
-    type: [],
-    resource: '',
-    desc: '',
-})
-
-const onSubmit = () => {
-    console.log('submit!')
-}
-
-// let noInterview: application[];
-
 let noInterview = ref();
 
 const loadNoInterview = () => {
@@ -153,7 +120,6 @@ const loadNoInterview = () => {
         })
         .then((response) => {
             if (response.data.code == 2002) {
-                console.log(response.data.result);
                 noInterview.value = response.data.result;
             } else {
                 alert("获取面试人信息失败");
@@ -174,7 +140,6 @@ let applicationDetail = ref([
 ]);
 
 const loadDetail = (userName) => {
-    alert(userName)
     axios.get("application/loadDetail", {
         params: {
             userName: userName
@@ -185,7 +150,6 @@ const loadDetail = (userName) => {
     })
         .then((response) => {
             if (response.data.code == 2002) {
-                console.log(response.data.result);
                 applicationDetail.value = response.data.result
             } else {
                 alert("获取面试人信息失败");
@@ -196,18 +160,85 @@ const loadDetail = (userName) => {
         });
 }
 
-const tableData = [];
+
+const judgeForm = ref({
+    name: '',
+    evaluate: '',
+    type: 0,
+})
+
+const submitJudge = (userName, judgeForm) => {
+    axios.post("admin/judge", {
+        "userName": userName,
+        "comments": judgeForm.evaluate,
+        "score": judgeForm.type,
+
+    }, {
+        headers: {
+            token: localStorage.getItem("token"),
+        }
+    })
+        .then((response) => {
+            if (response.data.code == 2000) {
+                console.log(response.data.msg)
+            } else {
+                alert("面试结果提交失败");
+            }
+            loadNoInterview();
+            loadInterviewed();
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
+
+let Interviewed = ref();
+
+const loadInterviewed = () => {
+    axios.get("application/applicationsJudged", {
+        headers: {
+            token: localStorage.getItem("token"),
+        },
+    })
+        .then((response) => {
+            if (response.data.code == 2002) {
+                Interviewed.value = response.data.result;
+            } else {
+                alert("获取面试人信息失败");
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+};
+loadInterviewed();
+
+const handleClick = (userName) => {
+    loadDetail(userName);
+}
+
 </script>
 
+
 <style scoped>
-* {
-    padding: 0;
-    margin: 0;
+.applicationDetail :deep() .el-descriptions__body .el-descriptions__table .el-descriptions__cell {
+    text-align: center;
 }
 
-.cell-item {
-    display: flex;
-    align-items: center;
+.applicationDetail :deep() .el-descriptions__header {
+    display: block;
+    margin-bottom: 0px;
 }
 
+/* :deep(.introduction :deep().el-descriptions-el-descriptions__cell .el-descriptions__content  )  { 
+    max-width: 295px;  
+    word-break: break-all; 
+    word-wrap: break-word;
+ }
+*/
+/* td.el-descriptions__cell.el-descriptions__content{
+    max-width: 295px;  
+    word-break: break-all; 
+    word-wrap: break-word;
+} */
 </style>

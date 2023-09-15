@@ -112,7 +112,7 @@ public class AdminController {
         ResultInfo resultInfo = new ResultInfo();
         int i = adminService.judgeApplication(judgeDto);
         MailVo mailVo = new MailVo();
-        mailVo.setTo(applicationMapper.getApplicationEmail(judgeDto.getUserId()));
+        mailVo.setTo(applicationMapper.getApplicationEmail(judgeDto.getUserName()));
         if (i == 1) {
             log.info("管理员进行面试评价成功.");
             resultInfo.success();
@@ -126,9 +126,6 @@ public class AdminController {
             mailService.sendMail(mailVo);
         } else {
             log.info("管理员进行面试评价失败.");
-//            resultInfo.setCode(2002);
-//            //insert异常
-//            resultInfo.setMsg("评论异常");
             resultInfo.error(202, "Evaluate error");
         }
         return resultInfo.success();

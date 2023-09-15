@@ -14,11 +14,11 @@
     </select>
 
     <update id="judgeApplication" statementType="PREPARED">
-        update application set userComments=#{comments}, userScore=#{score} where userId=#{userId}
+        update application set userComments=#{comments}, userScore=#{score} where userName=#{userName}
     </update>
     
     <update id="upDateApplicationStatus" statementType="PREPARED">
-        update application set userJudged=1 where userId=#{userId}
+        update application set userJudged=1 where userName=#{userName}
     </update>
 
     <select id="getUserByPage" resultType="com.bc208.blog.pojo.User" statementType="PREPARED">

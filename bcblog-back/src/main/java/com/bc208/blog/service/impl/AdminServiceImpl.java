@@ -119,7 +119,7 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
      */
     @Override
     public int judgeApplication(JudgeDto judgeDto){
-        adminMapper.upDateApplicationStatus(judgeDto.getUserId());
+        adminMapper.upDateApplicationStatus(judgeDto.getUserName());
         return adminMapper.judgeApplication(judgeDto);
     }
 

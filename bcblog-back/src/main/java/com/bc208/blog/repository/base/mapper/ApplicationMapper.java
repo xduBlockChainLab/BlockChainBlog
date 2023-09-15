@@ -40,7 +40,7 @@ public interface ApplicationMapper {
      * @param userId 申请人名字
      * @return 返回申请人邮箱
      */
-    String getApplicationEmail(int userId);
+    String getApplicationEmail(String userName);
 
     /**
      * 通过userId获取对应的详细信息
@@ -50,4 +50,6 @@ public interface ApplicationMapper {
     applicationDetailVO getApplicationDetail(String userName);
 
     List<applicationVO> getNoInterview();
+
+    List<applicationVO> getInterviewed();
 }
