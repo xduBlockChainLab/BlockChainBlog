@@ -2,7 +2,7 @@
     <div class="shell">
         <div class="image img1">
             <div style="transform: translateY(-20vh)" class="BCLogo">
-                <img style="width: 300px;" src="../assets/index/BClogo.png">
+                <img style="width: 250px;" src="../assets/index/BClogo.png">
                 <div style="font-size: 60px;      
                 color: #fefefe;
                 text-shadow: 0 0 0.5em #00ffff, 0 0 0.2em #5c5c5c;
@@ -58,7 +58,10 @@
             </el-dropdown>
         </div>
         <div class="text">
-            <h1>Set goals in your mind</h1>
+            <h1>协会简介:</h1>
+            <p>西安电子科技大学区块链协会社团是在学校党委领导，团委指导下，由网络与信息安全学院具体指导，西安电子科技大学区块链技术应用与评测研究中心提供专业指导，教育部区块链技术应用与评测工程研究中心、陕西省区块链与安全计算实验室、微众银行、蚂蚁链等单位提供合作支持的学术科技类社团。</p>
+            <p>社团期望建立一个西电开源社区，主要的活动方向为区块链、科技金融等领域，聚焦涉及金融、计算机、密码学与信息安全等各个方面。</p>	        
+            <p>希望协会的区块链爱好者们，共同研发创新创业项目，在人才培养、平台测试、应用研发和底层技术研究等方面进行深入探索，争取在视野、思维、技术上将区块链及其应用达到行业前沿水准。</p>
         </div>
         <div class="image img2"></div>
         <div class="heading">
@@ -142,7 +145,7 @@ export default {
 }
 
 .image.img1 {
-    background-image: url('../assets/index/newyou.png');
+    background-image: url('../assets/index/apple.png');
     height: 100%;
     width: 100%;
 }

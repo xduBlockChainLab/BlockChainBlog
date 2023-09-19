@@ -31,10 +31,10 @@
             </el-form-item>
             <el-form-item label="兴趣方向" prop="type">
                 <el-radio-group v-model="ruleForm.type">
-                    <el-radio :label="1">前端开发</el-radio>
-                    <el-radio :label="2">后端开发</el-radio>
-                    <el-radio :label="3">区块链开发</el-radio>
-                    <el-radio :label="4">文案PPT设计</el-radio>
+                    <el-radio :label="1">技术部-开发组</el-radio>
+                    <el-radio :label="2">技术部-应用组</el-radio>
+                    <el-radio :label="3">宣传部</el-radio>
+                    <el-radio :label="4">活动部</el-radio>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="个人简介" prop="desc">
@@ -126,16 +126,16 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         if (valid) {
             switch (ruleForm.type) {
                 case 1:
-                    userInterest = "FrontEnd"
+                    userInterest = "develop"
                     break;
                 case 2:
-                    userInterest = "BackEnd"
+                    userInterest = "apply"
                     break;
                 case 3:
-                    userInterest = "BlockChain"
+                    userInterest = "publicity"
                     break;
                 case 4:
-                    userInterest = "Beauty/PPT"
+                    userInterest = "activity"
                     break;
             }
             axios.post('application/submit', {
