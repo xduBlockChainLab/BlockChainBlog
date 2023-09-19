@@ -15,7 +15,7 @@ import 'element-plus/dist/index.css'
 // 全局生效
 
 import axios from 'axios'
-axios.defaults.baseURL = 'http://localhost:8080/'
+axios.defaults.baseURL = 'http://localhost:8088/'
 
 app.use(ElementPlus)
 app.use(router)

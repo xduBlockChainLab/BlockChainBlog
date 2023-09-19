@@ -39,18 +39,20 @@
                 </el-button>
                 <template #dropdown>
                     <el-dropdown-menu>
+
                     <el-dropdown-item style="
                         background-color:#00ffff;
                         color:white;
                         width: 250px;
                         font-size: medium;
-                        " round @click="Login" >成员登录</el-dropdown-item>
+                        " round @click="Home">进入主页</el-dropdown-item>
+
                     <el-dropdown-item style="
                         background-color:#00ffff;
                         color:white;
                         width: 250px;
                         font-size: medium;
-                        " round @click="Visitor">游客访问</el-dropdown-item>
+                        " round @click="Login" >管理员登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -92,10 +94,10 @@ export default {
             this.$router.push('/application')
         },
         Login() {
-            this.$router.push('/login')
+            this.$router.push('/adminlogin')
         },
-        Visitor() {
-            alert("游客访问")
+        Home() {
+            alert("功能正在开发")
         }
     }
 }

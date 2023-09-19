@@ -22,6 +22,7 @@ public class ResultInfo {
     public ResultInfo success(){
         return new ResultInfo(2000, "success", null);
     }
+//    TODO:将这些方法静态化, 省去new操作. (参考黑马的Redis课程代码)
 
     public ResultInfo success(int code, String msg){
         return new ResultInfo(code, msg, null);

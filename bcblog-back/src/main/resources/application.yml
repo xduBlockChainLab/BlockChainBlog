@@ -18,7 +18,7 @@ spring:
 #    properties:
 #      from: 2980267045@qq.com
 server:
-  port: 8080
+  port: 8088
 
 #mybatis:
 #  mapper-locations: classpath:com/bc208/blog/mapper/*.xml

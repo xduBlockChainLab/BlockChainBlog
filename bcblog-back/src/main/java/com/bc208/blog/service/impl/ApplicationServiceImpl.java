@@ -42,7 +42,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public applicationDetailVO getApplicationDetail(String userName) {
-        System.out.println("test"+userName+"----------------");
         return applicationMapper.getApplicationDetail(userName);
     }
 }

@@ -46,6 +46,7 @@ spring:
     database: 0
     #连接0号数据库
 
+
 logging:
   file:
     name: BC208.log

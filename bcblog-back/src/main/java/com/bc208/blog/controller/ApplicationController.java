@@ -65,7 +65,6 @@ public class ApplicationController {
     @GetMapping("/loadDetail")
     @ResponseBody
     public ResultInfo loadDetail(@RequestParam(name = "userName", required = true) String userName){
-        log.warn(userName);
         applicationDetailVO application = applicationService.getApplicationDetail(userName);
         if(application != null){
             log.info("获取面试人员信息成功.");

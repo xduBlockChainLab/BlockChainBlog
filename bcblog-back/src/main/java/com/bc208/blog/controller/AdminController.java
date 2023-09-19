@@ -6,9 +6,9 @@ import com.bc208.blog.common.dto.adminRegisterDto;
 import com.bc208.blog.common.vo.MailVo;
 import com.bc208.blog.common.vo.PageVO;
 import com.bc208.blog.pojo.User;
-import com.bc208.blog.repository.base.mapper.ApplicationMapper;
 import com.bc208.blog.service.MailService;
 import com.bc208.blog.service.impl.AdminServiceImpl;
+import com.bc208.blog.service.impl.ApplicationServiceImpl;
 import com.bc208.blog.utils.ResultInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +32,11 @@ public class AdminController {
 //    @Autowired
 //    QuartzService quartzService;
 
+    @Autowired
+    ApplicationServiceImpl applicationService;
 
     @Autowired
     private MailService mailService;
-
-    @Autowired
-    private ApplicationMapper applicationMapper;
 
     @PostMapping("/register")
     @ResponseBody
@@ -112,8 +111,8 @@ public class AdminController {
         ResultInfo resultInfo = new ResultInfo();
         int i = adminService.judgeApplication(judgeDto);
         MailVo mailVo = new MailVo();
-        mailVo.setTo(applicationMapper.getApplicationEmail(judgeDto.getUserName()));
-        if (i == 1) {
+        mailVo.setTo(applicationService.applicationEmail(judgeDto.getUserName()));
+        if (i != 0) {
             log.info("管理员进行面试评价成功.");
             resultInfo.success();
             if (judgeDto.getScore() == 1) {
