@@ -34,7 +34,7 @@ public class AdminCaptchaJob extends QuartzJobBean {
             mailVo.setTo("QingheLi_XDU@163.com");
             mailVo.setText(captcha);
             mailService.sendMail(mailVo);
-            quartzMapper.updateDescription(AdminCaptchaJob.class.getName(), captcha);
+            log.warn(quartzMapper.updateDescription(AdminCaptchaJob.class.getName(), captcha));
             log.warn("Admin注册验证码生成并发送");
     }
 

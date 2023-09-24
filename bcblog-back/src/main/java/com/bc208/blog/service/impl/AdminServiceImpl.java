@@ -74,7 +74,6 @@ public class AdminServiceImpl implements AdminService, UserDetailsService {
         admin.setCredentialsNoExpired(1);
         admin.setAccountNoLocked(1);
         admin.setUserToken("a");
-
         return adminMapper.registerAdmin(admin);
     }
 

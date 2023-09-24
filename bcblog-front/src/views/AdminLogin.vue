@@ -1,11 +1,11 @@
 <template>
     <div class="shell">
         <div class="BCLogo" style="padding-top: 5%;">
-            <img style="width: 100px" src="/src/assets/index/BClogo.png" />
+            <img style="width: 150px" src="/src/assets/index/BClogo.png" />
             <div style="
             font-size: 60px;
-            color: #fefefe;
-            text-shadow: 0 0 0.5em #00ffff, 0 0 0.2em #5c5c5c;
+            /* color: #fefefe; */
+            text-shadow: 0 0 0.5em #38a1ff, 0 0 0.2em #5c5c5c;
         " class="BCName" >
                 <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
             </div>
@@ -19,9 +19,6 @@
                 <el-input v-model="ruleForm.password" />
             </el-form-item>
             <el-form-item class="submitButton">
-                <!-- <el-button type="primary" @click="Login(ruleFormRef)">
-                    登录
-                </el-button> -->
                 <el-button type="primary" @click="Login(ruleFormRef)">
                     登录
                 </el-button>
@@ -38,6 +35,7 @@ import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import axios from 'axios';
+// import { request } from '../request'
 
 import useRouter from '../router/index'
 const router = useRouter
@@ -141,7 +139,7 @@ const Register = () => {
     margin: 0;
 }
 .shell {
-    background-image: url("../assets/index/worry.jpg");
+    background-image: url("../assets/index/adminlogin.png");
     background-size: cover;
     height: 100vh;
     height: calc(100vh -60px);
@@ -166,7 +164,7 @@ const Register = () => {
 }
 
 .el-form {
-    margin-top: 80px;
+    margin-top: 100px;
     width: 40%;
     margin-left: 30%;
 }
@@ -186,12 +184,12 @@ const Register = () => {
 .submitButton .el-button{
     margin-left: 20%;
     font-size: large;
-    background-color: black;
+    background-color: #38a1ff;;
 }
 
 .toIndex {
     text-decoration: none;
-    color: #00ffff;
+    color: black;
 }
 
 </style>

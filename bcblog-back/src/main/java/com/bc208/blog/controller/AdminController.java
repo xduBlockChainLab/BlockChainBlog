@@ -42,8 +42,7 @@ public class AdminController {
     @ResponseBody
     public ResultInfo userRegister(@RequestBody adminRegisterDto adminRegisterDto) throws Exception {
 //        if (adminRegisterDto.getCaptcha().equals(quartzService.getAdminRegisterCaptcha())) {
-        if (adminRegisterDto.getCaptcha().equals("36MKrz")) {
-
+        if (adminRegisterDto.getCaptcha().equals("bc208")) {
                 try {
                 if (adminService.adminRegister(adminRegisterDto) == 1) {
                     log.info("Admin registration successful");
@@ -113,8 +112,6 @@ public class AdminController {
         MailVo mailVo = new MailVo();
         mailVo.setTo(applicationService.applicationEmail(judgeDto.getUserName()));
         if (i != 0) {
-            log.info("管理员进行面试评价成功.");
-            resultInfo.success();
             if (judgeDto.getScore() == 1) {
                 mailVo.setSubject("Blockchain Studio interview results");
                 mailVo.setText("面试通过, 很期待与您一起探索知识的海洋!");
@@ -123,6 +120,7 @@ public class AdminController {
                 mailVo.setText("很抱歉, 您的面试未通过, 祝您能去到更好的工作室.");
             }
             mailService.sendMail(mailVo);
+            log.info("管理员进行面试评价成功.");
         } else {
             log.info("管理员进行面试评价失败.");
             resultInfo.error(202, "Evaluate error");

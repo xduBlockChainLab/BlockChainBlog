@@ -246,11 +246,13 @@ const timer = setInterval(() => {
     max-width: 295px;  
     word-break: break-all; 
     word-wrap: break-word;
- }
+}
+
 */
 /* td.el-descriptions__cell.el-descriptions__content{
     max-width: 295px;  
     word-break: break-all; 
     word-wrap: break-word;
 } */
+
 </style>

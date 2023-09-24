@@ -82,6 +82,7 @@ const routes = [
 ]
 
 const router = createRouter({ //设置为history模式
+    base:'bc208',
     history: createWebHistory(),
     routes: routes
 })

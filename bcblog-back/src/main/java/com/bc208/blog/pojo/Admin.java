@@ -2,7 +2,7 @@ package com.bc208.blog.pojo;
 
 import lombok.Data;
 
-import java.io.Serial;
+//import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 public class Admin implements Serializable {
 
-    @Serial
+//    @Serial
     private static final long serialVersionUID = -40356785423868312L;
 
     private Integer userId;

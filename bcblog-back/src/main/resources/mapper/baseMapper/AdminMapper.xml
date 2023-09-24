@@ -3,14 +3,14 @@
 <mapper namespace="com.bc208.blog.repository.base.mapper.AdminMapper">
 
     <insert id="registerAdmin" parameterType="com.bc208.blog.pojo.Admin" statementType="PREPARED" keyProperty="userId">
-        insert into admin(userName, userEmail, userPassword, userRole, enabled, accountNoExpired,
+        insert into `admin` (userName, userEmail, userPassword, userRole, enabled, accountNoExpired,
                          credentialsNoExpired, accountNoLocked, userToken)
         values (#{userName}, #{userEmail}, #{userPassword}, #{userRole}, #{enabled}, #{accountNoExpired},
                 #{credentialsNoExpired}, #{accountNoLocked}, #{userToken})
     </insert>
 
     <select id="findAdmin" resultType="com.bc208.blog.pojo.Admin">
-        select * from admin where username=#{email} and password=#{password}
+        select * from `admin` where username=#{email} and password=#{password}
     </select>
 
     <update id="judgeApplication" statementType="PREPARED">
@@ -30,18 +30,18 @@
     </select>
 
     <select id="getAdminByEmail" resultType="com.bc208.blog.pojo.Admin">
-        select * from admin where userEmail=#{email}
+        select * from `admin` where userEmail=#{email}
     </select>
 
     <select id="queryAdminByEmail" resultType="com.bc208.blog.pojo.Admin">
-        select * from admin where userEmail=#{email}
+        select * from `admin` where userEmail=#{email}
     </select>
     <select id="checkUserEnabled" resultType="java.lang.Integer">
-        select enabled from admin where userEmail=#{email}
+        select enabled from `admin` where userEmail=#{email}
     </select>
 
     <update id="makeDefaultPassword">
-        update admin set userPassword=#{userPassword} where userEmail=#{userEmail}
+        update `admin` set userPassword=#{userPassword} where userEmail=#{userEmail}
     </update>
 
 </mapper>

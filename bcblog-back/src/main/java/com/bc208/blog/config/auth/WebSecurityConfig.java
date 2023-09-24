@@ -53,6 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/register").anonymous()
                 .antMatchers("/admin/ForgotPassword").anonymous()
                 .antMatchers("/application/submit").anonymous()
+                .antMatchers("/bc208/hello").anonymous()
                 .anyRequest().authenticated()
                 .and()
                 .cors()

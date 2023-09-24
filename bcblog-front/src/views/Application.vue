@@ -1,11 +1,11 @@
 <template>
     <div class="shell">
         <div class="BCLogo" style="padding-top: 5%;">
-            <img style="width: 100px" src="../assets/index/BClogo.png" />
+            <img style="width: 150px" src="../assets/index/BClogo.png" />
             <div style="
             font-size: 60px;
-            color: #fefefe;
-            text-shadow: 0 0 0.5em #00ffff, 0 0 0.2em #5c5c5c;
+            /* color: #fefefe; */
+            text-shadow: 0 0 0.5em #38a1ff, 0 0 0.2em #5c5c5c;
         " class="BCName">
                 <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
             </div>
@@ -13,21 +13,21 @@
         <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="150px" class="applicationForm" status-icon
             label-position="left">
             <el-form-item label="姓名" prop="name">
-                <el-input v-model="ruleForm.name" />
+                <el-input v-model="ruleForm.name" placeholder="请输入名字" />
             </el-form-item>
             <el-form-item label="年级:" prop="grade">
                 <el-select v-model="ruleForm.grade" style="width:auto;" placeholder="请选择你的年级">
-                    <el-option label="20" value="20" />
                     <el-option label="21" value="21" />
                     <el-option label="22" value="22" />
                     <el-option label="23" value="23" />
+                    <el-option label="24" value="24" />
                 </el-select>
             </el-form-item>
             <el-form-item label="邮箱:" prop="email">
-                <el-input v-model="ruleForm.email" />
+                <el-input v-model="ruleForm.email" placeholder="请输入邮箱" />
             </el-form-item>
             <el-form-item label="QQ:" prop="qq">
-                <el-input v-model="ruleForm.qq" />
+                <el-input v-model="ruleForm.qq" placeholder="请输入QQ" />
             </el-form-item>
             <el-form-item label="兴趣方向" prop="type">
                 <el-radio-group v-model="ruleForm.type">
@@ -38,7 +38,8 @@
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="个人简介" prop="desc">
-                <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 3, maxRows: 8 }" />
+                <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 3, maxRows: 8 }"
+                    placeholder="请输入个人简介" />
             </el-form-item>
             <el-form-item class="submitButton">
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
@@ -79,6 +80,16 @@ const ruleForm = reactive<RuleForm>({
     desc: '',
 })
 
+
+const checkEmail = (rule: any, value: any, callback: any) => {
+    const regEmail = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+    if (regEmail.test(value)) {
+        // True 合法的邮箱
+        return callback()
+    }
+    callback(new Error('请输入合法的邮箱'))
+}
+
 const rules = reactive<FormRules<RuleForm>>({
     name: [
         { required: true, message: '请输入名字', trigger: 'blur' },
@@ -97,6 +108,10 @@ const rules = reactive<FormRules<RuleForm>>({
             message: '请输入邮箱',
             trigger: 'blur',
         },
+        {
+            validator: checkEmail,
+            trigger: 'blur',
+        }
     ],
     qq: [
         {
@@ -118,10 +133,10 @@ const rules = reactive<FormRules<RuleForm>>({
     ],
 })
 
-let userInterest : string
+let userInterest: string
 
-const submitForm = async (formEl: FormInstance | undefined) => {  
-    if(!formEl) return console.error("错误");
+const submitForm = async (formEl: FormInstance | undefined) => {
+    if (!formEl) return console.error("错误");
     await formEl.validate((valid, fields) => {
         if (valid) {
             switch (ruleForm.type) {
@@ -150,12 +165,12 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                     if (response.data.code == 2001) {
                         console.log(response.data.msg)
                         ElMessage({
-                            message: '申请提交成功, 正在跳转到首页.',
+                            message: '申请提交成功, 请查看您的邮箱以确定是否提交, 正在跳转到首页.',
                             type: 'success',
                         })
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             router.push('/');
-                        },1000)
+                        }, 5000)
                     } else {
                         formEl.resetFields()
                     }
@@ -164,7 +179,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                     console.log(error);
                 });
         } else {
-        console.log('error submit!', fields)
+            console.log('error submit!', fields)
         }
     })
 }
@@ -182,8 +197,9 @@ const resetForm = (formEl: FormInstance | undefined) => {
     padding: 0;
     margin: 0;
 }
+
 .shell {
-    background-image: url("../assets/index/path.png");
+    background-image: url("../assets/index/applicationsubmit.png");
     background-size: cover;
     height: 100vh;
     height: calc(100vh -60px);
@@ -212,40 +228,40 @@ const resetForm = (formEl: FormInstance | undefined) => {
     width: 60%;
     margin-left: 20%;
 }
+
 /* 
 .el-form-item :deep() .label {
     font-size: large;
 } */
 
-.el-form-item{
+.el-form-item {
     padding: 15px;
 }
 
-.applicationForm :deep() .el-form-item__label{
+.applicationForm :deep() .el-form-item__label {
     font-size: large;
 }
 
-.el-radio{
-    color: white;
+.el-radio {
+    color: black;
     margin-left: 30px;
 }
 
-.applicationForm :deep() .el-form-item__content{
+.applicationForm :deep() .el-form-item__content {
     margin-left: 20px;
 }
 
-.applicationForm :deep() .el-radio__label{
+.applicationForm :deep() .el-radio__label {
     font-size: medium;
 }
 
-.submitButton .el-button{
+.submitButton .el-button {
     margin-left: 28%;
     font-size: large;
-    background-color: black;
-}
-.toIndex {
-    text-decoration: none;
-    color: #00ffff;
+    background-color: #38a1ff;;
 }
 
-</style>
+.toIndex {
+    text-decoration: none;
+    color: black;
+}</style>
