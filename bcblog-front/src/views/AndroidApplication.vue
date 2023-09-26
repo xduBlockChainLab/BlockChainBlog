@@ -1,12 +1,11 @@
 <template>
     <div class="shell">
-        <div class="BCLogo" style="padding-top: 5%;">
-            <img style="width: 150px" src="../assets/index/BClogo.png" />
-            <div style="
-            font-size: 60px;
-            /* color: #fefefe; */
-            text-shadow: 0 0 0.5em #38a1ff, 0 0 0.2em #5c5c5c;
-        " class="BCName">
+        <div class="BCLogo" style="padding-top: 10%;">
+            <img style="width: 60px;" src="../assets/index/BClogo.png">
+            <div style="font-size: 28px;      
+                /* color: #fefefe; */
+                text-shadow: 0 0 0.5em #38a1ff, 0 0 0.2em #5c5c5c;
+                " class="BCName">
                 <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
             </div>
         </div>
@@ -192,6 +191,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 </script>
 
+
 <style scoped>
 * {
     padding: 0;
@@ -199,7 +199,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 }
 
 .shell {
-    background-image: url("../assets/index/applicationsubmit.png");
+    background-image: url("../assets/index/and_applicationsubmit.png");
     background-size: cover;
     height: 100vh;
     height: calc(100vh -60px);
@@ -223,46 +223,33 @@ const resetForm = (formEl: FormInstance | undefined) => {
     letter-spacing: 2px;
 }
 
-.el-form {
-    margin-top: 40px;
-    width: 60%;
-    margin-left: 20%;
-}
-
-/* 
-.el-form-item :deep() .label {
-    font-size: large;
-} */
-
-.el-form-item {
-    padding: 15px;
-}
-
-.applicationForm :deep() .el-form-item__label {
-    font-size: large;
-}
-
-.el-radio {
-    color: black;
-    margin-left: 30px;
-}
-
-.applicationForm :deep() .el-form-item__content {
-    margin-left: 20px;
-}
-
-.applicationForm :deep() .el-radio__label {
-    font-size: medium;
-}
-
-.submitButton .el-button {
-    margin-left: 28%;
-    font-size: large;
-    background-color: #38a1ff;;
-}
-
 .toIndex {
     text-decoration: none;
     color: black;
 }
+
+.el-form {
+    margin-top: 100px;
+    width: 100%;
+    margin-left: 0%;
+}
+.applicationForm :deep() .el-form-item{
+    margin: 25px;
+}
+
+.applicationForm :deep() .el-form-item__content {
+    margin-left: -70px;
+}
+.applicationForm :deep() .el-form-item__content .el-radio-group .el-radio{
+    padding: 5px;
+}
+
+.applicationForm :deep() .el-radio__label {
+    font-size: smaller;
+}
+.applicationForm .submitButton :deep() .el-form-item__content {
+    /* margin: 30 px; */
+}
+
+
 </style>

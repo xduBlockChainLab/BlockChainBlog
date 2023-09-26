@@ -20,12 +20,11 @@
                     border-radius: 30px;
                     font-size: large;
                     margin-right: 500px;
-                    " round @click="Application">
-                    加入我们吧
+                    " round @click="Application" class="btn">
+                加入我们吧
             </el-button>
-            <el-dropdown >
-                <el-button type="primary" size="large"
-                    style="position: absolute;
+            <el-dropdown>
+                <el-button type="primary" size="large" style="position: absolute;
                         background-color:#38a1ff;
                         color:white;
                         width: 300px;
@@ -34,7 +33,7 @@
                         border-radius: 30px;
                         font-size: large;
                         margin-left: 500px;
-                    ">
+                    " class="btn">
                     探索新世界
                 </el-button>
                 <template #dropdown>
@@ -50,7 +49,7 @@
                             color:white;
                             width: 250px;
                             font-size: medium;
-                            " round @click="Login" >管理员登录</el-dropdown-item>
+                            " round @click="Login">管理员登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -96,7 +95,7 @@
             <br>
             &nbsp; &nbsp; &sect; 智能合约开发：solidity&go
             <br>
-            &sect; 完善web开发技术           
+            &sect; 完善web开发技术
             <br>
             &nbsp; &nbsp; &sect; 后端编程语言Go、Java、Nodejs等和相应的web框架
             <br>
@@ -123,21 +122,21 @@
             <br>
             &sect; 2023年全国大学生节能减排社会实践与科技竞赛国三
             <br>
-            &sect; 国家级大学生创新创业训练计划优秀结题 
+            &sect; 国家级大学生创新创业训练计划优秀结题
             <br>
-            &sect; 第13届全国大学生电子商务三创赛陕西省一等奖 
+            &sect; 第13届全国大学生电子商务三创赛陕西省一等奖
             <br>
             &sect; 第九届中国国际“互联网+”大学生创新创业大赛陕西省银
             <br>
-            &sect; 2023年陕西省工业工程改善创意竞赛陕西省三等奖 
+            &sect; 2023年陕西省工业工程改善创意竞赛陕西省三等奖
             <br>
-            &sect; 第21届微软Imagine Cup复赛赛区优秀奖 
-            <br>        
-            &sect; 2022年西安市大学生创新创业成长计划优秀创新创业项目 
+            &sect; 第21届微软Imagine Cup复赛赛区优秀奖
             <br>
-            &sect; 首届蚂蚁链Web3.0与产业创新应用孵化营 
+            &sect; 2022年西安市大学生创新创业成长计划优秀创新创业项目
             <br>
-            &sect; 微众银行2022 FinTechaton金融科技高校大赛 
+            &sect; 首届蚂蚁链Web3.0与产业创新应用孵化营
+            <br>
+            &sect; 微众银行2022 FinTechaton金融科技高校大赛
             <br>
             &sect; 第18届“花旗杯”金融创新应用大赛
         </div>
@@ -146,17 +145,17 @@
         </div>
         <div class="image img5"></div>
         <div class="heading">
-            &sect; 技术部: 
+            &sect; 技术部:
             <br>
             &nbsp; &nbsp; &sect; 开发组: 前端, 后端开发; 区块链开发; 信息安全与加密算法.
             <br>
             &nbsp; &nbsp; &sect; 应用组: 产品经历, 行业研究.
             <br>
-            &sect; 宣传部: 
+            &sect; 宣传部:
             <br>
             &nbsp; &nbsp; &sect; 平面设计, 新媒体运营, 推文写作, 活动策划, 对外交流.
             <br>
-            &sect; 活动部: 
+            &sect; 活动部:
             <br>
             &nbsp; &nbsp; &sect; 活动策划: 社会活动方案的指定.
             <br>
@@ -173,7 +172,7 @@
                     border-radius: 30px;
                     font-size: large;
                     " round @click="Application">
-                    加入我们吧
+                加入我们吧
             </el-button>
         </div>
     </div>
@@ -196,22 +195,22 @@ export default {
                 this.$router.push('/application')
             }, 1000)
         },
-        Login() {            
+        Login() {
             ElMessage({
                 message: '正在跳转至管理员页面...',
                 type: 'success',
             })
             setTimeout(() => {
-            this.$router.push('/adminlogin')
+                this.$router.push('/adminlogin')
             }, 1000)
         },
-        Home() {            
+        Home() {
             ElMessage({
                 message: '正在跳转至功能页面...',
                 type: 'success',
             })
             setTimeout(() => {
-            // this.$router.push('/usepage')
+                // this.$router.push('/usepage')
                 ElMessage({
                     message: '功能正在开发...',
                     type: 'error',
@@ -223,8 +222,7 @@ export default {
 </script>
 
 <style scoped>
-*
-.shell {
+* .shell {
     height: 100vh;
     overflow-x: hidden;
     perspective: 3px;
@@ -232,7 +230,7 @@ export default {
     overflow-x: hidden;
 }
 
-.shell::-webkit-scrollbar{
+.shell::-webkit-scrollbar {
     width: 0 !important;
 }
 
@@ -307,4 +305,7 @@ export default {
     font-size: sm;
 }
 
+.btn {
+    margin: -4rem;    /* font-family: Helvetica, sans-serif; */
+}
 </style>

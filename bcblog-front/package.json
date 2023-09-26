@@ -13,7 +13,9 @@
     "element-plus": "^2.3.9",
     "reset-css": "^5.0.2",
     "typescript": "^5.1.6",
+    "vant": "^4.7.0",
     "vue": "^3.3.4",
+    "vue-device-detect": "^1.0.3",
     "vue-router": "^4.2.4"
   },
   "devDependencies": {
