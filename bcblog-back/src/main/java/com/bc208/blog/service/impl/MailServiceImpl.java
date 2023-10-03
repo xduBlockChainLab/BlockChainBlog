@@ -2,7 +2,6 @@ package com.bc208.blog.service.impl;
 
 import com.bc208.blog.common.vo.MailVo;
 import com.bc208.blog.service.MailService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -16,19 +15,30 @@ import java.util.Date;
 @Service
 public class MailServiceImpl implements MailService {
 
-    @Autowired
-    private JavaMailSenderImpl mailSender;
+    private final JavaMailSenderImpl mailSender;
+
+    public MailServiceImpl(JavaMailSenderImpl mailSender) {
+        this.mailSender = mailSender;
+    }
 
     @Override
-    public MailVo sendMail(MailVo mailVo) {
+    public MailVo createMail(String to, String subject, String text) {
+        MailVo mailVo = new MailVo();
+        mailVo.setTo(to);
+        mailVo.setSubject(subject);
+        mailVo.setText(text);
+        return mailVo;
+    }
+
+    @Override
+    public void sendMail(MailVo mailVo) {
         try {
             checkMail(mailVo);
             sendMimeMail(mailVo);
-            return saveMail(mailVo);
+            saveMail(mailVo);
         } catch (Exception e) {
             mailVo.setStatus("fail");
             mailVo.setError(e.getMessage());
-            return mailVo;
         }
     }
 
@@ -76,8 +86,7 @@ public class MailServiceImpl implements MailService {
      * @param mailVo 邮件基本信息
      */
     @Override
-    public MailVo saveMail(MailVo mailVo) {
-        return mailVo;
+    public void saveMail(MailVo mailVo) {
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.bc208.blog.repository.base.mapper;
 
-import com.bc208.blog.common.vo.applicationDetailVO;
+import com.bc208.blog.common.dto.ApplicationDTO;
+import com.bc208.blog.common.vo.ApplicationDetailVO;
 import com.bc208.blog.common.vo.applicationVO;
 import com.bc208.blog.pojo.Application;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,7 +21,7 @@ public interface ApplicationMapper {
      * @param application 申请者信息实体类
      * @return 返回数据库修改行数
      */
-    int insertApplication(Application application);
+    int insertApplication(ApplicationDTO applicationDTO);
 
     /**
      * 分页查询
@@ -47,7 +48,7 @@ public interface ApplicationMapper {
      * @param userName 用户Id
      * @return 返回详细用户信息
      */
-    applicationDetailVO getApplicationDetail(String userName);
+    ApplicationDetailVO getApplicationDetail(String userName);
 
     List<applicationVO> getNoInterview();
 

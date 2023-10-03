@@ -29,4 +29,5 @@ public interface UsersMapper {
 
     int checkUserEnabled(String userEmail);
 
+    User getUserInfo(String email);
 }

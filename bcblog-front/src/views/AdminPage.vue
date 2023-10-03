@@ -1,6 +1,6 @@
 <template>
     <div class="shell">
-        <el-container>
+        <el-container style="overflow: hidden;">
             <el-header style="border-radius: 10px;">
                 <div style="
                         font-size: 20px;
@@ -40,7 +40,7 @@
                 </el-dropdown>
                 </div>
             </el-header>
-            <el-container class="contextContainer">
+            <el-container class="contextContainer" style="overflow: auto;">
                 <el-aside width="200px" style="border-radius: 10px;">成员在线情况</el-aside>
                 <el-main style="border-radius: 20px;">
                     <router-view>
@@ -87,7 +87,7 @@
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
-    line-height: 160px;
+    /* line-height: 160px; */
 }
 
 body>.el-container {

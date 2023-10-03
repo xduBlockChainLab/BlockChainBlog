@@ -1,163 +1,156 @@
 package com.bc208.blog.service.impl;
 
-import com.bc208.blog.common.dto.LoginDto;
-import com.bc208.blog.common.dto.userRegisterDto;
-import com.bc208.blog.common.vo.SecurityUser;
-import com.bc208.blog.config.redisCofig.RedisCache;
-import com.bc208.blog.repository.base.mapper.UsersMapper;
+import cn.hutool.core.lang.UUID;
+import com.bc208.blog.common.dto.LoginDTO;
+import com.bc208.blog.common.dto.Result;
+import com.bc208.blog.common.dto.UserRegisterDTO;
 import com.bc208.blog.pojo.User;
+import com.bc208.blog.repository.base.mapper.UsersMapper;
+import com.bc208.blog.service.CaptchaService;
+import com.bc208.blog.service.MailService;
 import com.bc208.blog.service.UserService;
-import com.bc208.blog.utils.JwtUtil;
-import com.bc208.blog.utils.RandomCaptcha;
-import com.bc208.blog.utils.nullOrNot;
+import com.bc208.blog.utils.PasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import javax.annotation.Resource;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import static com.bc208.blog.utils.RedisConstants.LOGIN_USER_KEY;
+import static com.bc208.blog.utils.RedisConstants.REGISTER_CODE_KEY;
 
 /**
  * @author QingheLi
  */
 @Service("UsersServiceImpl")
 @Slf4j
-public class UsersServiceImpl implements UserService, UserDetailsService {
+public class UsersServiceImpl implements UserService {
 
-    @Autowired
-    private UsersMapper usersMapper;
+    private final UsersMapper usersMapper;
 
-    @Autowired
-    private JwtUtil jwtUtils;
+    private final MailService mailService;
 
-    @Autowired
-    private RedisCache redisCache;
+    private final CaptchaService captchaService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    public UsersServiceImpl(UsersMapper usersMapper, MailService mailService, CaptchaService captchaService) {
+        this.usersMapper = usersMapper;
+        this.mailService = mailService;
+        this.captchaService = captchaService;
+    }
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+
     /**
      * 用户登入
-     *
      * @param loginDto 账号密码输入
      * @return 返回用户信息
      */
     @Override
-    public HashMap<String, String> userLogin(LoginDto loginDto) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
-        // 使用authenticationManager调用loadUserByUsername
-        Authentication authentication = authenticationManager.authenticate(authToken);
-        if(authentication == null) {
-            throw new RuntimeException("Login false");
+    public Result userLogin(LoginDTO loginDto) {
+
+        User user = usersMapper.getUserInfo(loginDto.getEmail());
+
+        if (user.getUserEnable() == 0){
+            return Result.fail("您的账号暂未通过申请, 请过段时间尝试登录");
         }
-        log.info("user login successful");
 
-        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
-        Integer useId = securityUser.getUser().getUserId();
-        String usrName = securityUser.getUsername();
-
-        String role = securityUser.getUser().getUserRole();
-
-        List<String> authList = new ArrayList<String>();
-        for (GrantedAuthority auth : securityUser.getAuthorities()) {
-            authList.add(auth.getAuthority());
+        if (!PasswordEncoder.matches(user.getUserPassword(), loginDto.getPassword())){
+            return Result.fail("密码错误");
         }
-        String jwt = JwtUtil.createJwt("User login", useId, role);
-        //TODO: Token存入数据库, 考虑Redis和数据库的关系
 
-        //存入Redis
-        redisCache.setCacheObject("login:"+useId + role,securityUser);
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("token", jwt);
-        return map;
+        String token = UUID.randomUUID().toString(true);
+
+        Map<String, String> userMap = new HashMap<>(4);
+
+        userMap.put("id", String.valueOf(user.getUserId()));
+        userMap.put("name", user.getUserName());
+        userMap.put("email", user.getUserEmail());
+        userMap.put("role", user.getUserRole().toString());
+
+        stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, userMap);
+
+        stringRedisTemplate.expire(LOGIN_USER_KEY + token, 30, TimeUnit.MINUTES);
+
+        return Result.success(token);
     }
 
-
-    @Autowired
-    private PasswordEncoder bcryptPasswordEncoder;
 
     /**
      * 用户注册
-     *
-     * @param userRegisterDto
-     * @return
+     * @param userRegisterDto 注册信息
+     * @return 注册结果
      */
     @Override
-    @Transactional
-    public int userRegister(userRegisterDto userRegisterDto) {
-        nullOrNot.isTrue(usersMapper.queryUserByEmail(userRegisterDto.getEmail()) != null, "用户名已存在");
-        //判断是否已存在该用户名
+    public Result userRegister(UserRegisterDTO userRegisterDto) {
+
+        if (!captchaService.checkCaptcha(userRegisterDto.getEmail(), REGISTER_CODE_KEY, userRegisterDto.getCaptcha())){
+            return Result.fail("验证失败");
+        }
+
+        if (usersMapper.queryUserByEmail(userRegisterDto.getEmail()) != null) {
+            return Result.fail("用户已存在");
+        }
+
         User user = new User();
-
         user.setUserName(userRegisterDto.getUsername());
+        user.setUserGrade(userRegisterDto.getGrade());
         user.setUserEmail(userRegisterDto.getEmail());
-        user.setUserPassword(bcryptPasswordEncoder.encode(userRegisterDto.getPassword()));
-        user.setUserRole("user");
-        user.setEnabled(0); //经过管理员确认后才可使用 TODO:这里需要修改
-        user.setAccountNoExpired(1);
-        user.setCredentialsNoExpired(1);
-        user.setAccountNoLocked(1);
-        user.setUserToken("null");
-        return usersMapper.registerUser(user);
-    }
+        user.setUserInterest(userRegisterDto.getInterest());
+        user.setUserPassword(PasswordEncoder.encode(userRegisterDto.getPassword()));
+        user.setUserRole(0);
+        user.setUserAuth(0);
 
-
-
-    @Override
-    public User getByUserEmail(String email) {
-        return usersMapper.getByUserEmail(email);
-    }
-
-    @Override
-    public boolean checkUserEnabled(String email) {
-        int key = usersMapper.checkUserEnabled(email);
-        if(key == 1){
-            return true;
-        }else{
-            return false;
+        if (usersMapper.registerUser(user) == 1) {
+            return Result.success("用户注册成功");
+        } else {
+            return Result.fail("用户注册失败");
         }
     }
 
+    /**
+     * 用户退出
+     * @param token 前端token
+     * @return 用户退出
+     */
     @Override
-    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        User user = usersMapper.getByUserEmail(userEmail);
-        if (user == null) {
-            log.info("username not found");
-            throw new UsernameNotFoundException("username not found");
-        }
-        List<String> list = new ArrayList<>(Arrays.asList(user.getUserRole()));
-        return new SecurityUser(user, list);
+    public Result userLogout(String token){
+        stringRedisTemplate.delete(LOGIN_USER_KEY + token);
+        return Result.success();
     }
 
+    /**
+     * 用户注册验证码发送
+     * @param email 用户邮箱
+     * @return 处理结果
+     */
     @Override
-    public void userLogout(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SecurityUser loginUser = (SecurityUser) authentication.getPrincipal();
-        int userid = loginUser.getUser().getUserId();
-        redisCache.deleteObject("login:"+userid+loginUser.getUser().getUserRole());
+    public Result sendCaptcha(String email) {
+        final String mailSubject = "区块链工作室:用户注册验证码";
+        if(!captchaService.sendCaptcha(email, REGISTER_CODE_KEY, mailSubject)){
+            return Result.fail("验证码申请出错");
+        }
+        return Result.success();
     }
 
+
     @Override
-    public String userForgotPassword(String userEmail) {
-        final String DefaultPassword = new RandomCaptcha().createCode();
-        int key = usersMapper.makeDefaultPassword(userEmail, bcryptPasswordEncoder.encode(DefaultPassword));
-        if (key != 1){
-            log.warn(userEmail + " remake password failed");
-            return null;
-        }else{
-            log.info(userEmail + " remake password succeeded");
+    public Result userForgotPassword(String userEmail) {
+        final String newPassword = UUID.randomUUID().toString(true);
+
+        if(usersMapper.getUserInfo(userEmail) == null){
+            return Result.fail("用户不存在");
         }
-        return DefaultPassword;
+
+        if (usersMapper.makeDefaultPassword(userEmail, PasswordEncoder.encode(newPassword)) == 0){
+            return Result.fail("更新默认密码错误");
+        }
+
+        mailService.sendMail(mailService.createMail(userEmail, "密码更新", newPassword));
+        return Result.success();
     }
 }

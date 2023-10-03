@@ -25,11 +25,13 @@
         select enabled from user where userEmail=#{userEmail}
     </select>
 
+    <select id="getUserInfo" resultType="com.bc208.blog.pojo.User">
+        select * from user where userEmail=#{userEmail}
+    </select>
+
     <insert id="registerUser" parameterType="com.bc208.blog.pojo.User" statementType="PREPARED" keyProperty="userId">
-        insert into user(userName, userEmail, userPassword, userRole, enabled, accountNoExpired,
-                         credentialsNoExpired, accountNoLocked, userToken)
-                values (#{userName}, #{userEmail}, #{userPassword}, #{userRole}, #{enabled}, #{accountNoExpired},
-                                 #{credentialsNoExpired}, #{accountNoLocked}, #{userToken})
+        insert into user(userName, userGrade, userEmail, userInterest, userPassword, userRole, userAuth)
+                values (#{userName}, #{userGrade}, #{userEmail}, #{userInterest}, #{userPassword}, #{userRole}, #{userAuth})
     </insert>
 
     <update id="updateUser" parameterType="com.bc208.blog.pojo.User">

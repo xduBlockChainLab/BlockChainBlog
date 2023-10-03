@@ -1,4 +1,5 @@
 import {createRouter, createWebHistory } from 'vue-router'
+// import { isAuthenticated } from './auth';
 
 const routes = [
     {
@@ -12,11 +13,13 @@ const routes = [
         name: 'application',
         component: () => import("../views/Application.vue")
     },
+
     {
         path: '/login',
         name: 'login',
         component: () => import("../views/UserLogin.vue")
     },
+
     {
         path: '/register',
         name: 'register',
@@ -27,10 +30,39 @@ const routes = [
         path: '/userpage',
         name: 'userpage',
         component: () => import("../views/UserPage.vue"),
-        meta: {
-            needLogin: true,
-            roles: ["user"],
-        },
+        redirect: "/blogshow",
+        children: [
+            {
+                path: '/blogshow',
+                name: 'blogshow',
+                component: () => import("../views/BlogShow.vue")
+            },
+            {
+                path: '/ideashow',
+                name: 'ideashow',
+                component: () => import("../views/ideaShow.vue")
+            },            {
+                path: '/taskshow',
+                name: 'taskshow',
+                component: () => import("../views/taskShow.vue")
+            },
+            {
+                path: '/matchshow',
+                name: 'matchshow',
+                component: () => import("../views/matchShow.vue")
+            },
+            {
+                path: '/resourceshow',
+                name: 'resourceshow',
+                component: () => import("../views/resourceShow.vue")
+            },
+        ],      
+    },
+
+    {
+        path: '/waiting',
+        name: 'waiting',
+        component: () => import("../views/Waiting.vue")
     },
 
     {
@@ -49,8 +81,7 @@ const routes = [
         component: () => import("../views/AdminPage.vue"),
         redirect: "/applicationmanage",
         meta: {
-            needLogin: true,
-            roles: ["admin"],
+            requiresAuth: true
         },
         children: [
             {
@@ -89,29 +120,18 @@ const router = createRouter({ //设置为history模式
 
 router.beforeEach(async (to, from, next) => {
     // 如果需要登录
-    if (to.meta.needLogin) {
-      // 获取token
+    if (to.meta.requiresAuth) {
         const token = localStorage.getItem("token");
-        //TODO: 这里的认证逻辑需要处理.
-        // alert(token)
-      // 如果有token 则直接放行
         if (token) {
-            // 获取用户信息，从store里面获取
-            let role = localStorage.getItem("role");
-            // alert(role)
-            if(to.meta.roles && to.meta.roles.includes(role)){
-                next();
-            }else{
-                alert("warning");
-                next("/login");
-            }
+            next();
         } else {
-        // 否则去登录页
-        alert("warning");
-        next("/login");
-        }
+            alert("尚未登录, 请先登录");
+            next({
+                path: '/adminlogin',
+                query: {redirect: to.fullPath}
+            })
+        }   
     } else {
-        // 不需要登录则直接放行
         next();
     }
 });

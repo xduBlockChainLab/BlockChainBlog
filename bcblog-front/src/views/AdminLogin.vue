@@ -88,7 +88,6 @@ const falseMessage = () => {
 }
 
 
-
 const Login = async (formEl: FormInstance | undefined) => {  
     if (!formEl) return console.error("错误");
     await formEl.validate((valid, fields) => {
@@ -98,10 +97,8 @@ const Login = async (formEl: FormInstance | undefined) => {
                 "password": ruleForm.password
             })
                 .then(function (response) {
-                    if (response.data.code == 2003 && response.data.result.token != null) {
-                        // console.log(response.data.result.token)
-                        localStorage.setItem('token', response.data.result.token),
-                        localStorage.setItem('role', "admin"),
+                    if (response.data.success == true && response.data.data != null) {
+                        localStorage.setItem('token', response.data.data),
                         successMessage()
                     } else {
                         falseMessage()
@@ -117,8 +114,6 @@ const Login = async (formEl: FormInstance | undefined) => {
     })
 }
 
-
-
 const Register = () => {
     ElMessage({
         message: '正在前往管理员身份获取.',
@@ -128,7 +123,6 @@ const Register = () => {
         router.push('/adminregister');
     },2000)
 }
-
 
 </script>
 

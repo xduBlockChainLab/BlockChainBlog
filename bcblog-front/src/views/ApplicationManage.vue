@@ -1,40 +1,35 @@
 <template>
-    <div style="width: 40%; float: left; height: 100%" class="table">
-        <div style="height: 55%">
+    <div style="width: 40%; float: left; " class="table">
+        <div style="height: 500px;">
             <div style="font-size: smaller; height: 40px; line-height: 40px">
                 待面试人名单
             </div>
-            <div>
-                <el-table :data="noInterview" height="600px" style="width: 100%">
-                    <el-table-column prop="userName" label="名字"></el-table-column>
-                    <el-table-column prop="userGrade" label="年级"></el-table-column>
-                    <el-table-column prop="userInterest" label="方向"></el-table-column>
-                    <el-table-column fixed="right" label="操作">
-                        <template #default="scope">
-                            <el-button link type="primary" size="small"
-                                @click="loadDetail(scope.row.userName)">评价</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
+            <el-table :data="noInterview" style="width: 100%">
+                <el-table-column prop="userName" label="名字"></el-table-column>
+                <el-table-column prop="userGrade" label="年级"></el-table-column>
+                <el-table-column prop="userInterest" label="方向"></el-table-column>
+                <el-table-column fixed="right" label="操作">
+                    <template #default="scope">
+                        <el-button link type="primary" size="small" @click="loadDetail(scope.row.userName)">评价</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
         </div>
-        <div style="height: 45%; margin-top: 0px">
+        <div>
             <div style="font-size: smaller; height: 42px; line-height: 40px">
                 已面试人名单
             </div>
-            <div>
-                <el-table :data="Interviewed" height="490px" style="width: 100%">
-                    <el-table-column prop="userName" label="Name" />
-                    <el-table-column prop="userGrade" label="grade" />
-                    <el-table-column prop="userInterest" label="type" />
-                    <el-table-column fixed="right" label="Operations">
-                        <template #default="scope">
-                            <el-button link type="primary" size="small"
-                                @click="handleClick(scope.row.userName)">重新评价</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
+            <el-table :data="Interviewed" style="width: 100%">
+                <el-table-column prop="userName" label="Name" />
+                <el-table-column prop="userGrade" label="grade" />
+                <el-table-column prop="userInterest" label="type" />
+                <el-table-column fixed="right" label="Operations">
+                    <template #default="scope">
+                        <el-button link type="primary" size="small"
+                            @click="handleClick(scope.row.userName)">重新评价</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
         </div>
     </div>
     <div style="width: 60%; float: left; height: 100%" class="judge">
@@ -112,15 +107,14 @@ import { ref } from "vue";
 let noInterview = ref();
 
 const loadNoInterview = () => {
-    axios
-        .get("application/applications", {
-            headers: {
-                token: localStorage.getItem("token"),
-            },
-        })
+    axios.get("application/applications", {
+        headers: {
+            token: localStorage.getItem("token"),
+        },
+    })
         .then((response) => {
-            if (response.data.code == 2002) {
-                noInterview.value = response.data.result;
+            if (response.data.success == true) {
+                noInterview.value = response.data.data;
             } else {
                 alert("获取面试人信息失败");
             }
@@ -149,8 +143,8 @@ const loadDetail = (userName) => {
         },
     })
         .then((response) => {
-            if (response.data.code == 2002) {
-                applicationDetail.value = response.data.result
+            if (response.data.success == true) {
+                applicationDetail.value = response.data.data
             } else {
                 alert("获取面试人信息失败");
             }
@@ -179,9 +173,9 @@ const submitJudge = (userName, judgeForm) => {
         }
     })
         .then((response) => {
-            if (response.data.code == 2000) {
+            if (response.data.success == true) {
                 alert("面试评价成功.")
-                console.log(response.data.msg)
+                console.log(response.data.data)
             } else {
                 alert("面试评价失败.")
             }
@@ -196,7 +190,7 @@ const submitJudge = (userName, judgeForm) => {
 
 const remakeForm = () => {
     applicationDetail = '',
-    judgeForm = ''
+        judgeForm = ''
 }
 
 let Interviewed = ref();
@@ -208,8 +202,8 @@ const loadInterviewed = () => {
         },
     })
         .then((response) => {
-            if (response.data.code == 2002) {
-                Interviewed.value = response.data.result;
+            if (response.data.success == true) {
+                Interviewed.value = response.data.data;
             } else {
                 alert("获取面试人信息失败");
             }
@@ -227,7 +221,7 @@ const handleClick = (userName) => {
 const timer = setInterval(() => {
     loadNoInterview();
     loadInterviewed();
-}, 1000*60*10);
+}, 1000 * 60 * 10);
 
 </script>
 
@@ -254,5 +248,4 @@ const timer = setInterval(() => {
     word-break: break-all; 
     word-wrap: break-word;
 } */
-
 </style>

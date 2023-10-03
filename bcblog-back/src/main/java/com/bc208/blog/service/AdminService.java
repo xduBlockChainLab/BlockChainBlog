@@ -1,14 +1,9 @@
 package com.bc208.blog.service;
 
 import com.bc208.blog.common.dto.JudgeDto;
-import com.bc208.blog.common.dto.LoginDto;
-import com.bc208.blog.common.dto.adminRegisterDto;
-import com.bc208.blog.pojo.Admin;
-import com.bc208.blog.pojo.User;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.HashMap;
-import java.util.List;
+import com.bc208.blog.common.dto.LoginDTO;
+import com.bc208.blog.common.dto.Result;
+import com.bc208.blog.common.dto.UserRegisterDTO;
 
 /**
  * @author QingheLi
@@ -21,43 +16,60 @@ public interface AdminService {
      * @param userRegisterDto
      * @return
      */
-    int adminRegister(adminRegisterDto userRegisterDto);
-
-    HashMap<String, String> adminLogin(LoginDto loginDto);
+    Result adminRegister(UserRegisterDTO userRegisterDto);
 
     /**
-     * 管理员登入检测
-     * @param loginDto 登入信息
-     * @return 返回管理员信息
+     * 用户登录
+     * @param loginDto 登录信息
+     * @return 处理结果
      */
-    Admin adminDetection(LoginDto loginDto);
+    Result adminLogin(LoginDTO loginDto);
 
     /**
      * 面试评价
      * @param judgeDto 面试对象
      * @return 返回数据库修改条数
      */
-    int judgeApplication(JudgeDto judgeDto);
-
-
-    /**
-     * 用户分页查询
-     */
-    List<User> getUserByPage(int page, int size);
+    Result judgeApplication(JudgeDto judgeDto);
 
     /**
-     * 查询用户人数
-     * @return 返回总人数
+     * 用户退出
+     * @param token 管理员token
+     * @return 处理结果
      */
-    long getUserCount();
-
-
-    void adminLogout();
+    Result adminLogout(String token);
 
     /**
-     * 忘记密码
+     * 获取工作室社区加入申请
+     * @return 返回工作室加入申请列表
      */
-    String adminForgotPassword(@Param("userEmail") String userEmail);
+    Result getApplication();
 
-    boolean checkUserEnabled(String email);
+    /**
+     * 获取协会成员信息
+     * @return 成员信息
+     */
+    Result getMember();
+
+    /**
+     * 修改用户权限等级
+     * @param name 用户名
+     * @param auth 用户权限
+     * @return 处理结果
+     */
+    Result changeUserAuth(String name, Integer auth);
+
+    /**
+     * 删除用户
+     * @param userName 用户名字
+     * @return 处理结果
+     */
+    Result deleteMember(String userName);
+
+    /**
+     * 通过用户申请
+     * @param userName 用户名
+     * @return 处理结果
+     */
+    Result passApplication(String userName);
 }

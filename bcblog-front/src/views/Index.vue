@@ -210,11 +210,11 @@ export default {
                 type: 'success',
             })
             setTimeout(() => {
-                // this.$router.push('/usepage')
-                ElMessage({
-                    message: '功能正在开发...',
-                    type: 'error',
-                })
+                this.$router.push('/userpage')
+                // ElMessage({
+                //     message: '功能正在开发...',
+                //     type: 'error',
+                // })
             }, 500)
         }
     }

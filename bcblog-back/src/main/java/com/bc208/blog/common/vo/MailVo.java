@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * @author QingheLi
+ * 用于邮箱发送服务器
  */
 @Data
 public class MailVo {

@@ -7,14 +7,14 @@ spring:
 #      jdbc-url: jdbc:mysql://localhost:3306/bcblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
       jdbc-url: jdbc:mysql://localhost:3306/bcblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
       username: root
-      password:
+      password: Qh123456789!
 
     # 数据库2, 连接Quartz组件
     quartz:
       driver-class-name: com.mysql.cj.jdbc.Driver
       jdbc-url: jdbc:mysql://localhost:3306/quartz?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
       username: root
-      password:
+      password: Qh123456789!
 
   quartz:
     job-store-type: jdbc # 使用数据库存储
@@ -44,7 +44,7 @@ spring:
     host: 192.168.40.136
 #    host: 127.0.0.1
     port: 6379
-    password:
+    password: qinghe
     database: 0
     #连接0号数据库
 

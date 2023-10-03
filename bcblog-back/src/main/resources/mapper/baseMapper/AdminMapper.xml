@@ -2,19 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bc208.blog.repository.base.mapper.AdminMapper">
 
-    <insert id="registerAdmin" parameterType="com.bc208.blog.pojo.Admin" statementType="PREPARED" keyProperty="userId">
-        insert into `admin` (userName, userEmail, userPassword, userRole, enabled, accountNoExpired,
-                         credentialsNoExpired, accountNoLocked, userToken)
-        values (#{userName}, #{userEmail}, #{userPassword}, #{userRole}, #{enabled}, #{accountNoExpired},
-                #{credentialsNoExpired}, #{accountNoLocked}, #{userToken})
+    <insert id="registerAdmin" parameterType="com.bc208.blog.pojo.User" statementType="PREPARED" keyProperty="userId">
+        insert into `admin` (userName, userEmail, userPassword, userRole)
+        values (#{userName}, #{userEmail}, #{userPassword}, #{userRole})
     </insert>
 
-    <select id="findAdmin" resultType="com.bc208.blog.pojo.Admin">
+    <select id="findAdmin" resultType="com.bc208.blog.pojo.User">
         select * from `admin` where username=#{email} and password=#{password}
     </select>
 
     <update id="judgeApplication" statementType="PREPARED">
-        update application set userComments=#{comments}, userScore=#{score} where userName=#{userName}
+        update application set userComments=#{comments}, userScore=#{score}, userJudged=1 where userName=#{userName}
     </update>
     
     <update id="upDateApplicationStatus" statementType="PREPARED">
@@ -29,19 +27,40 @@
         select count(1) from user
     </select>
 
-    <select id="getAdminByEmail" resultType="com.bc208.blog.pojo.Admin">
+    <select id="getAdminByEmail" resultType="com.bc208.blog.pojo.User">
         select * from `admin` where userEmail=#{email}
     </select>
 
-    <select id="queryAdminByEmail" resultType="com.bc208.blog.pojo.Admin">
+    <select id="queryAdminByEmail" resultType="com.bc208.blog.pojo.User">
         select * from `admin` where userEmail=#{email}
     </select>
     <select id="checkUserEnabled" resultType="java.lang.Integer">
         select enabled from `admin` where userEmail=#{email}
     </select>
 
+    <select id="getAdminInfo" resultType="com.bc208.blog.pojo.User">
+        select * from `admin` where userEmail=#{email}
+    </select>
+
+    <select id="getApplications" resultType="com.bc208.blog.common.vo.UserVO">
+        select userName, userGrade, userInterest, userAuth from user where userEnable=0
+    </select>
+    <select id="getMembers" resultType="com.bc208.blog.common.vo.UserVO">
+        select userName, userGrade, userInterest, userAuth from user where userEnable=1
+    </select>
+
     <update id="makeDefaultPassword">
         update `admin` set userPassword=#{userPassword} where userEmail=#{userEmail}
+    </update>
+    <update id="changeUserAuth">
+        update user set userAuth=#{auth} where userName=#{name}
+    </update>
+
+    <update id="deleteMember">
+        update user set userEnable=2 where userName=#{userName}
+    </update>
+    <update id="passApplication">
+        update user set userEnable=1 where userName=#{userName}
     </update>
 
 </mapper>

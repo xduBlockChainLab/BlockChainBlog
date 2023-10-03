@@ -1,12 +1,12 @@
 <template>
     <div class="shell">
         <div class="BCLogo" style="padding-top: 5%;">
-            <img style="width: 100px" src="/src/assets/index/BClogo.png" />
+            <img style="width: 150px" src="/src/assets/index/BClogo.png" />
             <div style="
             font-size: 60px;
-            color: #fefefe;
-            text-shadow: 0 0 0.5em #00ffff, 0 0 0.2em #5c5c5c;
-        " class="BCName">
+            /* color: #fefefe; */
+            text-shadow: 0 0 0.5em #38a1ff, 0 0 0.2em #5c5c5c;
+        " class="BCName" >
                 <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
             </div>
         </div>
@@ -25,9 +25,6 @@
                 <el-button type="primary" @click="Register">
                     注册
                 </el-button>
-                <el-button type="primary" @click="Admin">
-                    管理员
-                </el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -35,13 +32,14 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { FormInstance, FormRules } from 'element-plus'
+import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import axios from 'axios';
+// import { request } from '../request'
 
 import useRouter from '../router/index'
 const router = useRouter
 
-import { ElMessage } from 'element-plus'
 
 interface RuleForm {
     email: string
@@ -64,17 +62,17 @@ const rules = reactive<FormRules<RuleForm>>({
         },
     ],
     password: [
-        {
-            required: true,
-            message: '请输入密码',
-            trigger: 'blur'
-        },
+        { 
+            required: true, 
+            message: '请输入密码', 
+            trigger: 'blur' },
     ],
 })
 
+
 const successMessage = () => {
     ElMessage({
-        message: '登录成功, 正在跳转.',
+        message: '用户登录成功, 正在跳转.',
         type: 'success',
     })
     setTimeout(()=>{
@@ -82,14 +80,15 @@ const successMessage = () => {
     },3000)
 }
 
-const falseMessage = () => {
+const falseMessage = (errorMsg: string) => {
     ElMessage({
-        message: '登录失败, 请重新尝试.',
+        message: '登录失败, '+errorMsg,
         type: 'error',
     })
 }
 
-const Login = async (formEl: FormInstance | undefined) => {
+
+const Login = async (formEl: FormInstance | undefined) => {  
     if (!formEl) return console.error("错误");
     await formEl.validate((valid, fields) => {
         if (valid) {
@@ -98,12 +97,11 @@ const Login = async (formEl: FormInstance | undefined) => {
                 "password": ruleForm.password
             })
                 .then(function (response) {
-                    if (response.data.code == 2003 && response.data.result.token != null) {
-                        localStorage.setItem('token', response.data.result.token),
-                        localStorage.setItem('role', "user"),
+                    if (response.data.success == true && response.data.data != null) {
+                        localStorage.setItem('token', response.data.data),
                         successMessage()
                     } else {
-                        falseMessage()
+                        falseMessage(response.data.errorMsg)
                         formEl.resetFields()
                     }
                 })
@@ -118,35 +116,24 @@ const Login = async (formEl: FormInstance | undefined) => {
 
 const Register = () => {
     ElMessage({
-        message: '前往注册页面, 正在跳转.',
+        message: '正在前往注册页面.',
         type: 'success',
     })
     setTimeout(()=>{
         router.push('/register');
-    },1000)
+    },2000)
 }
-
-const Admin = () => {
-    ElMessage({
-        message: '前往管理员页面, 正在跳转.',
-        type: 'success',
-    })
-    setTimeout(()=>{
-        router.push('/adminlogin');
-    },1000)
-}
-
 
 </script>
 
 <style scoped>
+
 * {
     padding: 0;
     margin: 0;
 }
-
 .shell {
-    background-image: url("../assets/index/path.png");
+    background-image: url("../assets/index/adminlogin.png");
     background-size: cover;
     height: 100vh;
     height: calc(100vh -60px);
@@ -171,31 +158,32 @@ const Admin = () => {
 }
 
 .el-form {
-    margin-top: 80px;
+    margin-top: 100px;
     width: 40%;
     margin-left: 30%;
 }
+/* 
+.el-form-item :deep() .label {
+    font-size: large;
+} */
 
-.el-form-item {
+.el-form-item{
     padding: 15px;
 }
 
-.applicationForm :deep() .el-form-item__label {
+.applicationForm :deep() .el-form-item__label{
     font-size: large;
 }
 
-.submitButton .el-button {
-    margin-left: 10%;
+.submitButton .el-button{
+    margin-left: 20%;
     font-size: large;
-    background-color: black;
+    background-color: #38a1ff;;
 }
 
 .toIndex {
     text-decoration: none;
-    color: #00ffff;
+    color: black;
 }
 
-.dialog-footer button:first-child {
-    margin-right: 10px;
-}
 </style>

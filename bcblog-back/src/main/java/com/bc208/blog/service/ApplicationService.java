@@ -1,10 +1,7 @@
 package com.bc208.blog.service;
 
-import com.bc208.blog.common.vo.applicationDetailVO;
-import com.bc208.blog.common.vo.applicationVO;
-import com.bc208.blog.pojo.Application;
-
-import java.util.List;
+import com.bc208.blog.common.dto.ApplicationDTO;
+import com.bc208.blog.common.dto.Result;
 
 /**
  * @author QingheLi
@@ -13,10 +10,10 @@ public interface ApplicationService {
 
     /**
      * 申请提交, 只需要写入申请者数据
-     * @param application 申请者数据
+     * @param applicationDTO 申请者数据
      * @return 返回数据库修改行数
      */
-    int applicationSubmission(Application application);
+    Result applicationSubmission(ApplicationDTO applicationDTO);
 
 
 
@@ -26,16 +23,32 @@ public interface ApplicationService {
      * @return 返回邮箱
      */
     String applicationEmail(String userName);
-    //TODO: 不对劲, 我通过applicationDetail获取详细信息, 为什么还要单独获取邮箱, 多余了
 
-    List<applicationVO> getInterviewed();
+    /**
+     * 获取已面试人信息
+     * @return 获取已面试人信息
+     */
+    Result getInterviewed();
 
-    List<applicationVO> getNoInterview();
+
+    /**
+     * 获取未面试人信息
+     * @return 获取未面试人信息
+     */
+    Result getNoInterview();
 
     /**
      * 通过userName获取对应的详细信息
      * @param userName 用户Id
      * @return 返回详细用户信息
      */
-    applicationDetailVO getApplicationDetail(String userName);
+    Result getApplicationDetail(String userName);
+
+    /**
+     * 发送验证码
+     * @param email 申请者邮箱
+     * @return 返回处理结果
+     */
+    Result sendCaptcha(String email);
+
 }

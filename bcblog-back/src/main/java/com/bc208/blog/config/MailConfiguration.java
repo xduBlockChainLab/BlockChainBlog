@@ -14,7 +14,7 @@ import java.util.Properties;
 @Configuration
 public class MailConfiguration {
     @Bean
-    public JavaMailSenderImpl JavaMailSender(){
+    public JavaMailSenderImpl javaMailSender(){
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.163.com");
         mailSender.setUsername("QingheLi_XDU@163.com");

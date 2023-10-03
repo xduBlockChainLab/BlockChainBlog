@@ -1,6 +1,6 @@
 <template>
     <div class="shell">
-        <el-container>
+        <el-container style="overflow: hidden;">
             <el-header style="border-radius: 10px;">
                 <div style="
                         font-size: 20px;
@@ -11,28 +11,32 @@
                         " class="BCName">
                     <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
                 </div>
-                <div style="float: left; margin-left: 10%" id="box">
-                    <router-link to="/applicationmanage">用户情况</router-link>    
+                <div style="float: left; margin-left: 8%" id="box">
+                    <router-link to="/login">登录</router-link>    
                 </div>
-                <div style="float: left; margin-left: 10%" id="box">
-                    <router-link to="/membermanage">1</router-link>
+                <div style="float: left; margin-left: 8%" id="box">
+                    <router-link to="/blogshow">博客</router-link>    
                 </div>
-                <div style="float: left; margin-left: 10%" id="box">
-                    <router-link to="/upcomemanage">2</router-link>
+                <div style="float: left; margin-left: 8%" id="box">
+                    <router-link to="/taskshow">任务清单</router-link>
                 </div>
-                <div style="float: left; margin-left: 10%" id="box">
-                    <router-link to="/webmanage">3</router-link>
+                <div style="float: left; margin-left: 8%" id="box">
+                    <router-link to="/ideashow">IDEA清单</router-link>
+                </div>
+                <div style="float: left; margin-left: 8%" id="box">
+                    <router-link to="/matchshow">比赛</router-link>
+                </div>
+                <div style="float: left; margin-left: 8%" id="box">
+                    <router-link to="/resourceshow">资料库</router-link>
                 </div>
                 <div style="float: right; padding-right: 50px; padding-top: 20px;">
                     <el-dropdown>
                     <span class="el-dropdown-link">
-                    账号管理
-                    <el-icon class="el-icon--right">
-                        <arrow-down />
-                    </el-icon>
+                    个人中心
                     </span>
                     <template #dropdown>
                     <el-dropdown-menu>
+                        <el-dropdown-item>内容管理</el-dropdown-item>
                         <el-dropdown-item>修改密码</el-dropdown-item>
                         <el-dropdown-item>账号退出</el-dropdown-item>
                     </el-dropdown-menu>
@@ -40,16 +44,18 @@
                 </el-dropdown>
                 </div>
             </el-header>
-            <el-container class="contextContainer">
-                <el-aside width="200px" style="border-radius: 10px;">成员在线情况</el-aside>
+            <el-container class="contextContainer" style="overflow: auto;">
+                <el-aside width="200px" >
+                    <div style="height: 50%;" id="box">任务清单</div>
+                    <div style="height: 50%;" id="box">IDEA清单</div>
+                </el-aside>
+                
                 <el-main style="border-radius: 20px;">
                     <router-view>
-
                     </router-view>
                 </el-main>
                 <el-aside width="200px">
-                    <div style="height: 50%;" id="box">近期安排</div>
-                    <div style="height: 50%;" id="box">网站运行情况</div>
+                    <div style="height:100%;" id="box">比赛信息</div>
                 </el-aside>
             </el-container>
         </el-container>
@@ -87,7 +93,7 @@
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
-    line-height: 160px;
+    /* line-height: 160px; */
 }
 
 body>.el-container {

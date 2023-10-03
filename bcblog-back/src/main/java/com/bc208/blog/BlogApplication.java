@@ -12,8 +12,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @ServletComponentScan
-//@MapperScan("com.bc208.blog.repository")
-//@ComponentScan(basePackages = {"com.bc208.blog.repository", "com.bc208.blog.controller", "com.bc208.blog.service"})
 @EnableScheduling
 public class BlogApplication {
 

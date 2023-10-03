@@ -40,6 +40,16 @@
                 <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 3, maxRows: 8 }"
                     placeholder="请输入个人简介" />
             </el-form-item>
+            <el-form-item label="验证码:" prop="captcha">
+                <el-input v-model="ruleForm.captcha">
+                    <template #suffix>
+                        <el-button type="primary" @click="getCaptcha(ruleFormRef)" :disabled="buttonDisabled">
+                            <!-- 获取验证码 -->
+                            {{ buttonDisabled ? ` ${countdownSeconds} 秒后可用` : '获取验证码' }}
+                        </el-button>
+                    </template>
+                </el-input>
+            </el-form-item>
             <el-form-item class="submitButton">
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
                     申请加入
@@ -67,6 +77,7 @@ interface RuleForm {
     qq: string
     type: Number
     desc: string
+    captcha: string
 }
 
 const ruleFormRef = ref<FormInstance>()
@@ -77,6 +88,7 @@ const ruleForm = reactive<RuleForm>({
     qq: '',
     type: 0,
     desc: '',
+    captcha: '',
 })
 
 
@@ -171,6 +183,58 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                             router.push('/');
                         }, 5000)
                     } else {
+                        formEl.resetFields()
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } else {
+            console.log('error submit!', fields)
+        }
+    })
+}
+
+const buttonDisabled = ref(false)
+const countdownSeconds = ref(60)
+
+let countdownTimer: any = null; // 定时器
+
+const startCountdown = () => {
+    if (!buttonDisabled.value) {
+        buttonDisabled.value = true;
+        countdownTimer = setInterval(() => {
+            countdownSeconds.value -= 1;
+            if (countdownSeconds.value <= 0) {
+                clearInterval(countdownTimer);
+                buttonDisabled.value = false;
+                countdownSeconds.value = 10; // 重新设置倒计时时间
+            }
+        }, 1000); // 每秒更新倒计时
+    }
+}
+
+const getCaptcha = async (formEl: FormInstance | undefined) => {
+    if (!formEl) return console.error("错误");
+    await formEl.validate((valid, fields) => {
+        if (valid) {
+            axios.get('bc208/captcha', {
+                params: {
+                    email: ruleForm.email
+                }
+            })
+                .then(function (response) {
+                    if (response.data.success == true) {
+                        ElMessage({
+                            message: '获取验证码成功, 请邮箱查看, 有效时间2分钟.',
+                            type: 'success',
+                        })
+                        startCountdown();
+                    } else {
+                        ElMessage({
+                            message: '获取验证码失败, 请重新尝试.',
+                            type: 'error',
+                        })
                         formEl.resetFields()
                     }
                 })

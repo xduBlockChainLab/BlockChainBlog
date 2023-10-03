@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bc208.blog.repository.base.mapper.ApplicationMapper">
 
-    <insert id="insertApplication" parameterType="com.bc208.blog.pojo.Application" statementType="PREPARED" >
-        insert into application(userName,userGrade,userEmail,userQq, userInterest, userDescription, userJudged, userComments, userScore)
-            values (#{userName},#{userGrade},#{userEmail}, #{userQq}, #{userInterest}, #{userDescription}, #{userJudged}, #{userComments}, #{userScore})
+    <insert id="insertApplication" parameterType="com.bc208.blog.common.dto.ApplicationDTO" statementType="PREPARED" >
+        insert into application(userName,userGrade,userEmail,userQq, userInterest, userDescription)
+            values (#{userName},#{userGrade},#{userEmail}, #{userQq}, #{userInterest}, #{userDescription})
     </insert>
 
     <select id="getApplicationByPage" resultType="com.bc208.blog.pojo.Application" statementType="PREPARED">
@@ -19,7 +19,7 @@
         select userEmail from application where userName=#{userName} order by userId desc limit 0,1
     </select>
 
-    <select id="getApplicationDetail" resultType="com.bc208.blog.common.vo.applicationDetailVO" statementType="PREPARED">
+    <select id="getApplicationDetail" resultType="com.bc208.blog.common.vo.ApplicationDetailVO" statementType="PREPARED">
         select  * from application where userName = #{userName} order by userId desc limit 0,1
     </select>
     <select id="getNoInterview" resultType="com.bc208.blog.common.vo.applicationVO">
