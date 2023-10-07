@@ -1,6 +1,6 @@
 # BC208_blog
 Welcome!!!   
-This project initiated with Vue, SpringBoot, SpringSecurity, MyBatis, Quartz.  
+This project initiated with Vue, SpringBoot, ~~SpringSecurity~~, MyBatis, Quartz.  
 ## Feature:
 * login and signup, authentication and permissions control.
 * article publish and management.
