@@ -30,7 +30,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         }
 
         String captcha = RandomUtil.randomNumbers(6);
-        stringRedisTemplate.opsForValue().set( tokenHeader + email, captcha, 1, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set( tokenHeader + email, captcha, 2, TimeUnit.MINUTES);
         MailVo mailVo = new MailVo();
         mailVo.setTo(email);
         mailVo.setSubject(mailSubject);

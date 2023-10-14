@@ -1,5 +1,4 @@
 import {createRouter, createWebHistory } from 'vue-router'
-// import { isAuthenticated } from './auth';
 
 const routes = [
     {
@@ -27,34 +26,34 @@ const routes = [
     },
 
     {
-        path: '/userpage',
-        name: 'userpage',
+        path: '/userPage',
+        name: 'userPage',
         component: () => import("../views/UserPage.vue"),
-        redirect: "/blogshow",
+        redirect: "/blogShow",
         children: [
             {
-                path: '/blogshow',
-                name: 'blogshow',
+                path: '/blogShow',
+                name: 'blogShow',
                 component: () => import("../views/BlogShow.vue")
             },
             {
-                path: '/ideashow',
-                name: 'ideashow',
-                component: () => import("../views/ideaShow.vue")
+                path: '/ideaShow',
+                name: 'ideaShow',
+                component: () => import("../views/IdeaShow.vue")
             },            {
-                path: '/taskshow',
-                name: 'taskshow',
-                component: () => import("../views/taskShow.vue")
+                path: '/taskShow',
+                name: 'taskShow',
+                component: () => import("../views/TaskShow.vue")
             },
             {
-                path: '/matchshow',
-                name: 'matchshow',
-                component: () => import("../views/matchShow.vue")
+                path: '/matchShow',
+                name: 'matchShow',
+                component: () => import("../views/GameShow.vue")
             },
             {
-                path: '/resourceshow',
-                name: 'resourceshow',
-                component: () => import("../views/resourceShow.vue")
+                path: '/resourceShow',
+                name: 'resourceShow',
+                component: () => import("../views/ResourceShow.vue")
             },
         ],      
     },
@@ -66,47 +65,48 @@ const routes = [
     },
 
     {
-        path: '/adminlogin',
-        name: 'adminlogin',
+        path: '/adminLogin',
+        name: 'adminLogin',
         component: () => import("../views/AdminLogin.vue")
     },
     {
-        path: '/adminregister',
-        name: 'adminregister',
+        path: '/adminRegister',
+        name: 'adminRegister',
         component: () => import("../views/AdminRegister.vue")
     },
     {
-        path: '/adminpage',
-        name: 'adminpage',
+        path: '/adminPage',
+        name: 'adminPage',
         component: () => import("../views/AdminPage.vue"),
-        redirect: "/applicationmanage",
+        redirect: "/adminIndex",
         meta: {
             requiresAuth: true
         },
         children: [
             {
-                path: '/applicationmanage',
-                name: 'applicationmanage',
-                component: () => import("../views/ApplicationManage.vue")
+                path: '/adminIndex',
+                name: 'adminIndex',
+                component: () => import("../views/AdminPageIndex.vue")
             },
             {
-                path: '/membermanage',
-                name: 'membermanage',
-                component: () => import("../views/MemberManager.vue")
-            },            {
-                path: '/applicationmanage',
-                name: 'applicationmanage',
-                component: () => import("../views/ApplicationManage.vue")
+                path: '/adminApplicationManage',
+                name: 'adminApplicationManage',
+                component: () => import("../views/AdminApplicationManage.vue")
             },
             {
-                path: '/upcomemanage',
-                name: 'upcomemanage',
-                component: () => import("../views/UpcomeManage.vue")
+                path: '/adminMemberManage',
+                name: 'adminMemberManage',
+                component: () => import("../views/AdminMemberManager.vue")
+            },            
+            {
+                path: '/adminUpcomingManage',
+                name: 'adminUpcomingManage',
+                component: () => import("../views/AdminUpcomingManage.vue")
             },
             {
-                path: '/webmanage',
-                name: 'webmanage',
-                component: () => import("../views/WebManage.vue")
+                path: '/adminWebManage',
+                name: 'adminWebManage',
+                component: () => import("../views/AdminWebManage.vue")
             },
         ],        
     },
@@ -127,7 +127,7 @@ router.beforeEach(async (to, from, next) => {
         } else {
             alert("尚未登录, 请先登录");
             next({
-                path: '/adminlogin',
+                path: '/adminLogin',
                 query: {redirect: to.fullPath}
             })
         }   

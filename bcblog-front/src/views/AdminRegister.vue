@@ -48,7 +48,6 @@ interface RuleForm {
     authCode: string
 }
 
-const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
     name: '',
@@ -107,7 +106,6 @@ const falseMessage = () => {
 }
 
 const Register = async (formEl: FormInstance | undefined) => {
-
     if (!formEl) return console.error("错误");
     await formEl.validate((valid, fields) => {
         if (valid) {
@@ -115,10 +113,10 @@ const Register = async (formEl: FormInstance | undefined) => {
                 "username": ruleForm.name,
                 "email": ruleForm.email,
                 "password": ruleForm.password,
-                "captcha": ruleForm.authCode
+                "authCode": ruleForm.authCode
             })
                 .then(function (response) {
-                    if (response.data.code == 2005) {
+                    if (response.data.success == true) {
                         successMessage()
                     } else {
                         falseMessage()

@@ -12,22 +12,25 @@
                     <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
                 </div>
                 <div style="float: left; margin-left: 8%" id="box">
-                    <router-link to="/login">登录</router-link>    
+                    <router-link to="/blogShow">首页</router-link>    
                 </div>
                 <div style="float: left; margin-left: 8%" id="box">
-                    <router-link to="/blogshow">博客</router-link>    
+                    <router-link to="/taskShow">待办</router-link>
                 </div>
                 <div style="float: left; margin-left: 8%" id="box">
-                    <router-link to="/taskshow">任务清单</router-link>
+                    <router-link to="/ideaShow">想法</router-link>
                 </div>
                 <div style="float: left; margin-left: 8%" id="box">
-                    <router-link to="/ideashow">IDEA清单</router-link>
+                    <router-link to="/matchShow">比赛</router-link>
                 </div>
                 <div style="float: left; margin-left: 8%" id="box">
-                    <router-link to="/matchshow">比赛</router-link>
+                    <router-link to="/resourceShow">资料</router-link>
                 </div>
                 <div style="float: left; margin-left: 8%" id="box">
-                    <router-link to="/resourceshow">资料库</router-link>
+                    <router-link to="/resourceShow">这里"搜索框"</router-link>
+                </div>
+                <div style="float: left; margin-left: 8%" id="box">
+                    <router-link to="/resourceShow">这里"创作中心"</router-link>
                 </div>
                 <div style="float: right; padding-right: 50px; padding-top: 20px;">
                     <el-dropdown>
@@ -35,8 +38,8 @@
                     个人中心
                     </span>
                     <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item>内容管理</el-dropdown-item>
+                    <el-dropdown-menu>    
+                        <el-dropdown-item><router-link to="/login">登录</router-link></el-dropdown-item>
                         <el-dropdown-item>修改密码</el-dropdown-item>
                         <el-dropdown-item>账号退出</el-dropdown-item>
                     </el-dropdown-menu>
@@ -46,16 +49,14 @@
             </el-header>
             <el-container class="contextContainer" style="overflow: auto;">
                 <el-aside width="200px" >
-                    <div style="height: 50%;" id="box">任务清单</div>
-                    <div style="height: 50%;" id="box">IDEA清单</div>
+                    <div style="height: 80%; margin-top: 30%;" id="box">文章分类</div>
                 </el-aside>
-                
                 <el-main style="border-radius: 20px;">
                     <router-view>
                     </router-view>
                 </el-main>
                 <el-aside width="200px">
-                    <div style="height:100%;" id="box">比赛信息</div>
+                    <div style="height: 80%; margin-top: 30%;" id="box">近期比赛</div>
                 </el-aside>
             </el-container>
         </el-container>

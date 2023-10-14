@@ -6,6 +6,9 @@ import com.bc208.blog.common.dto.Result;
 import com.bc208.blog.service.impl.ApplicationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileNotFoundException;
 
 /**
  * @author QingheLi
@@ -27,6 +30,17 @@ public class ApplicationController {
         return applicationService.applicationSubmission(applicationDTO);
     }
 
+    @GetMapping("/captcha")
+    public Result sendCaptcha(String email){
+        return applicationService.sendCaptcha(email);
+    }
+
+
+    @PostMapping("/submit/upload")
+    public Result upload(@RequestParam("file") MultipartFile file, @RequestParam("email") String email, @RequestParam("name") String name) throws FileNotFoundException {
+        return applicationService.applicationSubmitUpload(file, email, name);
+    }
+
     @GetMapping("/applications")
     public Result getApplications(){
         return applicationService.getNoInterview();
@@ -39,7 +53,7 @@ public class ApplicationController {
 
     @GetMapping("/loadDetail")
     @ResponseBody
-    public Result loadDetail(String userName){
+    public Result loadDetail(@RequestParam("userName") String userName){
         return applicationService.getApplicationDetail(userName);
     }
 

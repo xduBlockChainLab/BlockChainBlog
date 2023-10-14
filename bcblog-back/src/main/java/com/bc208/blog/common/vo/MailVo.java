@@ -2,6 +2,7 @@ package com.bc208.blog.common.vo;
 
 import lombok.Data;
 
+import java.io.File;
 import java.util.Date;
 
 
@@ -31,6 +32,7 @@ public class MailVo {
     private String bcc;
     private String status;
     private String error;
+    private File attachment;
 
 
 }

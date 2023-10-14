@@ -3,6 +3,9 @@ package com.bc208.blog.utils;
 
 import com.bc208.blog.common.dto.UserDTO;
 
+/**
+ * @author QingheLi
+ */
 public class UserHolder {
     private static final ThreadLocal<UserDTO> tl = new ThreadLocal<>();
 

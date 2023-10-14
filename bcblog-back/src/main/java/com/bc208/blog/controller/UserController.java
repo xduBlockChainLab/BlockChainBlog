@@ -3,6 +3,7 @@ package com.bc208.blog.controller;
 import com.bc208.blog.common.dto.LoginDTO;
 import com.bc208.blog.common.dto.Result;
 import com.bc208.blog.common.dto.UserRegisterDTO;
+import com.bc208.blog.service.QuartzService;
 import com.bc208.blog.service.impl.UsersServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
@@ -49,10 +50,12 @@ public class UserController {
         return usersServiceImpl.userLogout(token);
     }
 
+    @Autowired
+    private QuartzService quartzService;
+
     @GetMapping("/hello")
     @ResponseBody
     public Result hello() throws SchedulerException {
         return Result.success("hello bc208");
     }
-
 }

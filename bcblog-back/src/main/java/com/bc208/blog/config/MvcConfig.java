@@ -23,28 +23,10 @@ public class MvcConfig implements WebMvcConfigurer {
         // 拦截所有, 用于已登录者更新token时间
         registry.addInterceptor(new RefreshToeknInterceptor(redisTemplate)).addPathPatterns("/**").order(0);
         registry.addInterceptor(new LoginInterceptor())
-                .excludePathPatterns(
-                        "/admin/login",
-                        "/admin/register",
-                        "/application/submit",
-                        "/bc208/login",
-                        "/bc208/logout",
-                        "/bc208/register",
-                        "/bc208/ForgotPassword",
-                        "/bc208/hello",
-                        "/bc208/captcha"
+                .excludePathPatterns("/**"
                 ).order(1);
         registry.addInterceptor(new AuthorityInterceptor())
-                .excludePathPatterns(
-                        "/admin/login",
-                        "/admin/register",
-                        "/application/submit",
-                        "/bc208/login",
-                        "/bc208/logout",
-                        "/bc208/register",
-                        "/bc208/ForgotPassword",
-                        "/bc208/hello",
-                        "/bc208/captcha"
+                .excludePathPatterns("/**"
                 ).order(2);
     }
 }

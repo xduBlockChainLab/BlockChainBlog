@@ -13,12 +13,10 @@ import com.bc208.blog.utils.PasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import static com.bc208.blog.utils.RedisConstants.LOGIN_USER_KEY;
 import static com.bc208.blog.utils.RedisConstants.REGISTER_CODE_KEY;
 
@@ -141,15 +139,12 @@ public class UsersServiceImpl implements UserService {
     @Override
     public Result userForgotPassword(String userEmail) {
         final String newPassword = UUID.randomUUID().toString(true);
-
         if(usersMapper.getUserInfo(userEmail) == null){
             return Result.fail("用户不存在");
         }
-
         if (usersMapper.makeDefaultPassword(userEmail, PasswordEncoder.encode(newPassword)) == 0){
             return Result.fail("更新默认密码错误");
         }
-
         mailService.sendMail(mailService.createMail(userEmail, "密码更新", newPassword));
         return Result.success();
     }

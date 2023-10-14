@@ -20,7 +20,7 @@
     </select>
 
     <select id="getApplicationDetail" resultType="com.bc208.blog.common.vo.ApplicationDetailVO" statementType="PREPARED">
-        select  * from application where userName = #{userName} order by userId desc limit 0,1
+        select * from application where userName = #{userName} order by userId desc limit 0,1
     </select>
     <select id="getNoInterview" resultType="com.bc208.blog.common.vo.applicationVO">
         select userName, userGrade, userInterest from application where userJudged = 0

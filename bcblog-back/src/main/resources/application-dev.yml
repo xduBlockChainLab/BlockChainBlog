@@ -4,7 +4,6 @@ spring:
     # 数据库1, 连接基本的网站信息
     base:
       driver-class-name: com.mysql.cj.jdbc.Driver
-#      jdbc-url: jdbc:mysql://localhost:3306/bcblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
       jdbc-url: jdbc:mysql://localhost:3306/bcblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
       username: root
       password: Qh123456789!
@@ -42,7 +41,6 @@ spring:
 
   redis:
     host: 192.168.40.136
-#    host: 127.0.0.1
     port: 6379
     password: qinghe
     database: 0
@@ -52,14 +50,7 @@ spring:
 logging:
   file:
     name: BC208.log
-#  level:
-#    org:
-#      springframework:
-#        security: DEBUG
 
 mybatis:
-#  mapper-locations: classpath:com/bc208/blog/mapper/*.xml
-#  type-aliases-package: com.bc208.blog.repository.mapper
-#  mapper-locations: classpath:mapper/*Mapper.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

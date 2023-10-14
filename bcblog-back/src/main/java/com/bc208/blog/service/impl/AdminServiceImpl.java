@@ -4,9 +4,9 @@ import cn.hutool.core.lang.UUID;
 import com.bc208.blog.common.dto.JudgeDto;
 import com.bc208.blog.common.dto.LoginDTO;
 import com.bc208.blog.common.dto.Result;
-import com.bc208.blog.common.dto.UserRegisterDTO;
 import com.bc208.blog.common.vo.MailVo;
 import com.bc208.blog.common.vo.UserVO;
+import com.bc208.blog.pojo.AdminRegisterDTO;
 import com.bc208.blog.pojo.User;
 import com.bc208.blog.repository.base.mapper.AdminMapper;
 import com.bc208.blog.service.AdminService;
@@ -49,10 +49,10 @@ public class AdminServiceImpl implements AdminService {
      * 管理员注册
      */
     @Override
-    public Result adminRegister(UserRegisterDTO adminRegisterDTO) {
+    public Result adminRegister(AdminRegisterDTO adminRegisterDTO) {
         String adminCaptcha = "bc208:admin";
 
-        if (adminCaptcha.equals(adminRegisterDTO.getCaptcha())){
+        if (!adminCaptcha.equals(adminRegisterDTO.getAuthCode())){
             return Result.fail("验证码错误");
         }
 

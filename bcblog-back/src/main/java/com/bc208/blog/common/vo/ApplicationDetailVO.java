@@ -13,4 +13,5 @@ public class ApplicationDetailVO {
     private String userEmail;
     private String userInterest;
     private String userDescription;
+    private String userPdfUrl;
 }

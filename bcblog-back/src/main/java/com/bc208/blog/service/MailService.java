@@ -1,5 +1,8 @@
 package com.bc208.blog.service;
+
 import com.bc208.blog.common.vo.MailVo;
+
+import java.io.File;
 
 /**
  * @author QingheLi
@@ -15,6 +18,17 @@ public interface MailService {
      * @return 返回所创建的邮箱类
      */
     MailVo createMail(String to, String subject, String text);
+
+    /**
+     * 带附件的邮件
+     * @param to 发往
+     * @param subject 邮件主题
+     * @param text 邮件内容
+     * @param fileToEmail 附件
+     * @return null
+     */
+    MailVo createMail(String to, String subject, String text, File fileToEmail);
+
 
     /**
      * 发送邮件

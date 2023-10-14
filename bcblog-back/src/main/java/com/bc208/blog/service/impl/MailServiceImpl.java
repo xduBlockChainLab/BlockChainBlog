@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
 import java.util.Date;
 
 /**
@@ -27,6 +28,16 @@ public class MailServiceImpl implements MailService {
         mailVo.setTo(to);
         mailVo.setSubject(subject);
         mailVo.setText(text);
+        return mailVo;
+    }
+
+    @Override
+    public MailVo createMail(String to, String subject, String text, File fileToEmail) {
+        MailVo mailVo = new MailVo();
+        mailVo.setTo(to);
+        mailVo.setSubject(subject);
+        mailVo.setText(text);
+        mailVo.setAttachment(fileToEmail);
         return mailVo;
     }
 
@@ -64,6 +75,9 @@ public class MailServiceImpl implements MailService {
             messageHelper.setTo(mailVo.getTo().split(","));
             messageHelper.setSubject(mailVo.getSubject());
             messageHelper.setText(mailVo.getText());
+            if (mailVo.getAttachment() != null){
+                messageHelper.addAttachment(mailVo.getAttachment().getName(), mailVo.getAttachment());
+            }
 
             if (!StringUtils.isEmpty(mailVo.getCc())) {
                 messageHelper.setCc(mailVo.getCc().split(","));

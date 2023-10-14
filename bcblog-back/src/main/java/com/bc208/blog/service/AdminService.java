@@ -3,7 +3,7 @@ package com.bc208.blog.service;
 import com.bc208.blog.common.dto.JudgeDto;
 import com.bc208.blog.common.dto.LoginDTO;
 import com.bc208.blog.common.dto.Result;
-import com.bc208.blog.common.dto.UserRegisterDTO;
+import com.bc208.blog.pojo.AdminRegisterDTO;
 
 /**
  * @author QingheLi
@@ -16,7 +16,7 @@ public interface AdminService {
      * @param userRegisterDto
      * @return
      */
-    Result adminRegister(UserRegisterDTO userRegisterDto);
+    Result adminRegister(AdminRegisterDTO userRegisterDto);
 
     /**
      * 用户登录

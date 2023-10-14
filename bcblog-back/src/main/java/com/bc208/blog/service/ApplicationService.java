@@ -2,6 +2,9 @@ package com.bc208.blog.service;
 
 import com.bc208.blog.common.dto.ApplicationDTO;
 import com.bc208.blog.common.dto.Result;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileNotFoundException;
 
 /**
  * @author QingheLi
@@ -51,4 +54,13 @@ public interface ApplicationService {
      */
     Result sendCaptcha(String email);
 
+    /**
+     * 简历文件上传
+     * @param captcha 验证码
+     * @param file 申请者简历
+     * @param email 申请人邮箱
+     * @param name 申请人名字, 用于保存文件
+     * @return 处理结果
+     */
+    Result applicationSubmitUpload(MultipartFile file, String email, String name) throws FileNotFoundException;
 }

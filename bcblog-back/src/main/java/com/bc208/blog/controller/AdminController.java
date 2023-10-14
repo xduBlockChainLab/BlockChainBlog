@@ -3,7 +3,7 @@ package com.bc208.blog.controller;
 import com.bc208.blog.common.dto.JudgeDto;
 import com.bc208.blog.common.dto.LoginDTO;
 import com.bc208.blog.common.dto.Result;
-import com.bc208.blog.common.dto.UserRegisterDTO;
+import com.bc208.blog.pojo.AdminRegisterDTO;
 import com.bc208.blog.service.impl.AdminServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class AdminController {
 
     @PostMapping("/register")
     @ResponseBody
-    public Result adminRegister(@RequestBody UserRegisterDTO adminRegisterDto){
+    public Result adminRegister(@RequestBody AdminRegisterDTO adminRegisterDto){
         return adminService.adminRegister(adminRegisterDto);
     }
 
@@ -44,7 +44,7 @@ public class AdminController {
     }
 
     @GetMapping("/applications")
-    public Result getApplications(){
+    public Result getUserApplications(){
         return adminService.getApplication();
     }
 
