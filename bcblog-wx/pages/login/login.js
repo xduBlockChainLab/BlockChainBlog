@@ -1,5 +1,4 @@
 // pages/login/login.js
-const app = getApp()
 import request from '../../utils/request'
 
 Page({
