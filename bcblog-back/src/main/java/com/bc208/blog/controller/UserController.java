@@ -4,15 +4,9 @@ import com.bc208.blog.common.dto.LoginDTO;
 import com.bc208.blog.common.dto.Result;
 import com.bc208.blog.common.dto.UserRegisterDTO;
 import com.bc208.blog.common.dto.wxLinkDTO;
-import com.bc208.blog.service.QuartzService;
 import com.bc208.blog.service.impl.UsersServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.SchedulerException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
 
 /**
  * @author QingheLi
@@ -22,18 +16,21 @@ import javax.annotation.Resource;
 @RequestMapping("/bc208/")
 public class UserController {
 
-    @Autowired
-    private UsersServiceImpl usersServiceImpl;
+    private final UsersServiceImpl usersServiceImpl;
+
+    public UserController(UsersServiceImpl usersServiceImpl) {
+        this.usersServiceImpl = usersServiceImpl;
+    }
 
     @PostMapping("/login")
     @ResponseBody
-    public Result userLogin(@RequestBody LoginDTO user) throws Exception {
+    public Result userLogin(@RequestBody LoginDTO user){
         return usersServiceImpl.userLogin(user);
     }
 
     @PostMapping("/register")
     @ResponseBody
-    public Result userRegister(@RequestBody UserRegisterDTO userRegisterDto) throws Exception {
+    public Result userRegister(@RequestBody UserRegisterDTO userRegisterDto){
         return usersServiceImpl.userRegister(userRegisterDto);
     }
 
@@ -54,18 +51,13 @@ public class UserController {
         return usersServiceImpl.userLogout(token);
     }
 
-    @Autowired
-    private QuartzService quartzService;
-
     @GetMapping("/hello")
     @ResponseBody
-    public Result hello() throws SchedulerException {
+    public Result hello(){
         System.out.println("test不上传配置文件");
         return Result.success("hello bc208");
     }
 
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
 
     @GetMapping("/wxLogin")
     @ResponseBody
@@ -75,7 +67,7 @@ public class UserController {
 
     @PostMapping("/wxLink")
     @ResponseBody
-    public Result wxLink(@RequestBody wxLinkDTO user) throws Exception {
+    public Result wxLink(@RequestBody wxLinkDTO user){
         return usersServiceImpl.userWxLink(user);
     }
 }
