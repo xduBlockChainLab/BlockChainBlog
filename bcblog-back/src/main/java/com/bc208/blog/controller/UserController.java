@@ -60,6 +60,7 @@ public class UserController {
     @GetMapping("/hello")
     @ResponseBody
     public Result hello() throws SchedulerException {
+        System.out.println("test不上传配置文件");
         return Result.success("hello bc208");
     }
 
