@@ -11,17 +11,13 @@ import java.io.Serializable;
 @Data
 public class User implements Serializable{
 
-//    @Serial
-    private static final long serialVersionUID = -40356785423868312L;
-
-    private Integer userId;
+    private Long userId;
     private String userName;
+    private String userGrade;
     private String userEmail;
+    private String userInterest;
     private String userPassword;
-    private String userRole;
-    private String userToken;
-    private Integer enabled;
-    private Integer accountNoExpired;
-    private Integer credentialsNoExpired;
-    private Integer accountNoLocked;
+    private Integer userRole;
+    private Integer userAuth;
+    private Integer userEnable;
 }

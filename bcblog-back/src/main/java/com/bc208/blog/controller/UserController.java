@@ -1,16 +1,18 @@
 package com.bc208.blog.controller;
 
-import com.bc208.blog.common.dto.LoginDto;
-import com.bc208.blog.common.dto.userRegisterDto;
-import com.bc208.blog.common.vo.MailVo;
-import com.bc208.blog.repository.quartz.mapper.TestMapper;
-import com.bc208.blog.service.MailService;
+import com.bc208.blog.common.dto.LoginDTO;
+import com.bc208.blog.common.dto.Result;
+import com.bc208.blog.common.dto.UserRegisterDTO;
+import com.bc208.blog.common.dto.wxLinkDTO;
+import com.bc208.blog.service.QuartzService;
 import com.bc208.blog.service.impl.UsersServiceImpl;
-import com.bc208.blog.utils.ResultInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * @author QingheLi
@@ -25,84 +27,54 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseBody
-    public ResultInfo userLogin(@RequestBody LoginDto user) throws Exception {
-        try{
-            return new ResultInfo().success(2003, "User login success", usersServiceImpl.userLogin(user));
-        }catch (Exception e){
-            e.printStackTrace();
-            log.info("Login failure");
-            return new ResultInfo().error(5003, "User login fail");
-        }
+    public Result userLogin(@RequestBody LoginDTO user) throws Exception {
+        return usersServiceImpl.userLogin(user);
     }
 
     @PostMapping("/register")
     @ResponseBody
-    public ResultInfo userRegister(@RequestBody userRegisterDto userRegisterDto) throws Exception {
-        try{
-            if (usersServiceImpl.userRegister(userRegisterDto) == 1){
-                log.info("User registration successful");
-                return new ResultInfo().success(2005, "User registration success");
-            }else{
-                log.info("User registration failure");
-                return new ResultInfo().error(5005, "User registration fail");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            return new ResultInfo().error(5000, "system error");
-        }
+    public Result userRegister(@RequestBody UserRegisterDTO userRegisterDto) throws Exception {
+        return usersServiceImpl.userRegister(userRegisterDto);
     }
 
-    @Autowired
-    MailService mailService;
+    @GetMapping("/captcha")
+    public Result sendCaptcha(String email){
+        return usersServiceImpl.sendCaptcha(email);
+    }
 
-
-    @PostMapping("/ForgotPassword")
+    @GetMapping("/ForgotPassword")
     @ResponseBody
-    public ResultInfo forgotPassword(@RequestBody LoginDto loginDto){
-        if (!usersServiceImpl.checkUserEnabled(loginDto.getEmail())){
-            return new ResultInfo().error(5006, "User enabled");
-        }
-        String newPassword = usersServiceImpl.userForgotPassword(loginDto.getEmail());
-        if (newPassword == null){
-            return new ResultInfo().error(5006, "User get new password failed");
-        }
-        MailVo mailVo = new MailVo();
-        mailVo.setTo(loginDto.getEmail());
-        mailVo.setSubject("BlackChain BlogWeb, you new password.");
-        mailVo.setText(newPassword);
-        mailService.sendMail(mailVo);
-        return new ResultInfo().success(2006, "User get new password success");
+    public Result forgotPassword(String email){
+        return usersServiceImpl.userForgotPassword(email);
     }
-
 
     @GetMapping("/logout")
     @ResponseBody
-    public ResultInfo userLogout() {
-        try {
-            log.info("User logout");
-            usersServiceImpl.userLogout();
-            return new ResultInfo().success(2006, "User logout success");
-        }catch (Exception e){
-            e.printStackTrace();
-            return new ResultInfo().error(5006, "User logout fail");
-        }
+    public Result userLogout(String token) {
+        return usersServiceImpl.userLogout(token);
     }
 
     @Autowired
-    TestMapper testMapper;
+    private QuartzService quartzService;
 
-//    @Autowired
-//    QuartzService quartzService;
-
-//    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/hello")
     @ResponseBody
-    public ResultInfo hello() throws SchedulerException {
-//        System.out.println(test);
-        return new ResultInfo().success(2000, "test");
-//        return new ResultInfo().success(200, testMapper.test(0));
-//        quartzService.sendAdminRegisterCaptcha();
-//        return new ResultInfo().success(200, "ok");
+    public Result hello() throws SchedulerException {
+        return Result.success("hello bc208");
     }
 
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    @GetMapping("/wxLogin")
+    @ResponseBody
+    public Result wxLogin(@RequestParam("code") String wxCode) {
+        return usersServiceImpl.userWxLogin(wxCode);
+    }
+
+    @PostMapping("/wxLink")
+    @ResponseBody
+    public Result wxLink(@RequestBody wxLinkDTO user) throws Exception {
+        return usersServiceImpl.userWxLink(user);
+    }
 }

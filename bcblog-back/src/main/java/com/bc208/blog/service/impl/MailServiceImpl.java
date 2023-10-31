@@ -2,33 +2,57 @@ package com.bc208.blog.service.impl;
 
 import com.bc208.blog.common.vo.MailVo;
 import com.bc208.blog.service.MailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
 import java.util.Date;
 
 /**
  * @author QingheLi
  */
 @Service
+@Slf4j
 public class MailServiceImpl implements MailService {
 
-    @Autowired
-    private JavaMailSenderImpl mailSender;
+    private final JavaMailSenderImpl mailSender;
+
+    public MailServiceImpl(JavaMailSenderImpl mailSender) {
+        this.mailSender = mailSender;
+    }
 
     @Override
-    public MailVo sendMail(MailVo mailVo) {
+    public MailVo createMail(String to, String subject, String text) {
+        MailVo mailVo = new MailVo();
+        mailVo.setTo(to);
+        mailVo.setSubject(subject);
+        mailVo.setText(text);
+        return mailVo;
+    }
+
+    @Override
+    public MailVo createMail(String to, String subject, String text, File fileToEmail) {
+        MailVo mailVo = new MailVo();
+        mailVo.setTo(to);
+        mailVo.setSubject(subject);
+        mailVo.setText(text);
+        mailVo.setAttachment(fileToEmail);
+        return mailVo;
+    }
+
+    @Override
+    public void sendMail(MailVo mailVo) {
         try {
             checkMail(mailVo);
             sendMimeMail(mailVo);
-            return saveMail(mailVo);
+            log.warn("邮件发送:"+mailVo.getTo());
+            saveMail(mailVo);
         } catch (Exception e) {
             mailVo.setStatus("fail");
             mailVo.setError(e.getMessage());
-            return mailVo;
         }
     }
 
@@ -47,13 +71,15 @@ public class MailServiceImpl implements MailService {
 
     private void sendMimeMail(MailVo mailVo) {
         try {
-
             MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
             mailVo.setFrom(getMailSendFrom());
             messageHelper.setFrom(mailVo.getFrom());
             messageHelper.setTo(mailVo.getTo().split(","));
             messageHelper.setSubject(mailVo.getSubject());
             messageHelper.setText(mailVo.getText());
+            if (mailVo.getAttachment() != null){
+                messageHelper.addAttachment(mailVo.getAttachment().getName(), mailVo.getAttachment());
+            }
 
             if (!StringUtils.isEmpty(mailVo.getCc())) {
                 messageHelper.setCc(mailVo.getCc().split(","));
@@ -68,6 +94,7 @@ public class MailServiceImpl implements MailService {
             mailSender.send(messageHelper.getMimeMessage());
             mailVo.setStatus("ok");
         } catch (Exception e) {
+            log.warn(e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -76,8 +103,7 @@ public class MailServiceImpl implements MailService {
      * @param mailVo 邮件基本信息
      */
     @Override
-    public MailVo saveMail(MailVo mailVo) {
-        return mailVo;
+    public void saveMail(MailVo mailVo) {
     }
 
     /**

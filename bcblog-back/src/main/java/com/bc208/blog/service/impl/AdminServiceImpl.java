@@ -1,179 +1,173 @@
 package com.bc208.blog.service.impl;
 
+import cn.hutool.core.lang.UUID;
 import com.bc208.blog.common.dto.JudgeDto;
-import com.bc208.blog.common.dto.LoginDto;
-import com.bc208.blog.common.dto.adminRegisterDto;
-import com.bc208.blog.common.vo.SecurityAdmin;
-import com.bc208.blog.config.redisCofig.RedisCache;
-import com.bc208.blog.pojo.Admin;
+import com.bc208.blog.common.dto.LoginDTO;
+import com.bc208.blog.common.dto.Result;
+import com.bc208.blog.common.vo.MailVo;
+import com.bc208.blog.common.vo.UserVO;
+import com.bc208.blog.pojo.AdminRegisterDTO;
 import com.bc208.blog.pojo.User;
 import com.bc208.blog.repository.base.mapper.AdminMapper;
 import com.bc208.blog.service.AdminService;
-import com.bc208.blog.utils.JwtUtil;
-import com.bc208.blog.utils.RandomCaptcha;
-import com.bc208.blog.utils.nullOrNot;
+import com.bc208.blog.service.MailService;
+import com.bc208.blog.utils.PasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import static com.bc208.blog.utils.RedisConstants.LOGIN_USER_KEY;
 
 /**
  * @author QingheLi
  */
 @Slf4j
 @Service("AdminServiceImpl")
-public class AdminServiceImpl implements AdminService, UserDetailsService {
+public class AdminServiceImpl implements AdminService {
 
-    @Autowired
-    AdminMapper adminMapper;
-
-    @Autowired
-    private JwtUtil jwtUtils;
-
-    @Autowired
-    private RedisCache redisCache;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AdminMapper adminMapper;
+    private final ApplicationServiceImpl applicationService;
+    private final MailService mailService;
 
 
-    @Autowired
-    private PasswordEncoder bcryptPasswordEncoder;
+    public AdminServiceImpl(AdminMapper adminMapper, ApplicationServiceImpl applicationService, MailService mailService) {
+        this.adminMapper = adminMapper;
+        this.applicationService = applicationService;
+        this.mailService = mailService;
+    }
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 管理员注册
-     * @param userRegisterDto
-     * @return
      */
     @Override
-    @Transactional
-    public int adminRegister(adminRegisterDto userRegisterDto) {
-        nullOrNot.isTrue(adminMapper.queryAdminByEmail(userRegisterDto.getEmail()) != null, "用户名已存在");
-        //判断是否已存在该用户名
-        Admin admin = new Admin();
-        admin.setUserName(userRegisterDto.getUsername());
-        admin.setUserEmail(userRegisterDto.getEmail());
-        admin.setUserPassword(bcryptPasswordEncoder.encode(userRegisterDto.getPassword()));
-        //密码加密
-        admin.setUserRole("admin");
-        admin.setEnabled(1);
-        //经过Web开发员确认后才可使用
-        //TODO:这里需要修改
-        admin.setAccountNoExpired(1);
-        admin.setCredentialsNoExpired(1);
-        admin.setAccountNoLocked(1);
-        admin.setUserToken("a");
-        return adminMapper.registerAdmin(admin);
+    public Result adminRegister(AdminRegisterDTO adminRegisterDTO) {
+        String adminCaptcha = "bc208:admin";
+
+        if (!adminCaptcha.equals(adminRegisterDTO.getAuthCode())){
+            return Result.fail("验证码错误");
+        }
+
+        if (adminMapper.queryAdminByEmail(adminRegisterDTO.getEmail()) != null) {
+            return Result.fail("管理员已存在");
+        }
+
+        User admin = new User();
+        admin.setUserName(adminRegisterDTO.getUsername());
+        admin.setUserEmail(adminRegisterDTO.getEmail());
+        admin.setUserPassword(PasswordEncoder.encode(adminRegisterDTO.getPassword()));
+        admin.setUserRole(1);
+
+        if (adminMapper.registerAdmin(admin) == 1) {
+            return Result.success("管理员注册成功");
+        } else {
+            return Result.success("管理员注册失败");
+        }
     }
 
 
     @Override
-    @Transactional
-    public HashMap<String, String> adminLogin(LoginDto loginDto) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
-        // 使用authenticationManager调用loadUserByUsername
+    public Result adminLogin(LoginDTO loginDto) {
+        User admin = adminMapper.getAdminInfo(loginDto.getEmail());
 
-        Authentication authentication = authenticationManager.authenticate(authToken);
-        if(authentication == null) {
-            throw new RuntimeException("Login false");
+        if (!PasswordEncoder.matches(admin.getUserPassword(), loginDto.getPassword())){
+            return Result.fail("密码错误");
         }
-        log.info("admin login successful");
-        SecurityAdmin securityAdmin = (SecurityAdmin) authentication.getPrincipal();
-        Integer adminId = securityAdmin.getAdmin().getUserId();
-        String usrName = securityAdmin.getUsername();
 
-        String role = securityAdmin.getAdmin().getUserRole();
+        String token = UUID.randomUUID().toString(true);
 
-        List<String> authList = new ArrayList<String>();
-        for (GrantedAuthority auth : securityAdmin.getAuthorities()) {
-            authList.add(auth.getAuthority());
-        }
-        String jwt = JwtUtil.createJwt("Admin login", adminId, role);
-        // 存入Redis
-        redisCache.setCacheObject("login:"+adminId + role,securityAdmin);
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("token", jwt);
-        return map;
+        Map<String, String> adminMap = new HashMap<>(4);
+
+        adminMap.put("id", String.valueOf(admin.getUserId()));
+        adminMap.put("name", admin.getUserName());
+        adminMap.put("email", admin.getUserEmail());
+        adminMap.put("role", admin.getUserRole().toString());
+
+        stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, adminMap);
+
+        stringRedisTemplate.expire(LOGIN_USER_KEY + token, 30, TimeUnit.MINUTES);
+
+        return Result.success(token);
     }
 
+    @Override
+    public Result adminLogout(String token){
+        stringRedisTemplate.delete(LOGIN_USER_KEY + token);
+        return Result.success();
+    }
 
     @Override
-    public Admin adminDetection(LoginDto loginDto) {
-        return adminMapper.findAdmin(loginDto);
+    public Result getApplication() {
+        List<UserVO> userApplications = adminMapper.getApplications();
+        if (userApplications == null){
+            return Result.fail("获取成员申请失败");
+        }
+        return Result.success(userApplications);
+    }
+
+    @Override
+    public Result getMember() {
+        List<UserVO> members = adminMapper.getMembers();
+        if (members == null){
+            return Result.fail("获取成员申请失败");
+        }
+        return Result.success(members);
+    }
+
+    @Override
+    public Result changeUserAuth(String name, Integer auth) {
+        if (adminMapper.changeUserAuth(name, auth) == 0){
+            return Result.fail("修改用户权限失败");
+        }
+        return Result.success();
+    }
+
+    @Override
+    public Result deleteMember(String userName) {
+        if (adminMapper.deleteMember(userName) == 0){
+            return Result.fail("删除用户失败");
+        }
+        return Result.success();
+    }
+
+    @Override
+    public Result passApplication(String userName) {
+        if (adminMapper.passApplication(userName) == 0){
+            return Result.fail("删除用户失败");
+        }
+        return Result.success();
     }
 
     /**
      * 返回受影响条数
      */
     @Override
-    public int judgeApplication(JudgeDto judgeDto){
-        adminMapper.upDateApplicationStatus(judgeDto.getUserName());
-        return adminMapper.judgeApplication(judgeDto);
-    }
+    public Result judgeApplication(JudgeDto judgeDto){
+        MailVo mailVo = new MailVo();
 
-
-    @Override
-    public List<User> getUserByPage(int page, int size) {
-        return adminMapper.getUserByPage(page, size);
-    }
-
-    @Override
-    public long getUserCount(){
-        return adminMapper.getUserCount();
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Admin admin = adminMapper.getAdminByEmail(email);
-        if (admin == null) {
-            log.info("admin not found");
-            throw new UsernameNotFoundException("admin not found");
+        if (adminMapper.judgeApplication(judgeDto) == 0){
+            log.warn("管理员面试评价失败");
+            return Result.fail("管理员面试评价失败");
         }
-        List<String> list = new ArrayList<>(Arrays.asList(admin.getUserRole()));
-        return new SecurityAdmin(admin, list);
-    }
 
-    @Override
-    public void adminLogout(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        SecurityAdmin loginUser = (SecurityAdmin) authentication.getPrincipal();
-        int userid = loginUser.getAdmin().getUserId();
-        redisCache.deleteObject("login:"+userid+loginUser.getAdmin().getUserId());
-    }
-
-    @Override
-    public String adminForgotPassword(String userEmail) {
-        final String DefaultPassword = new RandomCaptcha().createCode();
-        int key = adminMapper.makeDefaultPassword(userEmail, bcryptPasswordEncoder.encode(DefaultPassword));
-        if (key != 1){
-            log.warn(userEmail + " remake password failed");
-            return null;
-        }else{
-            log.info(userEmail + " remake password succeeded");
+        mailVo.setTo(applicationService.applicationEmail(judgeDto.getUserName()));
+        mailVo.setSubject("区块链协会:面试结果");
+        if (judgeDto.getScore() == 1) {
+            mailVo.setText("面试通过, 很期待与您一起探索知识的海洋! \n 请添加协会QQ群:853207991 ");
+        } else {
+            mailVo.setText("很抱歉, 您的面试未通过, 祝您能去到更好的协会.");
         }
-        return DefaultPassword;
-    }
-
-
-    @Override
-    public boolean checkUserEnabled(String email) {
-        int key = adminMapper.checkUserEnabled(email);
-        if(key == 1){
-            return true;
-        }else{
-            return false;
-        }
+        mailService.sendMail(mailVo);
+        log.info("管理员进行面试评价成功.");
+        return Result.success();
     }
 
 }

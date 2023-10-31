@@ -1,43 +1,60 @@
 package com.bc208.blog.service;
 
-import com.bc208.blog.common.dto.LoginDto;
-import com.bc208.blog.common.dto.userRegisterDto;
-import com.bc208.blog.pojo.User;
-import org.apache.ibatis.annotations.Param;
-
-import java.io.IOException;
-import java.util.HashMap;
+import com.bc208.blog.common.dto.LoginDTO;
+import com.bc208.blog.common.dto.Result;
+import com.bc208.blog.common.dto.UserRegisterDTO;
+import com.bc208.blog.common.dto.wxLinkDTO;
 
 /**
  * @author QingheLi
  */
 public interface UserService {
-    /**
-     * 登入
-     * @LoginDto 输入登入信息
-     * @return
-     */
-    HashMap<String, String> userLogin(LoginDto loginDto);
 
     /**
-     * 注册
+     * 用户登录
+     * @param loginDto 登录信息
+     * @return 登录结果
      */
-    int userRegister(userRegisterDto userRegisterDto) throws IOException;//注册
+    Result userLogin(LoginDTO loginDto);
 
     /**
-     * 通过用户邮箱获取用户信息
-     * @param userEmail
-     * @return
+     * 用户注册
+     * @param userRegisterDto 注册信息
+     * @return 返回注册结果
      */
-    User getByUserEmail(@Param("userEmail") String userEmail);
+    Result userRegister(UserRegisterDTO userRegisterDto);//注册
+
 
     /**
      * 忘记密码
+     * @param userEmail 用户邮箱
+     * @return 处理结果
      */
-    String userForgotPassword(@Param("userEmail") String userEmail);
+    Result userForgotPassword( String userEmail);
 
-    void userLogout();
+    /**
+     * 用户退出
+     * @param token 前端token
+     * @return 处理结果
+     */
+    Result userLogout(String token);
 
-    boolean checkUserEnabled(String userEmail);
+    /**
+     * 发送验证码
+     * @param email 用户邮箱
+     * @return 返回处理结果
+     */
+    Result sendCaptcha(String email);
 
+    /**
+     * @param wxCode 小程序Code
+     * @return 登录结果
+     */
+    Result userWxLogin(String wxCode);
+
+    /**
+     * @param user 网站登录信息
+     * @return 登录结果
+     */
+    Result userWxLink(wxLinkDTO user);
 }

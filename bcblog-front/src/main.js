@@ -4,7 +4,6 @@ import './assets/reset.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 // 入口
-
 import { isAndroid } from 'vue-device-detect';
 
 const app = createApp(App)
@@ -15,11 +14,14 @@ import AndroidRouter from './router/router-android'
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+// import 'element-plus/theme-chalk/index.css';
 // 全局生效
 
 
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:8088/'
+// axios.defaults.baseURL = 'http://39.101.74.9:8088/'
+// axios.defaults.baseURL = 'http://43.138.209.227:8088/'
 
 const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 

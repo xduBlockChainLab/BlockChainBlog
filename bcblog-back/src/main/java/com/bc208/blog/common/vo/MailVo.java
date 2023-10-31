@@ -2,11 +2,13 @@ package com.bc208.blog.common.vo;
 
 import lombok.Data;
 
+import java.io.File;
 import java.util.Date;
 
 
 /**
  * @author QingheLi
+ * 用于邮箱发送服务器
  */
 @Data
 public class MailVo {
@@ -30,6 +32,7 @@ public class MailVo {
     private String bcc;
     private String status;
     private String error;
+    private File attachment;
 
 
 }

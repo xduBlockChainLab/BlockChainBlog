@@ -11,11 +11,14 @@
     "axios": "^1.4.0",
     "cors": "^2.8.5",
     "element-plus": "^2.3.9",
+    "pdfjs-dist": "^2.9.359",
     "reset-css": "^5.0.2",
     "typescript": "^5.1.6",
     "vant": "^4.7.0",
+    "vditor": "^3.9.6",
     "vue": "^3.3.4",
     "vue-device-detect": "^1.0.3",
+    "vue-pdf": "^4.3.0",
     "vue-router": "^4.2.4"
   },
   "devDependencies": {
