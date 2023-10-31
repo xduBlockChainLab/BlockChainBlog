@@ -2,6 +2,7 @@ package com.bc208.blog.service.impl;
 
 import com.bc208.blog.common.vo.MailVo;
 import com.bc208.blog.service.MailService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Date;
  * @author QingheLi
  */
 @Service
+@Slf4j
 public class MailServiceImpl implements MailService {
 
     private final JavaMailSenderImpl mailSender;
@@ -46,6 +48,7 @@ public class MailServiceImpl implements MailService {
         try {
             checkMail(mailVo);
             sendMimeMail(mailVo);
+            log.warn("邮件发送:"+mailVo.getTo());
             saveMail(mailVo);
         } catch (Exception e) {
             mailVo.setStatus("fail");
@@ -68,7 +71,6 @@ public class MailServiceImpl implements MailService {
 
     private void sendMimeMail(MailVo mailVo) {
         try {
-
             MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
             mailVo.setFrom(getMailSendFrom());
             messageHelper.setFrom(mailVo.getFrom());
@@ -92,6 +94,7 @@ public class MailServiceImpl implements MailService {
             mailSender.send(messageHelper.getMimeMessage());
             mailVo.setStatus("ok");
         } catch (Exception e) {
+            log.warn(e.getMessage());
             throw new RuntimeException(e);
         }
     }

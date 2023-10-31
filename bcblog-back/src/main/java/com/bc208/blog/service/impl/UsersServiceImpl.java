@@ -1,22 +1,29 @@
 package com.bc208.blog.service.impl;
 
 import cn.hutool.core.lang.UUID;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.bc208.blog.common.dto.LoginDTO;
 import com.bc208.blog.common.dto.Result;
 import com.bc208.blog.common.dto.UserRegisterDTO;
+import com.bc208.blog.common.dto.wxLinkDTO;
 import com.bc208.blog.pojo.User;
 import com.bc208.blog.repository.base.mapper.UsersMapper;
 import com.bc208.blog.service.CaptchaService;
 import com.bc208.blog.service.MailService;
 import com.bc208.blog.service.UserService;
 import com.bc208.blog.utils.PasswordEncoder;
+import com.bc208.blog.utils.UserOpenidHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import static com.bc208.blog.utils.RedisConstants.LOGIN_USER_KEY;
 import static com.bc208.blog.utils.RedisConstants.REGISTER_CODE_KEY;
 
@@ -133,6 +140,86 @@ public class UsersServiceImpl implements UserService {
             return Result.fail("验证码申请出错");
         }
         return Result.success();
+    }
+
+    @Override
+    public Result userWxLogin(String wxCode) {
+        String appid = "wxc70351d25064057f";
+        String secret = "58bb65ecf4d3dc5d2cea4ebd02d6e4d5";
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code";
+        String replaceUrl = url.replace("{0}", appid).replace("{1}", secret).replace("{2}", wxCode);
+        String res = HttpUtil.get(replaceUrl);
+        JSONObject jsonObject = JSONUtil.parseObj(res);
+        String userOpenId = jsonObject.getStr("openid");
+        if ( userOpenId == null){
+            // 1. 如果微信未通过认证, 就报错, 说明这个wxCode有问题
+            return Result.fail("微信登录失败");
+        }
+
+        String uuid = UUID.randomUUID().toString(true);
+        // 2. 通过微信认证, 接下来要考虑后端.
+        // 2.1 微信的openId是独一无二的, 所以如果这玩意在数据库中存在, 说明用户已经登录过该系统, 并绑定了邮箱和密码
+        // 如果后端未找到该openid对应的数据条目, 说明该用户未绑定系统, 需要进行绑定
+        if(usersMapper.checkUserWx(userOpenId)  == 0){
+            if(usersMapper.insertUserAuth("wx", userOpenId, jsonObject.getStr("session_key")) != 1){
+                return Result.fail("系统错误, 请联系管理员");
+            }
+            stringRedisTemplate.opsForValue().set("LOGIN:WEIXIN:OPENID:"+uuid, userOpenId, 5, TimeUnit.MINUTES);
+            return Result.fail(uuid);
+        }else if (usersMapper.checkUserWxLogined(userOpenId) == null){
+            stringRedisTemplate.opsForValue().set("LOGIN:WEIXIN:OPENID:"+uuid, userOpenId, 5, TimeUnit.MINUTES);
+            // 用户未绑定邮箱, 不返回token
+            return Result.fail(uuid);
+        }
+        // 用户通过验证, 并绑定了邮箱, 那登录后就返回token, 让用户得以访问数据
+
+        User user = usersMapper.getUserInfoByOpenid(userOpenId);
+        Map<String, String> userMap = new HashMap<>(4);
+        userMap.put("id", String.valueOf(user.getUserId()));
+        userMap.put("name", user.getUserName());
+        userMap.put("email", user.getUserEmail());
+        userMap.put("role", user.getUserRole().toString());
+        stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + uuid, userMap);
+        stringRedisTemplate.expire(LOGIN_USER_KEY + uuid, 30, TimeUnit.MINUTES);
+        return Result.success(uuid);
+    }
+
+    @Override
+    public Result userWxLink(wxLinkDTO wxLinkDTO) {
+
+        // 1. 进来先检查验证码是否正确
+        if (!captchaService.checkCaptcha(wxLinkDTO.getEmail(), REGISTER_CODE_KEY, wxLinkDTO.getCaptcha())){
+            return Result.fail("验证失败");
+        }
+        if (usersMapper.queryUserByEmail(wxLinkDTO.getEmail()) == null) {
+            return Result.fail("用户不存在, 请到BC208网站注册");
+        }
+
+        User user = usersMapper.getUserInfo(wxLinkDTO.getEmail());
+
+        if (user.getUserEnable() == 0){
+            return Result.fail("您的账号暂未可用, 请过段时间尝试");
+        }
+
+        if (!PasswordEncoder.matches(user.getUserPassword(), wxLinkDTO.getPassword())){
+            return Result.fail("密码错误");
+        }
+        String openid = stringRedisTemplate.opsForValue().get("LOGIN:WEIXIN:OPENID:" + wxLinkDTO.getAuth());
+        log.warn("openid:"+openid);
+        if (usersMapper.upUserIdForOpenid(openid, user.getUserId()) != 1){
+            return Result.fail("系统错误, 请联系管理员");
+        }
+        // 用完后要移除ThreadLocal
+        UserOpenidHolder.removeUser();
+        String token = UUID.randomUUID().toString(true);
+        Map<String, String> userMap = new HashMap<>(4);
+        userMap.put("id", String.valueOf(user.getUserId()));
+        userMap.put("name", user.getUserName());
+        userMap.put("email", user.getUserEmail());
+        userMap.put("role", user.getUserRole().toString());
+        stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, userMap);
+        stringRedisTemplate.expire(LOGIN_USER_KEY + token, 30, TimeUnit.MINUTES);
+        return Result.success(token);
     }
 
 

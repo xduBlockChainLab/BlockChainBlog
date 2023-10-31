@@ -48,6 +48,8 @@ spring:
 
 
 logging:
+  level:
+    com.zaxxer.hikari: warn
   file:
     name: BC208.log
 

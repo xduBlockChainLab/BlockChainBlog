@@ -303,9 +303,17 @@ const uploadAction = axios.defaults.baseURL + 'application/submit/upload'
 const uploadData = ref({
     email: '',
     name: '',
+    fileType: ["pdf"]
 });
 
 const beforeUpload = (file: File) => {
+    if(file.type.substring(file.type.length-3, file.type.length) !== "pdf"){
+        ElMessage({
+            message: '文件类型错误',
+            type: 'error',
+        })
+        return false
+    }
     if(ruleForm.value.name.length === 0){
         ElMessage({
             message: '请先填写表单内容',

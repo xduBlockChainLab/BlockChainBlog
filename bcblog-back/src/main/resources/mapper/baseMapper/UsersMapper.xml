@@ -28,6 +28,15 @@
     <select id="getUserInfo" resultType="com.bc208.blog.pojo.User">
         select * from user where userEmail=#{userEmail}
     </select>
+    <select id="checkUserWxLogined" resultType="java.lang.String">
+        select userId from userauth where openId=#{openid} order by userId desc limit 0,1
+    </select>
+    <select id="getUserInfoByOpenid" resultType="com.bc208.blog.pojo.User">
+        select * from user where userId = (select userId from userauth where openId=#{userOpenId})
+    </select>
+    <select id="checkUserWx" resultType="java.lang.Long">
+        select COUNT(*) from userauth where openId=#{userOpenId}
+    </select>
 
     <insert id="registerUser" parameterType="com.bc208.blog.pojo.User" statementType="PREPARED" keyProperty="userId">
         insert into user(userName, userGrade, userEmail, userInterest, userPassword, userRole, userAuth)
@@ -41,12 +50,18 @@
     <insert id="userDemand" statementType="PREPARED">
         insert into demand(userName, demandName, demandDescription, demandStatus) values (#{userName}, #{demandName}, #{demandDescription}, #{demandStatus})
     </insert>
+    <insert id="insertUserAuth">
+        insert into userauth(loginType, openid, sessionKey) value (#{loginType}, #{userOpenId}, #{sessionKey})
+    </insert>
 
     <update id="changeDemand" statementType="PREPARED">
         update demand set demandStatus=#{demandStatus},demandDescription=#{demandDescription}  where demandName=#{demandName} and userName=#{userName}
     </update>
     <update id="makeDefaultPassword">
         update user set userPassword=#{userPassword} where userEmail=#{userEmail}
+    </update>
+    <update id="upUserIdForOpenid">
+        update userauth set userId=#{userId} where openId=#{openId}
     </update>
 
 

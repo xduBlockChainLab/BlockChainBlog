@@ -1,0 +1,56 @@
+<!--pages/login/login.wxml-->
+<view class="top-box">
+  <view>Hi</view>
+  <view class="next-text">欢迎使用！</view>
+</view>
+<view class="center-box">
+  <view class="nav">
+    <view class="left {{current==1?'select':''}}" bindtap="click" data-code="1">
+      <text>登录</text>
+    </view>
+    <view class="right {{current==0?'select':''}}" bindtap="click" data-code="0">
+      <text>绑定</text>
+    </view>
+  </view>
+  <!-- 登录 -->
+  <view class="input-box" hidden="{{current==0}}">
+    <view class="sumbit-btn">
+      <button class="button" 
+      style="background-color: #33ccff;font-size: 30rpx;" 
+      type="primary"
+      data-form="{{form}}"
+      bindtap="checkLogin"
+      >立即登录</button>
+    </view>
+  </view>
+  <!-- 注册 -->
+  <view class="input-box" hidden="{{current==1}}">
+    <view class="wei-input">
+      <icon type="waiting" color="#44ADFB" size="16"></icon>
+      <input type="text" class="input" value="{{form.email}}" auto-focus placeholder="请输入网站邮箱" bindinput="inputChange" data-field="email"/>
+    </view>
+    <view class="wei-input">
+      <icon type="waiting" color="#44ADFB" size="16"></icon>
+      <input type="text" class="input" value="{{form.password}}" auto-focus placeholder="请输入登录密码" bindinput="inputChange" data-field="password"/>
+    </view>
+    <view class="wei-input">
+      <icon type="waiting" color="#44ADFB" size="16"></icon>
+      <input type="text" class="input" value="{{form.captcha}}" auto-focus placeholder="请输入6位验证码" bindinput="inputChange" data-field="captcha"/>
+      <text class="input-code" bindtap="getCode">{{codeText}}</text>
+    </view>
+    <view class="forget">
+      <text>忘记密码?</text>
+    </view>
+    <view class="sumbit-btn">
+      <button class="button" 
+      style="background-color: #33ccff;font-size: 30rpx;" 
+      type="primary"
+      data-form="{{form}}"
+      bindtap="wxEmailLink"
+      >完成绑定</button>
+    </view>
+  </view>
+</view>
+<!-- 重影 -->
+<view class="shadow shadow-1"></view><view class="shadow shadow-2"></view>
+

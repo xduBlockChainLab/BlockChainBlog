@@ -10,6 +10,7 @@ import com.bc208.blog.service.CaptchaService;
 import com.bc208.blog.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -42,18 +43,23 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    @Transactional
     public Result applicationSubmission(ApplicationDTO applicationDTO) {
-        if(!captchaService.checkCaptcha(applicationDTO.getUserEmail(), APPLICATION_CODE_KEY, applicationDTO.getCaptcha())){
-            return Result.fail("验证失败");
+        try {
+            if(!captchaService.checkCaptcha(applicationDTO.getUserEmail(), APPLICATION_CODE_KEY, applicationDTO.getCaptcha())){
+                return Result.fail("验证失败");
+            }
+            if (applicationMapper.insertApplication(applicationDTO) == 0){
+                log.warn("申请插入数据库失败:"+applicationDTO.getUserName());
+                return Result.fail("申请信息提交失败");
+            }
+            log.warn("协会申请提交: {}", applicationDTO.getUserName());
+            mailService.sendMail(mailService.createMail(applicationDTO.getUserEmail(), "区块链协会申请提交情况", "您的申请已提交至西电区块链协会, 请您最近留意邮箱, 我们会将面试结果发送至您的邮箱."));
+            log.info("协会申请提交成功: {}", applicationDTO.getUserName());
+            return Result.success();
+        }catch (Exception e){
+            return Result.fail("系统错误, 请联系管理员");
         }
-
-        if (applicationMapper.insertApplication(applicationDTO) == 0){
-            return Result.fail("申请信息提交失败");
-        }
-
-        mailService.sendMail(mailService.createMail(applicationDTO.getUserEmail(), "区块链协会申请提交情况", "您的申请已提交至西电区块链协会, 请您最近留意邮箱, 我们会将面试结果发送至您的邮箱."));
-        log.info("工作室申请提交成功: {}", applicationDTO.getUserName());
-        return Result.success();
     }
 
     @Override
@@ -79,24 +85,20 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationMapper.getApplicationEmail(userName);
     }
 
-
     @Override
     public Result getApplicationDetail(String userName) {
         ApplicationDetailVO applicationDetail = applicationMapper.getApplicationDetail(userName);
-
         if (applicationDetail == null) {
             return Result.fail("获取面试人详细信息失败");
         }
-
         String serverIp = "http://39.101.74.9/home/application/";
         applicationDetail.setUserPdfUrl(serverIp+userName+".pdf");
-
         return Result.success(applicationDetail);
     }
 
     @Override
     public Result sendCaptcha(String email) {
-        if(!captchaService.sendCaptcha(email, APPLICATION_CODE_KEY, "区块链工作室:加入申请验证码")){
+        if(!captchaService.sendCaptcha(email, APPLICATION_CODE_KEY, "区块链协会:加入申请验证码")){
             return Result.fail("验证码申请出错, 请稍后重试");
         }
         return Result.success();
@@ -104,20 +106,16 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public Result applicationSubmitUpload(MultipartFile file, String email, String name) throws FileNotFoundException {
-
         if (file.isEmpty()) {
             return Result.fail("请选择一个文件上传");
         }
-
         File fileToEmail = new File(Objects.requireNonNull(file.getOriginalFilename()));
         try (FileOutputStream fos = new FileOutputStream(fileToEmail)) {
             fos.write(file.getBytes());
         } catch (IOException e) {
             return Result.fail("系统错误");
         }
-
-        mailService.sendMail(mailService.createMail(mailService.getMailSendFrom(), "区块链工作室招新", "申请人<"+name+">简历", fileToEmail));
-
+        mailService.sendMail(mailService.createMail(mailService.getMailSendFrom(), "区块链协会招新", "申请人<"+name+">简历", fileToEmail));
         String jarParent = System.getProperty("user.dir");
         String uploadPath = jarParent + "/application";
         // 这里用的是`\`, 用于Linux系统, 如果是Win则需要使用`//`

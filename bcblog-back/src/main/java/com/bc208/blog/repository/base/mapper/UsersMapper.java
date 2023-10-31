@@ -30,4 +30,30 @@ public interface UsersMapper {
     int checkUserEnabled(String userEmail);
 
     User getUserInfo(String email);
+
+    /**
+     * @param openid 微信用户的opneid
+     * @return 是否绑定过邮箱
+     */
+    String checkUserWxLogined(String openid);
+
+    User getUserInfoByOpenid(String userOpenId);
+
+    /**
+     * @param loginType 登录类型
+     * @param userOpenId 第三方openid
+     * @param sessionKey 第三方sessionKey
+     * @return 插入结果
+     */
+    int insertUserAuth(String loginType, String userOpenId, String sessionKey);
+
+
+    /**
+     * @param openId 第三方openid
+     * @param userId user表的id
+     * @return 更新结果
+     */
+    int upUserIdForOpenid(String openId, Long userId);
+
+    long checkUserWx(String userOpenId);
 }

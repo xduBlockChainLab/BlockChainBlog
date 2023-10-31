@@ -159,11 +159,11 @@ public class AdminServiceImpl implements AdminService {
         }
 
         mailVo.setTo(applicationService.applicationEmail(judgeDto.getUserName()));
-        mailVo.setSubject("区块链工作室208 面试结果");
+        mailVo.setSubject("区块链协会:面试结果");
         if (judgeDto.getScore() == 1) {
-            mailVo.setText("面试通过, 很期待与您一起探索知识的海洋!");
+            mailVo.setText("面试通过, 很期待与您一起探索知识的海洋! \n 请添加协会QQ群:853207991 ");
         } else {
-            mailVo.setText("很抱歉, 您的面试未通过, 祝您能去到更好的工作室.");
+            mailVo.setText("很抱歉, 您的面试未通过, 祝您能去到更好的协会.");
         }
         mailService.sendMail(mailVo);
         log.info("管理员进行面试评价成功.");

@@ -25,8 +25,15 @@
                 <el-button type="primary" @click="Register">
                     注册
                 </el-button>
+                <el-button type="primary" @click="drawerChange = true">
+                    微信登录
+                </el-button>
             </el-form-item>
         </el-form>
+
+        <el-drawer class="drawer" v-model="drawerChange" direction=rtl size="30vw">
+            小程序二维码    
+        </el-drawer>
     </div>
 </template>
 
@@ -114,6 +121,11 @@ const Login = async (formEl: FormInstance | undefined) => {
     })
 }
 
+const wxLogin = () => {  
+
+
+}
+
 const Register = () => {
     ElMessage({
         message: '正在前往注册页面.',
@@ -123,6 +135,9 @@ const Register = () => {
         router.push('/register');
     },2000)
 }
+
+const drawerChange = ref(false)
+
 
 </script>
 
@@ -176,7 +191,7 @@ const Register = () => {
 }
 
 .submitButton .el-button{
-    margin-left: 20%;
+    margin-left: 12%;
     font-size: large;
     background-color: #38a1ff;;
 }

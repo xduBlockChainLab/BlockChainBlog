@@ -3,12 +3,16 @@ package com.bc208.blog.controller;
 import com.bc208.blog.common.dto.LoginDTO;
 import com.bc208.blog.common.dto.Result;
 import com.bc208.blog.common.dto.UserRegisterDTO;
+import com.bc208.blog.common.dto.wxLinkDTO;
 import com.bc208.blog.service.QuartzService;
 import com.bc208.blog.service.impl.UsersServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * @author QingheLi
@@ -57,5 +61,20 @@ public class UserController {
     @ResponseBody
     public Result hello() throws SchedulerException {
         return Result.success("hello bc208");
+    }
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    @GetMapping("/wxLogin")
+    @ResponseBody
+    public Result wxLogin(@RequestParam("code") String wxCode) {
+        return usersServiceImpl.userWxLogin(wxCode);
+    }
+
+    @PostMapping("/wxLink")
+    @ResponseBody
+    public Result wxLink(@RequestBody wxLinkDTO user) throws Exception {
+        return usersServiceImpl.userWxLink(user);
     }
 }

@@ -240,7 +240,6 @@ const timer = setInterval(() => {
 
 
 const drawerChange = ref(false)
-const userName = ref()
 
 function cancelClick() {
     drawerChange.value = false

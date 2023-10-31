@@ -3,6 +3,7 @@ package com.bc208.blog.service;
 import com.bc208.blog.common.dto.LoginDTO;
 import com.bc208.blog.common.dto.Result;
 import com.bc208.blog.common.dto.UserRegisterDTO;
+import com.bc208.blog.common.dto.wxLinkDTO;
 
 /**
  * @author QingheLi
@@ -45,4 +46,15 @@ public interface UserService {
      */
     Result sendCaptcha(String email);
 
+    /**
+     * @param wxCode 小程序Code
+     * @return 登录结果
+     */
+    Result userWxLogin(String wxCode);
+
+    /**
+     * @param user 网站登录信息
+     * @return 登录结果
+     */
+    Result userWxLink(wxLinkDTO user);
 }

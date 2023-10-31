@@ -149,7 +149,7 @@ export default {
                 type: "success",
             });
             setTimeout(() => {
-                this.$router.push("/waiting");
+                this.$router.push("/login");
             }, 1000);
         },
     },
