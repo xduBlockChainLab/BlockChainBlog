@@ -16,6 +16,7 @@ import com.bc208.blog.service.UserService;
 import com.bc208.blog.utils.PasswordEncoder;
 import com.bc208.blog.utils.UserOpenidHolder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -142,10 +143,14 @@ public class UsersServiceImpl implements UserService {
         return Result.success();
     }
 
+    @Value("${app.appid}")
+    private String appid;
+
+    @Value("${app.appsecret}")
+    private String secret;
+
     @Override
     public Result userWxLogin(String wxCode) {
-        String appid = "wxc70351d25064057f";
-        String secret = "58bb65ecf4d3dc5d2cea4ebd02d6e4d5";
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code";
         String replaceUrl = url.replace("{0}", appid).replace("{1}", secret).replace("{2}", wxCode);
         String res = HttpUtil.get(replaceUrl);
@@ -155,7 +160,6 @@ public class UsersServiceImpl implements UserService {
             // 1. 如果微信未通过认证, 就报错, 说明这个wxCode有问题
             return Result.fail("微信登录失败");
         }
-
         String uuid = UUID.randomUUID().toString(true);
         // 2. 通过微信认证, 接下来要考虑后端.
         // 2.1 微信的openId是独一无二的, 所以如果这玩意在数据库中存在, 说明用户已经登录过该系统, 并绑定了邮箱和密码
