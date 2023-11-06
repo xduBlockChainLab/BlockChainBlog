@@ -24,21 +24,21 @@ Page({
   },
   //获取验证码 
   getCode(){
-    console.log(this.data.form.email)
     if(this.data.form.email == ""){
       wx.showToast({
         title: '请输入网站邮箱!!!',
+        icon: 'error',
       })
     }else if(!this.emailCheck()) {
       wx.showToast({
         title: '请输入正确邮箱!!!',
+        icon: 'error',
       })
     }else{
       var that = this;
       if (!that.data.counting) {
         request('/captcha', "GET", {email:this.data.form.email})
           .then(response =>{
-            console.log(response)
             if(response.success == true){
               wx.showToast({
                 title: '验证码已发送',
@@ -81,7 +81,6 @@ Page({
   },
   //关联邮箱和微信
   wxEmailLink: function (){
-    console.log("表单数据为:", this.data.form)
 
     var updatedData = {};
     updatedData['form.auth'] = wx.getStorageSync("auth");
@@ -90,7 +89,6 @@ Page({
     var form = this.data.form
     request('/wxLink', "POST", form)
       .then(response => {
-        console.log(response)
         if(response.success == true){
           wx.showToast({
             title: '成功绑定邮箱',
@@ -101,6 +99,7 @@ Page({
         }else{
           wx.showToast({
             title: response.errorMsg,
+            icon: 'error',
           })
         }
       })
@@ -114,10 +113,8 @@ Page({
       })
       wx.login({
         success: res => {
-          console.log("code:"+res.code)
           request('wxLogin', 'GET', {code:res.code})
             .then(response => {
-              console.log(response)
               if(response.success == true){
                 wx.setStorageSync("token",response.data)
               }else{
@@ -142,17 +139,15 @@ Page({
   checkLogin: function () {
     const token = wx.getStorageSync('token'); // 假设你的用户信息存储在本地缓存中
     if (!token) {
-      // 用户未登录，跳转到登录页
-      console.log("用户未登录")
       wx.showToast({
         title: '用户未绑定邮箱',
+        icon: 'error',
       })
       this.setData({
         current:0
       })
       return false; // 返回 false 阻止页面跳转
     }
-    console.log("用户已登录")
     wx.showToast({
       title: '用户已登录',
     })
@@ -169,10 +164,8 @@ Page({
     // 登录
     wx.login({
       success: res => {
-        console.log("code:"+res.code)
         request('wxLogin', 'GET', {code:res.code})
           .then(response => {
-            console.log(response)
             if(response.success == true){
               wx.setStorageSync("token",response.data)
             }else{
@@ -181,6 +174,11 @@ Page({
           })
           .catch(error => {
             console.error('请求失败', error);
+            wx.showToast({
+              icon: 'none',
+              title: '系统错误, 请稍后重试.',
+              duration: 5000//持续的时间
+            })
           });
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
       }

@@ -16,11 +16,16 @@ import com.bc208.blog.service.UserService;
 import com.bc208.blog.utils.PasswordEncoder;
 import com.bc208.blog.utils.UserOpenidHolder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -224,6 +229,50 @@ public class UsersServiceImpl implements UserService {
         stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, userMap);
         stringRedisTemplate.expire(LOGIN_USER_KEY + token, 30, TimeUnit.MINUTES);
         return Result.success(token);
+    }
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Override
+    public Result getQRCode() {
+        String getAccessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+appid+"&secret="+secret;
+        String accessTokenRes = HttpUtil.get(getAccessTokenUrl);
+        JSONObject jsonObject = JSONUtil.parseObj(accessTokenRes);
+        String accessToken = jsonObject.getStr("access_token");
+
+        log.warn("accessToken:"+accessToken);
+        String getQRCodeUrl0 = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="+accessToken;
+        log.warn("url"+getQRCodeUrl0);
+        String getQRCodeUrl = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={accessToken}";
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        // 使用Map设置占位符的值
+        Map<String, String> urlVariables = new HashMap<>();
+        urlVariables.put("accessToken", accessToken);
+
+        String requestBody = "{\"page\":\"pages/login/login\", \"scene\":\"a=1\"}";
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, requestHeaders);
+
+        // ResponseEntity<byte[]> responseEntity = restTemplate.exchange(getQRCodeUrl, HttpMethod.POST, requestEntity, byte[].class);
+        ResponseEntity<byte[]> responseEntity = restTemplate.exchange(getQRCodeUrl, HttpMethod.POST, requestEntity, byte[].class, urlVariables);
+        log.warn("image:"+responseEntity.getBody());
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            byte[] imageBytes = responseEntity.getBody();
+            // 保存图片到文件
+            try (FileOutputStream fos = new FileOutputStream("image.jpg")) {
+                assert imageBytes != null;
+                fos.write(imageBytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("图片下载成功并保存到文件");
+        } else {
+            System.out.println("图片下载失败，状态码：" + responseEntity.getStatusCode());
+        }
+        return Result.success();
     }
 
 

@@ -57,4 +57,6 @@ public interface UserService {
      * @return 登录结果
      */
     Result userWxLink(wxLinkDTO user);
+
+    Result getQRCode();
 }

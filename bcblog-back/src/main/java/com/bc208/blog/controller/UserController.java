@@ -54,7 +54,6 @@ public class UserController {
     @GetMapping("/hello")
     @ResponseBody
     public Result hello(){
-        System.out.println("test不上传配置文件");
         return Result.success("hello bc208");
     }
 
@@ -69,5 +68,11 @@ public class UserController {
     @ResponseBody
     public Result wxLink(@RequestBody wxLinkDTO user){
         return usersServiceImpl.userWxLink(user);
+    }
+
+    @GetMapping("wxQRCode")
+    public Result getWxQRCode(){
+        // TODO:没办法, 得将小程序"上线"才能真正的使用, 否则无法调用那个HTTP链接来获取小程序码
+        return usersServiceImpl.getQRCode();
     }
 }
