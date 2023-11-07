@@ -17,6 +17,11 @@ function request(path, method, data) {
         resolve(res.data);
       },
       fail: error => {
+        wx.showToast({
+          icon: 'none',
+          title: '系统错误, 请稍后重试.',
+          duration: 5000//持续的时间
+        })
         reject(error);
       }
     });

@@ -1,5 +1,6 @@
 package com.bc208.blog.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -13,12 +14,15 @@ import java.util.Properties;
  */
 @Configuration
 public class MailConfiguration {
+    @Value("${app.mailPassword}")
+    private String mailPassword;
+
     @Bean
     public JavaMailSenderImpl javaMailSender(){
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.163.com");
         mailSender.setUsername("QingheLi_XDU@163.com");
-        mailSender.setPassword("SCPMNGZSOQKJBERP");
+        mailSender.setPassword(mailPassword);
         mailSender.setPort(465);
         mailSender.setProtocol("smtp");
         Properties props = mailSender.getJavaMailProperties();

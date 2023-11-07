@@ -6,7 +6,7 @@
             font-size: 60px;
             /* color: #fefefe; */
             text-shadow: 0 0 0.5em #38a1ff, 0 0 0.2em #5c5c5c;
-        " class="BCName" >
+        " class="BCName">
                 <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
             </div>
         </div>
@@ -32,13 +32,13 @@
         </el-form>
 
         <el-drawer class="drawer" v-model="drawerChange" direction=rtl size="30vw">
-            小程序二维码    
+            小程序二维码
         </el-drawer>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onBeforeMount } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import axios from 'axios';
@@ -53,7 +53,6 @@ interface RuleForm {
     password: string
 }
 
-const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
     email: '',
@@ -69,10 +68,11 @@ const rules = reactive<FormRules<RuleForm>>({
         },
     ],
     password: [
-        { 
-            required: true, 
-            message: '请输入密码', 
-            trigger: 'blur' },
+        {
+            required: true,
+            message: '请输入密码',
+            trigger: 'blur'
+        },
     ],
 })
 
@@ -82,20 +82,20 @@ const successMessage = () => {
         message: '用户登录成功, 正在跳转.',
         type: 'success',
     })
-    setTimeout(()=>{
+    setTimeout(() => {
         router.push('/userpage');
-    },3000)
+    }, 3000)
 }
 
 const falseMessage = (errorMsg: string) => {
     ElMessage({
-        message: '登录失败, '+errorMsg,
+        message: '登录失败, ' + errorMsg,
         type: 'error',
     })
 }
 
 
-const Login = async (formEl: FormInstance | undefined) => {  
+const Login = async (formEl: FormInstance | undefined) => {
     if (!formEl) return console.error("错误");
     await formEl.validate((valid, fields) => {
         if (valid) {
@@ -106,7 +106,7 @@ const Login = async (formEl: FormInstance | undefined) => {
                 .then(function (response) {
                     if (response.data.success == true && response.data.data != null) {
                         localStorage.setItem('token', response.data.data),
-                        successMessage()
+                            successMessage()
                     } else {
                         falseMessage(response.data.errorMsg)
                         formEl.resetFields()
@@ -121,7 +121,7 @@ const Login = async (formEl: FormInstance | undefined) => {
     })
 }
 
-const wxLogin = () => {  
+const wxLogin = () => {
 
 
 }
@@ -131,22 +131,48 @@ const Register = () => {
         message: '正在前往注册页面.',
         type: 'success',
     })
-    setTimeout(()=>{
+    setTimeout(() => {
         router.push('/register');
-    },2000)
+    }, 2000)
 }
 
 const drawerChange = ref(false)
 
+// const checkToken =  async () => {
+//     const token = localStorage.getItem('token')
+//     await axios.get("bc208/checkLogin", {
+//             headers: {
+//                 token: localStorage.getItem("token"),
+//             },
+//             })
+//             .then(function (response) {
+//                 if (response.data.success == true && response.data.data != null) {
+//                     localStorage.setItem('token', response.data.data),
+//                         successMessage()
+//                 } else {
+//                 }
+//             })
+//             .catch(function (error) {
+//                 console.log(error);
+//             }); 
+// }
+
+// const toUserPage = () => {
+//     router.push('/userPage');
+// }
+
+// onBeforeMount(() => {
+//     checkToken()
+// })
 
 </script>
 
 <style scoped>
-
 * {
     padding: 0;
     margin: 0;
 }
+
 .shell {
     background-image: url("../assets/index/adminlogin.png");
     background-size: cover;
@@ -177,28 +203,29 @@ const drawerChange = ref(false)
     width: 40%;
     margin-left: 30%;
 }
+
 /* 
 .el-form-item :deep() .label {
     font-size: large;
 } */
 
-.el-form-item{
+.el-form-item {
     padding: 15px;
 }
 
-.applicationForm :deep() .el-form-item__label{
+.applicationForm :deep() .el-form-item__label {
     font-size: large;
 }
 
-.submitButton .el-button{
+.submitButton .el-button {
     margin-left: 12%;
     font-size: large;
-    background-color: #38a1ff;;
+    background-color: #38a1ff;
+    ;
 }
 
 .toIndex {
     text-decoration: none;
     color: black;
 }
-
 </style>
