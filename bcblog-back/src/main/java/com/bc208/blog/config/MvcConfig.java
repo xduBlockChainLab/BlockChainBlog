@@ -2,7 +2,7 @@ package com.bc208.blog.config;
 
 import com.bc208.blog.utils.AuthorityInterceptor;
 import com.bc208.blog.utils.LoginInterceptor;
-import com.bc208.blog.utils.RefreshToeknInterceptor;
+import com.bc208.blog.utils.RefreshTokenInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -20,8 +20,11 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){
-        // 拦截所有, 用于已登录者更新token时间
-        registry.addInterceptor(new RefreshToeknInterceptor(redisTemplate)).addPathPatterns("/**").order(0);
+        // addPathPatterns 拦截所有, 用于已登录者更新token时间
+        registry.addInterceptor(new RefreshTokenInterceptor(redisTemplate))
+                .addPathPatterns("/**"
+                ).order(0);
+        // excludePathPatterns 放行部分请求
         registry.addInterceptor(new LoginInterceptor())
                 .excludePathPatterns("/**"
                 ).order(1);

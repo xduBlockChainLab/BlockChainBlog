@@ -15,17 +15,20 @@ import java.util.concurrent.TimeUnit;
 import static com.bc208.blog.utils.RedisConstants.LOGIN_USER_KEY;
 import static com.bc208.blog.utils.RedisConstants.LOGIN_USER_TTL;
 
+/**
+ * @author QingheLi
+ */
 @Slf4j
-public class RefreshToeknInterceptor implements HandlerInterceptor {
+public class RefreshTokenInterceptor implements HandlerInterceptor {
 
     private final StringRedisTemplate redisTemplate;
 
-    public RefreshToeknInterceptor(StringRedisTemplate redisTemplate){
+    public RefreshTokenInterceptor(StringRedisTemplate redisTemplate){
         this.redisTemplate = redisTemplate;
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 处理跨域请求处理
         if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             return true;
@@ -37,7 +40,7 @@ public class RefreshToeknInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        Map<Object, Object> userMap= redisTemplate.opsForHash().entries(LOGIN_USER_KEY + token);
+        Map<Object, Object> userMap = redisTemplate.opsForHash().entries(LOGIN_USER_KEY + token);
 
         if (userMap.isEmpty()) {
             return true;
@@ -52,7 +55,7 @@ public class RefreshToeknInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) {
         // 移除用户
         UserHolder.removeUser();
     }

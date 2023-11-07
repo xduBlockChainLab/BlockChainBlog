@@ -59,4 +59,5 @@ public interface UserService {
     Result userWxLink(wxLinkDTO user);
 
     Result getQRCode();
+
 }

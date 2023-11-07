@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -256,9 +257,8 @@ public class UsersServiceImpl implements UserService {
         String requestBody = "{\"page\":\"pages/login/login\", \"scene\":\"a=1\"}";
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, requestHeaders);
 
-        // ResponseEntity<byte[]> responseEntity = restTemplate.exchange(getQRCodeUrl, HttpMethod.POST, requestEntity, byte[].class);
         ResponseEntity<byte[]> responseEntity = restTemplate.exchange(getQRCodeUrl, HttpMethod.POST, requestEntity, byte[].class, urlVariables);
-        log.warn("image:"+responseEntity.getBody());
+        log.warn("image:"+ Arrays.toString(responseEntity.getBody()));
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             byte[] imageBytes = responseEntity.getBody();
             // 保存图片到文件
@@ -274,7 +274,6 @@ public class UsersServiceImpl implements UserService {
         }
         return Result.success();
     }
-
 
     @Override
     public Result userForgotPassword(String userEmail) {

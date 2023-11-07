@@ -1,38 +1,38 @@
 <template>
     <div class="shell">
         <el-container style="overflow: hidden;">
-            <el-header style="border-radius: 10px;">
+            <el-header style="border-radius: 10px; background-color: rgb(0, 174, 255);">
                 <div style="
-                        font-size: 20px;
+                        font-size: 1vw;
                         color: #fefefe;
                         text-shadow: 0 0 0.5em #00ffff, 0 0 0.2em #5c5c5c;
                         float: left;
-                        padding-left: 10px;
+                        padding-left: 0.5vw;
                         " class="BCName">
                     <router-link to="/" class="toIndex">BlockChain Studio 208</router-link>
                 </div>
-                <div style="float: left; margin-left: 8%" id="box">
+                <div style="float: left; margin-left: 6vw" id="box">
                     <router-link to="/blogShow">首页</router-link>    
                 </div>
-                <div style="float: left; margin-left: 8%" id="box">
+                <div style="float: left; margin-left: 6vw" id="box">
                     <router-link to="/taskShow">待办</router-link>
                 </div>
-                <div style="float: left; margin-left: 8%" id="box">
+                <div style="float: left; margin-left: 6vw" id="box">
                     <router-link to="/ideaShow">想法</router-link>
                 </div>
-                <div style="float: left; margin-left: 8%" id="box">
+                <div style="float: left; margin-left: 6vw" id="box">
                     <router-link to="/matchShow">比赛</router-link>
                 </div>
-                <div style="float: left; margin-left: 8%" id="box">
+                <div style="float: left; margin-left: 6vw" id="box">
                     <router-link to="/resourceShow">资料</router-link>
                 </div>
-                <div style="float: left; margin-left: 8%" id="box">
+                <div style="float: left; margin-left: 6vw" id="box">
                     <router-link to="/resourceShow">这里"搜索框"</router-link>
                 </div>
-                <div style="float: left; margin-left: 8%" id="box">
+                <div style="float: left; margin-left: 6vw" id="box">
                     <router-link to="/resourceShow">这里"创作中心"</router-link>
                 </div>
-                <div style="float: right; padding-right: 50px; padding-top: 20px;">
+                <div style="float: right; margin: 3vh; ">
                     <el-dropdown>
                     <span class="el-dropdown-link">
                     个人中心
@@ -48,15 +48,15 @@
                 </div>
             </el-header>
             <el-container class="contextContainer" style="overflow: auto;">
-                <el-aside width="200px" >
-                    <div style="height: 80%; margin-top: 30%;" id="box">文章分类</div>
+                <el-aside style="background-color: white;" width="10vw" >
+                    <div style="height: 80%; margin-top: 7vh;" id="box">文章分类</div>
                 </el-aside>
-                <el-main style="border-radius: 20px;">
+                <el-main style="border-radius: 20px; background-color: white;">
                     <router-view>
                     </router-view>
                 </el-main>
-                <el-aside width="200px">
-                    <div style="height: 80%; margin-top: 30%;" id="box">近期比赛</div>
+                <el-aside style="background-color: white;" width="10vw">
+                    <div style="height: 80%; margin-top: 7vh;" id="box">近期比赛</div>
                 </el-aside>
             </el-container>
         </el-container>

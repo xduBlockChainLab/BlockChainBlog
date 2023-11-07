@@ -51,12 +51,11 @@ public class UserController {
         return usersServiceImpl.userLogout(token);
     }
 
-    @GetMapping("/hello")
-    @ResponseBody
-    public Result hello(){
-        return Result.success("hello bc208");
-    }
-
+    // @GetMapping("/checkLogin")
+    // @ResponseBody
+    // public Result userLoginCheck(String token) {
+    //     return usersServiceImpl.checkLogin(token);
+    // }
 
     @GetMapping("/wxLogin")
     @ResponseBody
@@ -75,4 +74,11 @@ public class UserController {
         // TODO:没办法, 得将小程序"上线"才能真正的使用, 否则无法调用那个HTTP链接来获取小程序码
         return usersServiceImpl.getQRCode();
     }
+
+    @GetMapping("/hello")
+    @ResponseBody
+    public Result hello(){
+        return Result.success("hello bc208");
+    }
+
 }
