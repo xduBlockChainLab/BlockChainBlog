@@ -26,7 +26,12 @@ public class MvcConfig implements WebMvcConfigurer {
                 ).order(0);
         // excludePathPatterns 放行部分请求
         registry.addInterceptor(new LoginInterceptor())
-                .excludePathPatterns("/**"
+                .excludePathPatterns(
+                        "/bc208/login",
+                        "/bc208/wxLogin",
+                        "/bc208/captcha",
+                        "/bc208/register",
+                        "/bc208/wxQRCode"
                 ).order(1);
         registry.addInterceptor(new AuthorityInterceptor())
                 .excludePathPatterns("/**"

@@ -1,8 +1,11 @@
 package com.bc208.blog.repository.base.mapper;
 
+import com.bc208.blog.common.vo.TaskVO;
 import com.bc208.blog.pojo.UserTask;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Mapper
 @Repository
@@ -29,4 +32,12 @@ public interface TasksMapper {
     //                @Param("taskId") Integer taskId);
 
     int addTask(UserTask taskDTO);
+
+    int delete(Long taskId);
+
+    int update(TaskVO taskVO);
+
+    List<TaskVO> getTasks(Long userId);
+
+    List<TaskVO> getTasksDone(Long userId);
 }

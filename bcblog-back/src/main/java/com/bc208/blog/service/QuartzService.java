@@ -34,7 +34,7 @@ public interface QuartzService {
      * @param jobTime   任务时间表达式
      * @param jobData   任务参数
      */
-    void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, String jobTime);
+    void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, Map<String, Object> jobData ,String jobTime);
 
     /**
      * 修改一个任务job

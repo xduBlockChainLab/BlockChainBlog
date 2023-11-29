@@ -45,13 +45,14 @@ public class QuartzServiceImpl implements QuartzService{
      *            时间表达式 （如：0/5 * * * * ? ）
      */
     @Override
-    public void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, String jobTime) {
+    public void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, Map<String, Object> jobData, String jobTime) {
         try {
             // 创建jobDetail实例，绑定Job实现类
             // 指明job的名称，所在组的名称，以及绑定job类
             // 任务名称和组构成任务key
             JobDetail jobDetail = JobBuilder.newJob(jobClass)
                     .withIdentity(jobName, jobGroupName)
+                    .usingJobData(new JobDataMap(jobData))
                     .build();
             // // 设置job参数
             // if(jobData!= null && jobData.size()>0){

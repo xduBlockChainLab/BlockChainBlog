@@ -28,7 +28,7 @@
     <select id="getUserInfo" resultType="com.bc208.blog.pojo.User">
         select * from user where userEmail=#{userEmail}
     </select>
-    <select id="checkUserWxLogined" resultType="java.lang.String">
+    <select id="checkUserWxLogined" resultType="java.lang.Long">
         select userId from userauth where openId=#{openid} order by userId desc limit 0,1
     </select>
     <select id="getUserInfoByOpenid" resultType="com.bc208.blog.pojo.User">

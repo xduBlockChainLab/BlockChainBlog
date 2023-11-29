@@ -162,6 +162,7 @@ public class UsersServiceImpl implements UserService {
         String res = HttpUtil.get(replaceUrl);
         JSONObject jsonObject = JSONUtil.parseObj(res);
         String userOpenId = jsonObject.getStr("openid");
+        log.warn("userOpenId:"+userOpenId);
         if ( userOpenId == null){
             // 1. 如果微信未通过认证, 就报错, 说明这个wxCode有问题
             return Result.fail("微信登录失败");
@@ -176,7 +177,7 @@ public class UsersServiceImpl implements UserService {
             }
             stringRedisTemplate.opsForValue().set("LOGIN:WEIXIN:OPENID:"+uuid, userOpenId, 5, TimeUnit.MINUTES);
             return Result.fail(uuid);
-        }else if (usersMapper.checkUserWxLogined(userOpenId) == null){
+        }else if (usersMapper.checkUserWxLogined(userOpenId) == -1){
             stringRedisTemplate.opsForValue().set("LOGIN:WEIXIN:OPENID:"+uuid, userOpenId, 5, TimeUnit.MINUTES);
             // 用户未绑定邮箱, 不返回token
             return Result.fail(uuid);
@@ -257,7 +258,8 @@ public class UsersServiceImpl implements UserService {
         String requestBody = "{\"page\":\"pages/login/login\", \"scene\":\"a=1\"}";
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, requestHeaders);
 
-        ResponseEntity<byte[]> responseEntity = restTemplate.exchange(getQRCodeUrl, HttpMethod.POST, requestEntity, byte[].class, urlVariables);
+        // ResponseEntity<byte[]> responseEntity = restTemplate.exchange(getQRCodeUrl, HttpMethod.POST, requestEntity, byte[].class, urlVariables);
+        ResponseEntity<byte[]> responseEntity = restTemplate.exchange(getQRCodeUrl0, HttpMethod.POST, requestEntity, byte[].class);
         log.warn("image:"+ Arrays.toString(responseEntity.getBody()));
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             byte[] imageBytes = responseEntity.getBody();
@@ -268,9 +270,9 @@ public class UsersServiceImpl implements UserService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("图片下载成功并保存到文件");
+            log.info("图片下载成功并保存到文件");
         } else {
-            System.out.println("图片下载失败，状态码：" + responseEntity.getStatusCode());
+            log.info("图片下载失败，状态码：" + responseEntity.getStatusCode());
         }
         return Result.success();
     }
