@@ -21,7 +21,6 @@ import 'element-plus/dist/index.css'
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:8088/'
 // axios.defaults.baseURL = 'http://39.101.74.9:8088/'
-// axios.defaults.baseURL = 'http://43.138.209.227:8088/'
 
 const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 

@@ -15,11 +15,13 @@ public class LoginInterceptor implements HandlerInterceptor {
         if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             return true;
         }
-
+        log.warn("第二层拦截: 登录拦截");
+        // 如果无法获取到UserHolder里的userDTO就认为其没登录
         if(UserHolder.getUser() == null){
             response.setStatus(401);
             return false;
         }
+        log.warn("第二层拦截: 已登录, 放行");
         return true;
     }
 

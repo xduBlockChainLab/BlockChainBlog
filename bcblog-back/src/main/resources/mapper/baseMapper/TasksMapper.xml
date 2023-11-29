@@ -6,4 +6,19 @@
         insert into `user_task` (taskName, userId, beginTime, endTime, importance, remind, remindTime, taskDesc, taskDone)
         value (#{taskName}, #{userId}, #{beginTime}, #{endTime}, #{importance}, #{remind}, #{remindTime}, #{taskDesc}, #{taskDone})
     </insert>
+    <update id="update" parameterType="com.bc208.blog.common.vo.TaskVO">
+        UPDATE `user_task`
+        SET taskName=#{taskName}, beginTime=#{beginTime}, endTime=#{endTime}, importance=#{importance},
+                               remind=#{remind}, remindTime=#{remindTime}, taskDesc=#{taskDesc}
+        WHERE taskId=#{taskId}
+    </update>
+    <delete id="delete">
+        DELETE FROM `user_task` WHERE taskId =#{taskId}
+    </delete>
+    <select id="getTasks" resultType="com.bc208.blog.common.vo.TaskVO">
+        SELECT taskId, taskName, beginTime, endTime, importance, remind, remindTime, taskDesc, taskDone FROM user_task WHERE userId=#{userId} AND taskDone=0
+    </select>
+    <select id="getTasksDone" resultType="com.bc208.blog.common.vo.TaskVO">
+        SELECT taskId, taskName, beginTime, endTime, importance, remind, remindTime, taskDesc, taskDone FROM user_task WHERE userId=#{userId} AND taskDone=1
+    </select>
 </mapper>

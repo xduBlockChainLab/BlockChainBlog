@@ -16,6 +16,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        log.warn("第三层拦截: 管理员权限拦截");
         if("0".equals(UserHolder.getUser().getUserRole())){
             response.setStatus(401);
             return false;

@@ -51,12 +51,6 @@ public class UserController {
         return usersServiceImpl.userLogout(token);
     }
 
-    // @GetMapping("/checkLogin")
-    // @ResponseBody
-    // public Result userLoginCheck(String token) {
-    //     return usersServiceImpl.checkLogin(token);
-    // }
-
     @GetMapping("/wxLogin")
     @ResponseBody
     public Result wxLogin(@RequestParam("code") String wxCode) {
@@ -80,5 +74,7 @@ public class UserController {
     public Result hello(){
         return Result.success("hello bc208");
     }
+
+
 
 }

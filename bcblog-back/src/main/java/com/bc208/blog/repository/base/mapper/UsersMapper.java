@@ -35,7 +35,7 @@ public interface UsersMapper {
      * @param openid 微信用户的opneid
      * @return 是否绑定过邮箱
      */
-    String checkUserWxLogined(String openid);
+    Long checkUserWxLogined(String openid);
 
     User getUserInfoByOpenid(String userOpenId);
 
