@@ -40,4 +40,6 @@ public interface TasksMapper {
     List<TaskVO> getTasks(Long userId);
 
     List<TaskVO> getTasksDone(Long userId);
+
+    int taskDoneChange(Long userId);
 }

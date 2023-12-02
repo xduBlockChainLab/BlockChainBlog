@@ -36,14 +36,12 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         log.warn("第一层拦截: 用于刷新token");
 
         String token = request.getHeader("token");
-
         if (StrUtil.isBlank(token)){
             log.warn("用户没有携带token");
             return true;
         }
 
         Map<Object, Object> userMap = redisTemplate.opsForHash().entries(LOGIN_USER_KEY + token);
-
         if (userMap.isEmpty()) {
             log.warn("token已过期");
             return true;
