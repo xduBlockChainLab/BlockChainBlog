@@ -14,4 +14,6 @@ public interface TaskService {
     Result getTasks(Long userId);
 
     Result getTasksDone(Long userId);
+
+    Result taskDoneChange(Long userId);
 }

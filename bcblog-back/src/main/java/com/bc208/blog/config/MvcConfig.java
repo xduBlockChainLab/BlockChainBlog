@@ -29,6 +29,7 @@ public class MvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/bc208/login",
                         "/bc208/wxLogin",
+                        "/bc208/wxLink",
                         "/bc208/captcha",
                         "/bc208/register",
                         "/bc208/wxQRCode"

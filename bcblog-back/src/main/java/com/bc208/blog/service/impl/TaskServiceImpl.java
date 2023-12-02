@@ -37,6 +37,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public Result add(TaskDTO taskDTO) {
+        log.warn(String.valueOf(taskDTO));
+
         UserTask userTask = new UserTask();
         userTask.setTaskName(taskDTO.getTaskName());
         userTask.setUserId(UserHolder.getUser().getUserId());
@@ -112,6 +114,15 @@ public class TaskServiceImpl implements TaskService {
             return Result.fail("获取任务列表失败, 请联系管理员.");
         }
         return Result.success(tasks);
+    }
+
+    @Override
+    public Result taskDoneChange(Long userId) {
+        if(tasksMapper.taskDoneChange(userId) == 1){
+            return Result.success();
+        }else{
+            return Result.fail("修改任务错误, 请联系管理员");
+        }
     }
 }
 

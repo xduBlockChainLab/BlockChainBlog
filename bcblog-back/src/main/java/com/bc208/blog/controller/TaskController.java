@@ -55,4 +55,10 @@ public class TaskController {
         return taskService.getTasksDone(userId);
     }
 
+    @GetMapping("/taskDoneChange")
+    @ResponseBody
+    public Result getTasksDone(Long taskId){
+        return taskService.taskDoneChange(taskId);
+    }
+
 }

@@ -12,6 +12,14 @@
                                remind=#{remind}, remindTime=#{remindTime}, taskDesc=#{taskDesc}
         WHERE taskId=#{taskId}
     </update>
+    <update id="taskDoneChange">
+        UPDATE `user_task`
+        SET taskDone = CASE
+            WHEN taskDone = 1 THEN 0
+            WHEN taskDone = 0 THEN 1
+        END
+        WHERE taskId=#{taskId}
+    </update>
     <delete id="delete">
         DELETE FROM `user_task` WHERE taskId =#{taskId}
     </delete>
