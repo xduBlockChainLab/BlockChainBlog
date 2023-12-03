@@ -1,15 +1,46 @@
 {
-  "pages":[
+  "pages": [
     "pages/login/login",
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/todo/todo",
+    "pages/test/test"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "BC208",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "tabBar": {
+    "custom": true,
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/img/HOME.png",
+        "selectedIconPath": "/static/img/HOME.png"
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "text": "待办",
+        "iconPath": "static/img/TODO.png",
+        "selectedIconPath": "/static/img/TODO.png"
+      },
+      {
+        "pagePath": "pages/todo/todo",
+        "text": "待办",
+        "iconPath": "static/img/TODO.png",
+        "selectedIconPath": "/static/img/TODO.png"
+      },
+      {
+        "pagePath": "pages/test/test",
+        "text": "待办",
+        "iconPath": "static/img/TODO.png",
+        "selectedIconPath": "/static/img/TODO.png"
+      }
+    ]
+  }
 }

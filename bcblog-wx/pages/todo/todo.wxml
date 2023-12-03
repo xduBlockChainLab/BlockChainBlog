@@ -1,0 +1,227 @@
+<view class="todolist_container">
+  <view class="top">
+    <view class="top_left">
+      <text>ToDoList</text>
+    </view>
+    <view class="top_right">
+      <!-- <input type="text" placeholder="添加ToDo" class="input_class" bindinput="inputValue" bindconfirm="addToDo" data-value="inputValue" /> -->
+      <button type="primary" bind:tap="addToDo">创建任务</button>
+    </view>
+  </view>
+  <view class="middle">
+    <view class="pendding_container">
+      <text class="font_status">正在进行</text>
+      <view class="header">
+        <text class="header-task-name">任务名</text>
+        <text class="header-task-import">重要程度</text>
+        <text class="header-task-endtime">结束时间</text>
+      </view>
+      <view class="task-card-pending">
+        <view wx:if="{{list.length > 0}}">
+          <view wx:for="{{ list }}" class="pendding_box" wx:for-item="task" wx:for-index="index" wx:key="{{index}}">
+            <view>
+              <checkbox color="default" bindtap="ToFinished" checked="{{task.taskDone}}" data-index="{{index}}"></checkbox>
+            </view>
+            <view style="width: 20vw ;overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" bind:tap="exchTodoNoDone" data-index="{{index}}">{{task.taskName}}</view>
+            <view>
+              {{task.importance}}
+            </view>
+            <view>
+              {{task.endTime}}
+            </view>
+            <view>
+              <button size="mini" type="warn" bindtap="delNoDone" data-index="{{index}}">删除</button>
+            </view>
+          </view>
+        </view>
+        <view wx:else>
+          <text>暂无数据</text>
+        </view>
+      </view>
+    </view>
+    <view class="finished_container">
+      <text class="font_status">已经完成</text>
+      <view class="header">
+        <text class="header-task-name">任务名</text>
+        <text class="header-task-import">重要程度</text>
+        <text class="header-task-endtime">结束时间</text>
+      </view>
+      <view class="task-card-ending">
+        <view wx:if="{{finishedList.length > 0}}">
+          <view class="finished_box" wx:for="{{finishedList}}" wx:key="{{index}}">
+            <view>
+              <checkbox color="default" class="checkbox_style" bindtap="ToPendding" data-val="{{item.taskDone}}" data-index="{{index}}" checked="{{item.taskDone}}"></checkbox>
+            </view>
+            <view style="width: 20vw ;overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" bind:tap="exchTodoDone" data-index="{{index}}">{{item.taskName}}</view>
+            <view>
+              {{item.importance}}
+            </view>
+            <view>
+              {{item.endTime}}
+            </view>
+            <view>
+              <button size="mini" type="warn" bindtap="delDone" data-index="{{index}}">删除</button>
+            </view>
+          </view>
+        </view>
+        <view wx:else>
+          <text>暂无数据</text>
+        </view>
+      </view>
+    </view>
+    <!-- 弹窗组件 -->
+    <!-- 在页面中添加遮罩层和弹窗 -->
+    <view wx:if="{{showTodoExch}}" class="mask" />
+    <view wx:if="{{showTodoExch}}" class="modal">
+      <!-- 弹窗内容，包括任务修改的表单等 -->
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>任务名</label>
+        <input class="createToDo-input" focus="true" bindinput="exchTaskNameAdd" value="{{currentTask.taskName}}" placeholder="请输入任务名字" />
+      </view>
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>紧急程度 (1 -> 4, 不重要 -> 重要)</label>
+        <picker bindchange="exchImportPicker" value="{{importancesArrayIndex}}" range="{{importancesPickerArray}}">
+          <view class="picker" style="color: rgb(52, 128, 228);">
+            选择重要程度: {{currentTask.importance}}
+          </view>
+        </picker>
+      </view>
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        开始时间 (2023-01-01 -> 2026-01-01)
+        <picker mode="date" value="{{currentTask.begin_Date}}" start="2023-01-01" end="2026-01-01" bindchange="exchBeginDatePicker">
+          <view class="picker">
+            选择开始日期: {{currentTask.begin_Date}}
+          </view>
+        </picker>
+        <picker mode="time" value="{{currentTask.begin_Time}}" start="09:01" end="21:01" bindchange="exchBeginTimePicker">
+          <view class="picker">
+            选择开始时间: {{currentTask.begin_Time}}
+          </view>
+        </picker>
+      </view>
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>结束时间 (2023-01-01 -> 2026-01-01)</label>
+        <picker mode="date" value="{{currentTask.end_Date}}" start="2023-01-01" end="2026-01-01" bindchange="exchEndDatePicker">
+          <view class="picker">
+            选择结束日期: {{currentTask.end_Date}}
+          </view>
+        </picker>
+        <picker mode="time" value="{{currentTask.end_Time}}" start="09:01" end="21:01" bindchange="exchEndTimePicker">
+          <view class="picker">
+            选择结束时间: {{currentTask.end_Time}}
+          </view>
+        </picker>
+      </view>
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>是否开启提醒</label>
+        <switch style="margin-left: 20px;" checked="{{currentTask.remind}}" bindchange="exchRemind" />
+      </view>
+      <view wx:if="{{currentTask.remind == true}}">
+        <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+          <label>提醒时间</label>
+          <picker mode="date" value="{{currentTask.remind_Date}}" start="2023-01-01" end="2026-01-01" bindchange="exchRemindDatePicker">
+            <view class="picker">
+              选择提醒日期: {{currentTask.remind_Date}}
+            </view>
+          </picker>
+          <picker mode="time" value="{{currentTask.remind_Time}}" start="00:00" end="23:59" bindchange="exchRemindTimePicker">
+            <view class="picker">
+              选择提醒时间: {{currentTask.remind_Time}}
+            </view>
+          </picker>
+        </view>
+      </view>
+      <!-- <view  style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>任务描述</label>
+        <textarea bindblur="newTaskDesc" maxlength="180" auto-height placeholder="请输入任务描述" />
+      </view> -->
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>任务描述</label>
+        <textarea bindinput="exchTaskDesc" style="height: 5em; overflow-y: scroll;" value="{{currentTask.taskDesc}}" placeholder="请输入任务描述"></textarea>
+      </view>
+      <!-- 关闭弹窗的按钮 -->      
+      <view style="display: flex; justify-content: space-between;">
+        <button style="margin-top: 1vh;" size="mini" type="primary" bindtap="exchTask">保存修改</button>
+        <!-- 关闭弹窗的按钮 -->
+        <button style="margin-top: 1vh;" size="mini" type="warn" bindtap="hideExchTodo">取消修改</button>
+      </view>
+    </view>
+
+    <view wx:if="{{showTodoCreate}}" class="mask" />
+    <view wx:if="{{showTodoCreate}}" class="modal">
+      <!-- 弹窗内容，包括任务修改的表单等 -->
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>任务名</label>
+        <input class="createToDo-input" focus="true" bindinput="newTaskNameAdd" placeholder="请输入任务名字" />
+      </view>
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>紧急程度 (1 -> 4, 不重要 -> 重要)</label>
+        <picker bindchange="importPicker" value="{{importancesArrayIndex}}" range="{{importancesPickerArray}}">
+          <view class="picker" style="color: rgb(52, 128, 228);">
+            选择重要程度: {{newTask.newTaskImportance}}
+          </view>
+        </picker>
+      </view>
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        开始时间 (2023-01-01 -> 2026-01-01)
+        <picker mode="date" value="{{newTask.newTaskBeginDate}}" start="2023-01-01" end="2026-01-01" bindchange="beginDatePicker">
+          <view class="picker">
+            选择开始日期: {{newTask.newTaskBeginDate}}
+          </view>
+        </picker>
+        <picker mode="time" value="{{newTask.newTaskBeginTime}}" start="09:01" end="21:01" bindchange="beginTimePicker">
+          <view class="picker">
+            选择开始时间: {{newTask.newTaskBeginTime}}
+          </view>
+        </picker>
+      </view>
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>结束时间 (2023-01-01 -> 2026-01-01)</label>
+        <picker mode="date" value="{{newTask.newTaskEndDate}}" start="2023-01-01" end="2026-01-01" bindchange="endDatePicker">
+          <view class="picker">
+            选择结束日期: {{newTask.newTaskEndDate}}
+          </view>
+        </picker>
+        <picker mode="time" value="{{newTask.newTaskEndTime}}" start="09:01" end="21:01" bindchange="endTimePicker">
+          <view class="picker">
+            选择结束时间: {{newTask.newTaskEndTime}}
+          </view>
+        </picker>
+      </view>
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>是否开启提醒</label>
+        <switch style="margin-left: 20px;" checked="{{newTask.newTaskRemind}}" bindchange="openRemind" />
+      </view>
+      <view wx:if="{{newTask.newTaskRemind == true}}">
+        <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+          <label>提醒时间</label>
+          <picker mode="date" value="{{newTask.newTaskRemindDate}}" start="2023-01-01" end="2026-01-01" bindchange="remindDatePicker">
+            <view class="picker">
+              选择提醒日期: {{newTask.newTaskRemindDate}}
+            </view>
+          </picker>
+          <picker mode="time" value="{{newTask.newTaskRemindTime}}" start="09:01" end="21:01" bindchange="remindTimePicker">
+            <view class="picker">
+              选择提醒时间: {{newTask.newTaskRemindTime}}
+            </view>
+          </picker>
+        </view>
+      </view>
+      <!-- <view  style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>任务描述</label>
+        <textarea bindblur="newTaskDesc" maxlength="180" auto-height placeholder="请输入任务描述" />
+      </view> -->
+      <view style="border: 3px solid #8BC34A; padding: 5px; border-radius: 20px;">
+        <label>任务描述</label>
+        <textarea bindinput="newTaskDesc" style="height: 5em; overflow-y: scroll;" placeholder="请输入任务描述"></textarea>
+      </view>
+      <view style="display: flex; justify-content: space-between;">
+        <button style="margin-top: 1vh;" size="mini" type="primary" bindtap="CreateTask">创建任务</button>
+        <!-- 关闭弹窗的按钮 -->
+        <button style="margin-top: 1vh;" size="mini" type="warn" bindtap="hideCreateTodo">关闭弹窗</button>
+      </view>
+    </view>
+
+  </view>
+
+</view>

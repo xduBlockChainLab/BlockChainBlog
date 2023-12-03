@@ -37,15 +37,16 @@
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
-    }
+    },
+    "ignoreUploadUnusedFiles": true
   },
   "compileType": "miniprogram",
   "libVersion": "2.19.4",
-  "appid": "wxc70351d25064057f",
   "projectname": "miniprogram-92",
   "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2
-  }
+  },
+  "appid": "wxc70351d25064057f"
 }

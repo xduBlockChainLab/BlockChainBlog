@@ -1,0 +1,128 @@
+.todolist_container {
+  width: 100%;
+  height: 100vh;
+}
+
+.top {
+  width: 100%;
+  height: 5vh;
+  background-color: #7dd1d2;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.top_left {
+  width: 30%;
+  height: 5vh;
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .top_right {
+  width: 70%;
+  height: 30px;
+  border: 1px solid gray;
+  text-indent: 20px;
+  border-radius: 20px;
+  background-color: white;
+} */
+
+.middle{
+  width: 100%;
+  height: 100%;
+  background-color: #CDCDCD;
+}
+.pendding_container{
+  width: 100%;
+  /* height: 200px; */
+}
+
+.task-card-pending {
+  border: 3px solid #8BC34A; /* 设置边框颜色为淡绿色 */
+  padding: 10px;
+  border-radius: 20px;
+}
+.task-card-ending {
+  border: 3px solid #1d9ce6; /* 设置边框颜色为淡绿色 */
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.finished_container{
+  width: 100%;
+  /* height: 200px; */
+  
+}
+.font_status{
+  font-size: 22px
+}
+.pendding_box{
+  width: 100%;
+  height: 35px;
+  display: flex;
+  justify-content: space-around;
+  /* 在Flex布局中用于定义项目在主轴上的对齐方式的属性, 主轴上均匀发呢不项目, 两端各留一半空间 */
+  align-items: center;
+  background-color: white;
+}
+.input_checkbox{
+  width: 20%;
+ border: 1px solid gray;
+}
+
+.finished_box{
+  width: 100%;
+  height: 35px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: white;
+}
+
+/* 样式中设置遮罩层和弹窗的样式 */
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 半透明黑色遮罩 */
+  z-index: 1000; /* 遮罩层在最上层 */
+}
+
+.modal {
+  position: fixed;
+  top: 5%;
+  left: 6%;
+  width: 80%;
+  height: 70%;
+  /* transform: translate(-50%, -50%); */
+  background: #fff;
+  padding: 10px;
+  z-index: 1001; /* 弹窗在遮罩层之上 */
+  /* 其他样式设置 */
+  border: 3px solid #7dd1d2; /* 设置边框颜色为淡绿色 */
+  /* padding: 10px; */
+  border-radius: 20px;
+}
+
+.header-task-name{
+  padding-left: 100rpx;
+}
+.header-task-import{
+  padding-left: 40rpx;
+}
+.header-task-endtime{
+  padding-left: 100rpx;
+}
+
+
+
+
+
+

@@ -1,5 +1,5 @@
 // logs.js
-const app = getApp()
+import util from '../../utils/util'
 
 Page({
   data: {

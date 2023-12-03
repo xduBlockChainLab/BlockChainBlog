@@ -7,7 +7,7 @@ page{
 /* 顶部背景 */
 .top-box{
   height: 30%;
-  background-image: linear-gradient( #44ADFB,#5ed6fd);
+  background-image: linear-gradient( #7dd1d2,#5ed6fd);
   padding: 30rpx;
   color: white;
   font-weight: bold;
@@ -21,8 +21,8 @@ page{
   margin: -20% 20rpx 0rpx 20rpx;
   padding: 25rpx;
   border-radius: 15rpx;
-  -webkit-filter: drop-shadow(0 0 8rpx #44ADFB);
-  filter: drop-shadow(0 0 8rpx #44ADFB);
+  -webkit-filter: drop-shadow(0 0 8rpx #7dd1d2);
+  filter: drop-shadow(0 0 8rpx #7dd1d2);
 }
 /* 导航 */
 .nav{
@@ -41,7 +41,7 @@ page{
 }
 .select{
   font-weight: bold;
-  color: #33ccff;
+  color: #7dd1d2;
 }
 .select text{
   padding-bottom: 5rpx;
@@ -70,12 +70,12 @@ page{
   font-size: 26rpx;
   padding: 10rpx 15rpx;
   color: white;
-  background-color: #FF8C69;
+  background-color: #7dd1d2;
   border-radius: 10rpx;
 }
 .forget{
   font-size: 26rpx;
-  color: #33ccff;
+  color: #7dd1d2;
   margin-top: 20rpx;
   text-align: right;
 }
