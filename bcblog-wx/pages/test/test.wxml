@@ -1,0 +1,15 @@
+<!-- text 不会换行，可以理解为传统页面中的 span 行内元素-->
+<text>这是text标签1</text>
+<text>这是text标签2</text>
+
+<!-- view 会换行，可以理解为传统页面中的 div 块级元素 -->
+<view>这是div标签1</view>
+<view>这是div标签2</view>
+
+<view>
+  <!-- 我博客的图，显示如果出现什么问题，自己替换一下哈 -->
+  <image  mode='widthFix' style='width:60%' src='https://imgconvert.csdnimg.cn/aHR0cDovL2ltYWdlLmlkZWFsLTIwLmNuL3dlaXhpbi1taW5pLzE5LTAxLTAyLTAwMS5wbmc?x-oss-process=image/format,png'></image>
+</view>
+<view wx:if="{{length > 5}}"> 1 </view>
+<view wx:elif="{{length > 2}}"> 2 </view>
+<view wx:else> 3 </view>

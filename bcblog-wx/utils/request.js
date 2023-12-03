@@ -1,6 +1,7 @@
 // request.js
-function request(path, method, data) {
+function request(path, method, data, token) {
   const baseUrl = 'http://localhost:8088/bc208/'; // 基础 URL
+  // const baseUrl = 'http://39.101.74.9:8088/bc208/'; // 基础 URL
   const url = baseUrl + path; // 拼接 URL
 
   return new Promise((resolve, reject) => {
@@ -10,8 +11,7 @@ function request(path, method, data) {
       data,
       header: {
         'Content-Type': 'application/json',
-        // 'Authorization': 'Bearer your_access_token', // 设置统一的请求头部信息
-        // 添加其他请求头信息
+        'token': token
       },
       success: res => {
         resolve(res.data);

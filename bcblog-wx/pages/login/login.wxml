@@ -16,7 +16,7 @@
   <view class="input-box" hidden="{{current==0}}">
     <view class="sumbit-btn">
       <button class="button" 
-      style="background-color: #33ccff;font-size: 30rpx;" 
+      style="background-color: #7dd1d2;font-size: 30rpx;" 
       type="primary"
       data-form="{{form}}"
       bindtap="checkLogin"
@@ -26,15 +26,15 @@
   <!-- 注册 -->
   <view class="input-box" hidden="{{current==1}}">
     <view class="wei-input">
-      <icon type="waiting" color="#44ADFB" size="16"></icon>
+      <icon type="waiting" color="#7dd1d2" size="16"></icon>
       <input type="text" class="input" value="{{form.email}}" auto-focus placeholder="请输入网站邮箱" bindinput="inputChange" data-field="email"/>
     </view>
     <view class="wei-input">
-      <icon type="waiting" color="#44ADFB" size="16"></icon>
+      <icon type="waiting" color="#7dd1d2" size="16"></icon>
       <input type="text" class="input" value="{{form.password}}" auto-focus placeholder="请输入登录密码" bindinput="inputChange" data-field="password"/>
     </view>
     <view class="wei-input">
-      <icon type="waiting" color="#44ADFB" size="16"></icon>
+      <icon type="waiting" color="#7dd1d2" size="16"></icon>
       <input type="text" class="input" value="{{form.captcha}}" auto-focus placeholder="请输入6位验证码" bindinput="inputChange" data-field="captcha"/>
       <text class="input-code" bindtap="getCode">{{codeText}}</text>
     </view>
@@ -43,7 +43,7 @@
     </view>
     <view class="sumbit-btn">
       <button class="button" 
-      style="background-color: #33ccff;font-size: 30rpx;" 
+      style="background-color: #7dd1d2;font-size: 30rpx;" 
       type="primary"
       data-form="{{form}}"
       bindtap="wxEmailLink"

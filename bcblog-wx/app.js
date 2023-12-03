@@ -1,6 +1,4 @@
 // app.js
-import request from './utils/request'
-
 App({
   onLaunch() {
     // 展示本地存储能力
@@ -11,5 +9,7 @@ App({
 
   globalData: {
     userInfo: null,
+    selectedIndex: 0
   }
+  // testGit wx ENABLE?
 })

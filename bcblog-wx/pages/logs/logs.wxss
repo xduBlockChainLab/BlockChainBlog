@@ -1,8 +1,29 @@
-.log-list {
-  display: flex;
-  flex-direction: column;
-  padding: 40rpx;
+/* todo.wxss */
+
+input,
+button {
+  margin-bottom: 10px;
 }
-.log-item {
-  margin: 10rpx;
+
+.task-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.toggle {
+  color: #007AFF;
+}
+
+.remove {
+  color: red;
 }
