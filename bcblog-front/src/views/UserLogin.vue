@@ -15,8 +15,8 @@
             <el-form-item label="邮箱" prop="email">
                 <el-input v-model="ruleForm.email" />
             </el-form-item>
-            <el-form-item label="密码:" prop="password">
-                <el-input v-model="ruleForm.password" />
+            <el-form-item label="密码:" prop="password" >
+                <el-input  type="password" v-model="ruleForm.password" />
             </el-form-item>
             <el-form-item class="submitButton">
                 <el-button type="primary" @click="Login(ruleFormRef)">
@@ -31,8 +31,8 @@
             </el-form-item>
         </el-form>
 
-        <el-drawer class="drawer" v-model="drawerChange" direction=rtl size="30vw">
-            小程序二维码
+        <el-drawer class="drawer" v-model="drawerChange" direction=ltr size="32vw">
+            <img src="../assets/wxLogin.jpg">
         </el-drawer>
     </div>
 </template>

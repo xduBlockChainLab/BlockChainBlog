@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bc208.blog.repository.base.mapper.DBlearnMapper">
+
+    <insert id="driverAddd" parameterType="com.bc208.blog.pojo.db.Driver" statementType="PREPARED">
+        insert into driver (driver_name, driver_age, driver_sex, driver_phone, driver_role)
+        value (#{driver_name}, #{driver_age}, #{driver_sex}, #{driver_phone}, #{driver_role})
+    </insert>
+    <insert id="busAdd" parameterType="com.bc208.blog.pojo.db.Driver" statementType="PREPARED">
+        insert into bus (license_plate_number, seat_num)
+        value (#{license_plate_number}, #{seat_num})
+    </insert>
+    <insert id="peccancyAdd" parameterType="com.bc208.blog.pojo.db.Driver" statementType="PREPARED">
+        insert into peccancy_record (peccancy_record_recorder_id, peccancy_record_driver_id, peccancy_record_peccancy_name, peccancy_record_time, peccancy_record_location)
+        value (#{peccancy_record_recorder_id}, #{peccancy_record_driver_id}, #{peccancy_record_peccancy_name}, #{peccancy_record_time}, #{peccancy_record_location})
+    </insert>
+    <select id="fleetDrivers" resultType="com.bc208.blog.pojo.db.Driver">
+        SELECT * FROM fleetdriversinfo WHERE fleet_id = #{fleet_id}
+    </select>
+    <select id="getDriverPeccancy" resultType="com.bc208.blog.pojo.db.PeccancyVO">
+        select pr.peccancy_record_id, pr.peccancy_record_recorder_id, pr.peccancy_record_driver_id, pr.peccancy_record_peccancy_name,
+                pr.peccancy_record_time, pr.peccancy_record_location
+        from peccancy_record pr
+        join driver d ON pr.peccancy_record_driver_id = d.driver_id
+        where d.driver_id = #{driver_id}
+        and pr.peccancy_record_time between #{startTime} AND #{endTime}
+    </select>
+    <select id="fleetPeccancys" resultType="com.bc208.blog.pojo.db.FleetPeccancyVO">
+        SELECT
+        pr.peccancy_record_peccancy_name,
+        COUNT(pr.peccancy_record_id) AS peccancy_count
+        FROM
+        fleet f
+        JOIN
+        line l ON f.fleet_id = l.line_fleet_id
+        JOIN
+        driver_line dl ON l.line_id = dl.line_id
+        JOIN
+        peccancy_record pr ON dl.driver_id = pr.peccancy_record_driver_id
+        WHERE
+        pr.peccancy_record_time BETWEEN #{startTime} AND #{endTime}
+        AND f.fleet_id = #{fleet_id}
+        GROUP BY
+        f.fleet_id, pr.peccancy_record_peccancy_name;
+    </select>
+</mapper>

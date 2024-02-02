@@ -6,6 +6,10 @@ spring:
 
 server:
   port: 8088
+#  ssl:
+#    key-store: classpath:www.qingheli.tech.jks
+#    key-store-password: phifbs4s
+#    keyStoreType: JKS
 
 mybatis:
   configuration:

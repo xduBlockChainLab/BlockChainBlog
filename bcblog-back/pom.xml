@@ -140,6 +140,13 @@
             <version>5.7.17</version>
         </dependency>
 
+<!--        经纬度距离计算工具-->
+<!--        <dependency>-->
+<!--            <groupId>org.geotools</groupId>-->
+<!--            <artifactId>gt-main</artifactId>-->
+<!--            <version>30.1</version>-->
+<!--        </dependency>-->
+
     </dependencies>
 
     <build>
@@ -175,6 +182,7 @@
                     <include>**/*.yml</include>
                     <include>**/*.properties</include>
                     <include>**/*.xml</include>
+                    <include>**/*.jks</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>

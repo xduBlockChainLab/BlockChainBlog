@@ -70,11 +70,10 @@
         <el-card class="box-card" shadow="hover" v-for="item in 10" :key="item">
             <template #header>
                 <div class="card-header">
-                    <span>任务名字</span>
+                    <span></span>
                     <el-button class="button" text>查看详情</el-button>
                 </div>
             </template>
-            <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
         </el-card>
     </div>
 </template>
@@ -175,6 +174,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.resetFields()
 }
+
 
 </script>
 

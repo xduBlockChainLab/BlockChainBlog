@@ -75,6 +75,14 @@ public class UserController {
         return Result.success("hello bc208");
     }
 
+    @GetMapping("/sign")
+    public Result userSign(){
+        return usersServiceImpl.userSign();
+    }
 
+    @GetMapping("/treasure")
+    public Result userTreasureDig(@RequestParam("lat") double latitude, @RequestParam("lon") double longitude){
+        return usersServiceImpl.treasureDig(latitude, longitude);
+    }
 
 }
