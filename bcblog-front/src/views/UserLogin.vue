@@ -15,8 +15,8 @@
             <el-form-item label="邮箱" prop="email">
                 <el-input v-model="ruleForm.email" />
             </el-form-item>
-            <el-form-item label="密码:" prop="password" >
-                <el-input  type="password" v-model="ruleForm.password" />
+            <el-form-item label="密码:" prop="password">
+                <el-input type="password" v-model="ruleForm.password" />
             </el-form-item>
             <el-form-item class="submitButton">
                 <el-button type="primary" @click="Login(ruleFormRef)">
@@ -25,7 +25,7 @@
                 <el-button type="primary" @click="Register">
                     注册
                 </el-button>
-                <el-button type="primary" @click="drawerChange = true">
+                <el-button type="primary" @click="drawerChange = true, qrcodeURL = getQRCode()">
                     微信登录
                 </el-button>
             </el-form-item>
@@ -123,7 +123,6 @@ const Login = async (formEl: FormInstance | undefined) => {
 
 const wxLogin = () => {
 
-
 }
 
 const Register = () => {
@@ -164,6 +163,22 @@ const drawerChange = ref(false)
 // onBeforeMount(() => {
 //     checkToken()
 // })
+const qrcodeURL = ref();
+
+const getQRCode = () => {
+    axios.get('bc208/wxQRCode')
+        .then(function (response) {
+            if (response.data.success == true) {
+                console.log("生成二维码")
+            } else {
+                falseMessage(response.data.errorMsg)
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    return "http://39.101.74.9/images/"+ "QRCode.jpg"
+}
 
 </script>
 

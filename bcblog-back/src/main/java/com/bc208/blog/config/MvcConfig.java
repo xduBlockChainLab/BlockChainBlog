@@ -35,7 +35,8 @@ public class MvcConfig implements WebMvcConfigurer {
                         "/bc208/wxQRCode",
                         "/admin/login",
                         "/admin/register",
-                        "/database/**"
+                        "/swagger**/**","/webjars/**","/v3/**","/doc.html",
+                        "/wxapi/checkToken"
                 ).order(1);
         registry.addInterceptor(new AuthorityInterceptor())
                 .excludePathPatterns("/**"

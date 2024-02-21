@@ -30,7 +30,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -244,7 +243,7 @@ public class UsersServiceImpl implements UserService {
         log.warn("accessToken:"+accessToken);
         String getQRCodeUrl0 = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="+accessToken;
         log.warn("url"+getQRCodeUrl0);
-        String getQRCodeUrl = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={accessToken}";
+        // String getQRCodeUrl = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token={accessToken}";
 
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -258,19 +257,18 @@ public class UsersServiceImpl implements UserService {
 
         // ResponseEntity<byte[]> responseEntity = restTemplate.exchange(getQRCodeUrl, HttpMethod.POST, requestEntity, byte[].class, urlVariables);
         ResponseEntity<byte[]> responseEntity = restTemplate.exchange(getQRCodeUrl0, HttpMethod.POST, requestEntity, byte[].class);
-        log.warn("image:"+ Arrays.toString(responseEntity.getBody()));
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             byte[] imageBytes = responseEntity.getBody();
             // 保存图片到文件
-            try (FileOutputStream fos = new FileOutputStream("image.jpg")) {
+            try (FileOutputStream fos = new FileOutputStream("QRCode.jpg")) {
                 assert imageBytes != null;
                 fos.write(imageBytes);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            log.info("图片下载成功并保存到文件");
+            log.info("小程序码下载成功并保存到文件");
         } else {
-            log.info("图片下载失败，状态码：" + responseEntity.getStatusCode());
+            log.warn("小程序码下载失败，状态码：" + responseEntity.getStatusCode());
         }
         return Result.success();
     }
